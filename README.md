@@ -1,0 +1,2 @@
+# mindlogicx
+mindlogicx website template
