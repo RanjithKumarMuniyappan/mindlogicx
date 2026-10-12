@@ -1,0 +1,910 @@
+/**
+ * Every breakpoint, in one place. `ls.css` is written desktop-first at the
+ * reference's own measurements, so this sheet only ever steps values *down*.
+ *
+ * Two things drive the breakpoints:
+ *
+ *   1. The display scale. An 80px h1 with -0.03em tracking is the whole look,
+ *      but on a 360px screen it is four words per line. The scale steps at
+ *      every breakpoint; the *weight* never does, because moving off 400 is
+ *      what would stop this reading as the reference pattern.
+ *
+ *   2. The two-column sections (feature layout, info-tabs). Both collapse at
+ *      992px. The info-tab's sticky side panel cannot survive the collapse —
+ *      there is nothing left to stick beside — so below 992px the panel is
+ *      hidden and the copy of it that sits inside each accordion item takes
+ *      over. The reference does exactly this, which is why InfoTabs.jsx
+ *      renders its visual twice.
+ */
+
+/* ========================================================================
+   < 1200px  —  the display scale comes off its maximum
+   ======================================================================== */
+
+@media (max-width: 1199.98px) {
+  :root {
+    --section-y: 5.5rem;
+    --section-y-lg: 7rem;
+  }
+
+  .ls-h1 {
+    font-size: 64px;
+  }
+
+  .ls-h2 {
+    font-size: 48px;
+  }
+
+  .ls-h2--sm {
+    font-size: 42px;
+  }
+
+  .ls-h3 {
+    font-size: 34px;
+  }
+
+  .ls-feature,
+  .ls-infotab {
+    gap: 56px;
+  }
+
+  .ls-card {
+    padding: 32px;
+  }
+
+  .ls-statement {
+    padding: 44px;
+  }
+
+  /* The desktop menu shows from 992px with the reference's 28px gaps, which
+     fits its six short demo labels. Mindlogicx's are longer ("ESG &
+     Sustainability", "Global Compliance"), so the row overflows and pushes the
+     header CTA onto a second line. Tighten in this band only; from 1400px the
+     reference's own spacing applies. */
+  .ls-nav {
+    gap: 20px;
+  }
+
+  .ls-nav__link {
+    font-size: 14px;
+  }
+
+  .ls-heroslide__heading {
+    font-size: 48px;
+  }
+
+  .ls-heroslide__text {
+    font-size: 22px;
+  }
+
+  .ls-mg__head {
+    gap: 56px;
+  }
+
+  .ls-mg__title {
+    font-size: 40px;
+  }
+
+  /* The counters keep their rail here but everything around it tightens —
+     four columns inside a ~910px measure leaves about 160px per figure. */
+  .ls-why__metric {
+    min-height: 300px;
+    padding-left: 58px;
+  }
+
+  .ls-why__rail {
+    left: 26px;
+  }
+
+  .ls-why__glyph {
+    width: 52px;
+    height: 52px;
+  }
+
+  .ls-why__marker {
+    left: 48px;
+  }
+
+  .ls-why__value {
+    padding-left: 18px;
+    font-size: 54px;
+  }
+
+  .ls-why__label {
+    padding-left: 18px;
+    font-size: 19px;
+  }
+
+  .ls-why__pillars {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Eight tiles over three rows rather than two — four across gets tight for
+     "United Kingdom" once the measure drops below the full 1480px. */
+  .ls-aff__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* No `.ls-ind__title` size here on purpose. Between 992px and this
+     breakpoint the title is held on one line by `min(52px, 3.5vw)` in
+     `ls.css`; a flat value would overflow the line at the bottom of the band
+     (42px needs ~1130px of measure, and at 992px there are ~883px). Below
+     992px it wraps again and the override returns. */
+
+  .ls-wwd__grid {
+    gap: 48px;
+  }
+
+  .ls-wwd__title {
+    font-size: 46px;
+  }
+
+  .ls-wwd__card {
+    padding: 28px 30px 30px;
+  }
+
+  .ls-palt__items {
+    gap: 16px;
+  }
+
+  .ls-palt__name {
+    font-size: 18px;
+  }
+}
+
+/* ========================================================================
+   < 992px  —  two-column sections collapse, the mobile drawer takes over
+   ======================================================================== */
+
+@media (max-width: 991.98px) {
+  :root {
+    --section-y: 4.5rem;
+    --section-y-lg: 5.5rem;
+  }
+
+  .ls-h1 {
+    font-size: 52px;
+  }
+
+  .ls-h2 {
+    font-size: 40px;
+  }
+
+  .ls-h2--sm {
+    font-size: 36px;
+  }
+
+  .ls-h3 {
+    font-size: 30px;
+  }
+
+  .ls-h4 {
+    font-size: 24px;
+  }
+
+  .ls-lead {
+    font-size: 19px;
+  }
+
+  .ls-intro + *,
+  .ls-mt-lg {
+    margin-top: 48px;
+  }
+
+  .ls-mt-md {
+    margin-top: 40px;
+  }
+
+  .ls-statement p {
+    font-size: 24px;
+  }
+
+  /* Desktop nav off, burger on. */
+  .ls-nav {
+    display: none;
+  }
+
+  .ls-header__cta {
+    display: none;
+  }
+
+  .ls-header__burger {
+    display: block;
+  }
+
+  /* Two-up sections stack. Reverse ordering is dropped with them: once there
+     is one column, "media second" has to mean media first, or the copy for a
+     section is separated from its own picture. */
+  .ls-feature,
+  .ls-infotab {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+
+  .ls-feature--reverse > .ls-feature__media {
+    order: 0;
+  }
+
+  .ls-feature__media {
+    max-width: 640px;
+  }
+
+  /* The sticky panel has nothing to stick beside now — see the file header. */
+  .ls-infotab__aside {
+    display: none;
+  }
+
+  .ls-infotab__mobile-figure {
+    display: block;
+    margin-top: 24px;
+    overflow: hidden;
+    border-radius: var(--radius-media);
+    aspect-ratio: 16 / 10;
+  }
+
+  .ls-grid--3,
+  .ls-grid--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ls-hero {
+    padding-top: 56px;
+  }
+
+  .ls-hero__media {
+    margin-top: 48px;
+    aspect-ratio: 16 / 9;
+  }
+
+  /* The copy claims more of the frame as the artwork is cropped in, and the
+     scrim reaches further right to keep its background a known quantity.
+     The value is set by "Build High-Performing Teams." — the longest second
+     line of the five, and the one that decides whether the headings hold the
+     two lines the comp draws. It came down from 30% when the heading at this
+     band went 38px → 40px; column width and heading size are a pair here. */
+  .ls-heroslide__inner {
+    padding-right: 20%;
+  }
+
+  .ls-heroslide::after {
+    background: linear-gradient(
+      to right,
+      rgb(255 255 255 / 92%) 0%,
+      rgb(255 255 255 / 82%) 40%,
+      rgb(255 255 255 / 0%) 78%
+    );
+  }
+
+  .ls-heroslide__heading {
+    font-size: 40px;
+    margin-top: 22px;
+  }
+
+  .ls-heroslide__text {
+    font-size: 20px;
+  }
+
+  /* Three across: five 20vw slots on a tablet leave each wordmark too narrow
+     to read while it is moving. */
+  .ls-logostrip {
+    --logo-slot: 33.333vw;
+  }
+
+  .ls-logostrip__item img {
+    height: 40px;
+  }
+
+  /*
+   * The orchestration diagram goes, exactly as in the source: below 768px
+   * there is no width for a 560px circle, and the six agent cards below
+   * carry the same information. The head collapses to one column with it.
+   */
+  .ls-mg__head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+  }
+
+  .ls-mg__title {
+    font-size: 36px;
+  }
+
+  .ls-mg__agents {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 56px;
+  }
+
+  .ls-mg__principle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 32px;
+  }
+
+  /* The controls drop under the lead — side by side they were squeezing the
+     paragraph to about twenty characters a line. */
+  .ls-ind__meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+  }
+
+  /* The two columns stack. `order` is reset so the photograph always follows
+     its copy once they are one above the other — a flipped band would
+     otherwise put the picture above a name it has not introduced yet. */
+  .ls-edu__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .ls-edu__grid--flip .ls-edu__copy {
+    order: 0;
+  }
+
+  .ls-edu__prop {
+    font-size: 26px;
+  }
+
+  /* One column: two columns of 15px rules in under 700px leaves ~45
+     characters a line, which is below comfortable for body text. */
+  .ls-ops__list {
+    columns: 1;
+    margin-top: 40px;
+  }
+
+  /* ---- Who We Are (About) ---- */
+  .ls-intro2__top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .ls-intro2__title {
+    font-size: 36px;
+  }
+
+  .ls-intro2__cards {
+    margin-top: 40px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* ---- Why Mindlogicx ----------------------------------------------------
+     The rule, its glyph and the ring marker are dropped rather than scaled,
+     as in the source. Holding a 335px band around a two-line figure just
+     reserves a block of dead space once the columns halve. */
+  .ls-why__head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .ls-why__bodywrap {
+    justify-self: start;
+  }
+
+  .ls-why__body {
+    max-width: 46ch;
+    text-align: left;
+  }
+
+  .ls-why__metrics {
+    margin-top: 56px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 32px;
+  }
+
+  .ls-why__metric {
+    min-height: 0;
+    padding-left: 0;
+    align-content: start;
+  }
+
+  .ls-why__rail,
+  .ls-why__marker {
+    display: none;
+  }
+
+  .ls-why__value,
+  .ls-why__label {
+    padding-left: 0;
+  }
+
+  .ls-why__pillars {
+    margin-top: 56px;
+  }
+
+  .ls-why__cta {
+    margin-top: 40px;
+  }
+
+  .ls-edu__prop {
+    font-size: 24px;
+  }
+
+  .ls-intro2__title {
+    font-size: 30px;
+  }
+
+  /* The pills go full width and stack — side by side at 375px,
+     "With least human intervention" wraps to three lines inside its pill. */
+  .ls-intro2__pill {
+    width: 100%;
+  }
+
+  .ls-intro2__card {
+    padding: 22px;
+    gap: 14px;
+  }
+
+  .ls-aff__grid {
+    margin-top: 40px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ls-aff__tile {
+    min-height: 128px;
+    padding: 22px 18px;
+  }
+
+  .ls-ind__title {
+    font-size: 36px;
+  }
+
+  /*
+   * The two columns stack. The cascade is switched off with them: an offset
+   * that reads as a descending run beside a column of text just looks like
+   * three cards that failed to line up once they are the full width.
+   */
+  .ls-wwd__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 44px;
+  }
+
+  .ls-wwd__cards > li:nth-child(2),
+  .ls-wwd__cards > li:nth-child(3) {
+    margin-left: 0;
+  }
+
+  .ls-wwd__title {
+    font-size: 40px;
+  }
+
+  .ls-wwd__media {
+    max-width: 100%;
+  }
+
+  /* Five columns at this width give each product about 190px, narrower than
+     "IntelliTHESIS™" needs. Wrap three-up instead. */
+  .ls-palt__items {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .ls-cta {
+    padding: 64px 36px;
+  }
+
+  .ls-footer__top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 44px;
+  }
+}
+
+/* ========================================================================
+   < 768px  —  single column throughout
+   ======================================================================== */
+
+@media (max-width: 767.98px) {
+  :root {
+    --section-y: 3.5rem;
+    --section-y-lg: 4.5rem;
+    --gutter: 20px;
+  }
+
+  body {
+    font-size: 17px;
+  }
+
+  .ls-h1 {
+    font-size: 42px;
+    letter-spacing: -0.02em;
+  }
+
+  .ls-h2 {
+    font-size: 34px;
+    letter-spacing: -0.02em;
+  }
+
+  .ls-h2--sm {
+    font-size: 31px;
+  }
+
+  .ls-h3 {
+    font-size: 26px;
+  }
+
+  .ls-h4 {
+    font-size: 22px;
+  }
+
+  .ls-lead {
+    font-size: 18px;
+  }
+
+  .ls-body,
+  .ls-bullets li {
+    font-size: 16px;
+  }
+
+  .ls-grid--3,
+  .ls-grid--4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Portraits stay two-up: a single column of square photographs turns the
+     leadership section into a very long scroll of near-identical crops. */
+  .ls-grid--people {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  /* One advisor per row below 768px. Two-up would leave 40-word biographies
+     in ~150px columns; unlike the roster portraits these cards are mostly
+     text, so they do not survive being halved. */
+  .ls-adv__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Capped, or a 4:5 portrait at full card width becomes a 450px-tall photo
+     with four lines of text under it. */
+  .ls-adv__photo {
+    max-width: 240px;
+  }
+
+  /* Portraits stay two-up on a phone where most grids collapse to one — a
+     single column of eleven portrait cards is an enormous amount of scroll
+     for a roster. The odd tier out then centres its last card. */
+  .ls-roster {
+    --roster-gap: 20px;
+  }
+
+  .ls-roster > li {
+    flex-basis: calc((100% - var(--roster-gap)) / 2);
+    max-width: calc((100% - var(--roster-gap)) / 2);
+  }
+
+  .ls-card {
+    padding: 28px;
+  }
+
+  .ls-statement {
+    padding: 32px;
+  }
+
+  .ls-statement p {
+    font-size: 21px;
+  }
+
+  .ls-infotab__trigger {
+    gap: 14px;
+    padding: 22px 0;
+  }
+
+  .ls-infotab__panel-inner {
+    /* The index column is dropped from the indent — at this width the copy
+       needs the full measure more than it needs to align under the heading. */
+    padding-left: 0;
+    padding-bottom: 22px;
+  }
+
+  /*
+   * The hero turns vertical. There is no empty left third at 375px — the crop
+   * is all subject — so the overlay stops being an overlay: the artwork drops
+   * to the bottom of the frame, the scrim goes solid white across the top, and
+   * the copy sits on white above it. Text over a photograph at this width is
+   * either unreadable or needs a veil so heavy the photograph is pointless.
+   */
+  /* Still a full screen, but as a floor rather than a fixed height: the
+     stacked layout below needs to grow if the copy runs long on a narrow
+     phone, and a hard `height` would clip it. */
+  .ls-heroslider {
+    height: auto;
+    min-height: calc(100vh - var(--header-h));
+    min-height: calc(100dvh - var(--header-h));
+  }
+
+  .ls-heroslide {
+    position: relative;
+    align-items: flex-start;
+    /* Stacked rather than absolutely positioned, so the tallest slide sets the
+       height and none of the others are clipped. Only the active one is in
+       flow; the rest are pulled out from under it.
+       The active slide is what actually drives the full-screen height here,
+       since the slider itself is `height: auto` at this width. */
+    min-height: calc(100vh - var(--header-h));
+    min-height: calc(100dvh - var(--header-h));
+    padding-block: 36px 108px;
+  }
+
+  .ls-heroslide:not([data-active='true']) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .ls-heroslide__bg {
+    object-position: right bottom;
+  }
+
+  /*
+   * Fully opaque through the copy, not merely near-opaque. At 96-98% the
+   * labels inside the artwork's UI card — "Better Engagement", "Data-Driven
+   * Decisions" — stayed legible enough to read as stray text sitting behind
+   * the paragraph. A couple of percent of photograph is not worth seeing
+   * through a body paragraph; the artwork gets the bottom of the frame
+   * instead, where it is unobstructed.
+   */
+  .ls-heroslide::after {
+    background: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 100%) 0%,
+      /* Holds past the "Learn More" pill — at 54% the fade began level with
+         the button and fragments of the artwork's UI card surfaced beside it,
+         which reads as a rendering glitch rather than as a photograph. */
+      rgb(255 255 255 / 100%) 64%,
+      rgb(255 255 255 / 55%) 82%,
+      rgb(255 255 255 / 0%) 100%
+    );
+  }
+
+  /* Cancels the desktop percentage. Restated as the same clamp the fluid
+     container uses rather than `var(--gutter)`, so both sides of the copy
+     match — the gutter is 20px here and the clamp bottoms out at 24px, which
+     left the text one pixel-nudge off-centre against its own band. */
+  .ls-heroslide__inner {
+    padding-right: clamp(24px, 4.5vw, 96px);
+  }
+
+  .ls-heroslide__heading {
+    font-size: 34px;
+    margin-top: 18px;
+  }
+
+  .ls-heroslide__text {
+    margin-top: 14px;
+    font-size: 18px;
+  }
+
+  .ls-heroslide__cta {
+    margin-top: 24px;
+  }
+
+  .ls-heroslider__controls {
+    bottom: 28px;
+  }
+
+  /* Two wordmarks across instead of five — at 20vw each they would be 75px
+     wide on a phone. Only the slot width changes; the belt is unaffected. */
+  .ls-logostrip {
+    --logo-slot: 50vw;
+  }
+
+  .ls-logostrip__item img {
+    height: 34px;
+  }
+
+  .ls-mg__visual {
+    display: none;
+  }
+
+  .ls-mg__title {
+    font-size: 30px;
+  }
+
+  .ls-mg__agents {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ls-mg__definition {
+    padding-left: 18px;
+  }
+
+  .ls-ind__title {
+    font-size: 30px;
+  }
+
+  /* The card is a media card now — no fixed height, no scrim, and its padding
+     lives on the body rather than the card. Only the body tightens here. */
+  .ls-ind__body {
+    padding: 36px 20px 20px;
+  }
+
+  /* The affiliation tiles are logo-only now, so there is no name to size. The
+     placeholder marks scale with the tile. */
+
+  .ls-why__value {
+    font-size: 44px;
+  }
+
+  .ls-why__label {
+    font-size: 17px;
+  }
+
+  .ls-why__pillars {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ls-why__pillar {
+    padding: 24px;
+  }
+
+  .ls-ind__name {
+    font-size: 23px;
+  }
+
+  .ls-wwd__title {
+    font-size: 34px;
+  }
+
+  .ls-wwd__card {
+    padding: 24px 24px 26px;
+  }
+
+  .ls-wwd__cardtitle {
+    font-size: 22px;
+  }
+
+  .ls-wwd__cardhead {
+    gap: 14px;
+  }
+
+  .ls-wwd__media {
+    aspect-ratio: 3 / 2;
+  }
+
+  .ls-palt__items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .ls-cta {
+    padding: 48px 24px;
+    border-radius: var(--radius-card);
+  }
+
+  .ls-footer__top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .ls-footer__legal {
+    margin-left: 0;
+  }
+
+  .ls-drawer__link {
+    font-size: 20px;
+  }
+}
+
+/* ========================================================================
+   < 480px  —  smallest phones
+   ======================================================================== */
+
+@media (max-width: 479.98px) {
+  .ls-h1 {
+    font-size: 36px;
+  }
+
+  .ls-h2 {
+    font-size: 30px;
+  }
+
+  .ls-h2--sm {
+    font-size: 28px;
+  }
+
+  .ls-h3 {
+    font-size: 24px;
+  }
+
+  .ls-grid--people {
+    gap: 16px;
+  }
+
+  .ls-roster {
+    --roster-gap: 16px;
+  }
+
+  /*
+   * Restated, not inherited. The hero heading carries both `.ls-h1` and
+   * `.ls-heroslide__heading`, which are the same specificity, so the later
+   * declaration wins — and `.ls-h1` above is later than the hero's own rule in
+   * the 768px block. Without this the heading silently renders at the generic
+   * 36px instead of the 32px that band is tuned for.
+   */
+  .ls-heroslide__heading {
+    font-size: 30px;
+  }
+
+  .ls-heroslide__text {
+    font-size: 17px;
+  }
+
+  .ls-ind__title {
+    font-size: 27px;
+  }
+
+  .ls-wwd__title {
+    font-size: 30px;
+  }
+
+  .ls-wwd__quote {
+    padding-left: 16px;
+  }
+
+  /* One per row. Two columns at 375px give each product ~150px, which starts
+     clipping the longer names. */
+  .ls-palt__items {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ls-palt__art {
+    /* Wider than tall now it has the full width, so the row of products does
+       not turn into five tall blocks. */
+    aspect-ratio: 16 / 9;
+  }
+
+  .ls-card {
+    padding: 24px;
+  }
+
+  /* A pill and a field side by side leaves the field too narrow to show a
+     typed address, so the button drops below it. */
+  .ls-subscribe {
+    flex-direction: column;
+  }
+
+  .ls-subscribe .ls-pill {
+    justify-content: center;
+  }
+
+  .ls-statement {
+    padding: 24px;
+  }
+
+  .ls-statement p {
+    font-size: 19px;
+  }
+}
+
+/* ========================================================================
+   >= 992px  —  the mobile-only copy of the info-tab visual stays out
+   ======================================================================== */
+
+@media (min-width: 992px) {
+  .ls-infotab__mobile-figure {
+    display: none;
+  }
+
+  /*
+   * "Where We Apply It" sets on a single line, by request.
+   *
+   * **This has to live here, not in `ls.css`.** The element carries both
+   * `ls-h2` and `ls-ind__title`, which are the same specificity, so the later
+   * declaration wins — and `ls-responsive.css` overrides `.ls-h2` at every
+   * breakpoint. The first attempt put this in `ls.css` and the 48px `.ls-h2`
+   * override at `max-width: 1199.98px` silently beat it, pushing a 1147px
+   * line through an 868px column and scrolling the whole page sideways.
+   *
+   * The headline is 56 characters and Roboto sets it at ~0.427em each, so it
+   * needs ~24em. The container runs at about 0.89 of the viewport below
+   * 1480px, which puts the largest size that still fits at ~3.7vw; 3.5vw
+   * leaves a margin, capped at the section's own 52px.
+   *
+   * **Re-measure if the headline text ever changes** — `nowrap` overflows
+   * silently rather than falling back to wrapping.
+   *
+   * Only above 992px: below it the burger nav is in and a single line would
+   * have to drop to ~14px to fit a phone, so it wraps there instead.
+   */
+  .ls-ind__title {
+    white-space: nowrap;
+    font-size: min(52px, 3.5vw);
+  }
+}
