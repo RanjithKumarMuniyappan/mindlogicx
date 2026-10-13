@@ -552,18 +552,17 @@ behaviour too, not a breakpoint bug.
 Reduced 2026-10-12 to a compact band carrying only the `<h1>`. It previously
 held the eyebrow, the lead and `banner.bgImg`.
 
-**White type, on a band deepened to carry it.** The title was asked for in
-white. White on `--accent-fill` (`#00aeef`) is **2.53:1** — it fails AA at any
-size, and at 80px it reads as a pale smear rather than a heading. So the band
-drops to `--accent-strong-cyan`, the same hue darkened, which carries white at
-**5.88:1**.
+**The band is the secondary brand colour, and the title is therefore ink.**
+Asked for `--accent-fill` — true `#00aeef` — as the background (2026-10-12),
+so `.ls-hero--accent` now sets no colours at all and simply inherits
+`.ls-section--accent`, whose `--accent-fill` / `--on-accent-fill` pairing is
+ink on cyan at **7.38:1**.
 
-> **Both halves of that pair are load-bearing.** `.ls-hero--accent` overrides
-> *both* the background and the colour, taking the band off the
-> `--accent-fill` / `--on-accent-fill` pairing that `.ls-section--accent`
-> otherwise guarantees. Lightening the background back to `--accent-fill`
-> without returning the type to ink reinstates the 2.53:1 failure. If the
-> bright cyan is ever wanted back, the title has to go back to ink.
+> **The band cannot be bright cyan and the type white at the same time.**
+> White on `#00aeef` is **2.53:1** — it fails AA at any size, and at 80px it
+> reads as a pale smear. An earlier revision ran white on a *darkened* cyan
+> (`--accent-strong-cyan`, 5.88:1) to honour a white-title request; that
+> remains the only way to have white here. Pick the colour or pick the white.
 
 `PageHero` kept its `eyebrow`, `lead` and `image` props — About simply stops
 passing them, so another page can still open the full way. Two strings went
@@ -715,6 +714,43 @@ Both portraits arrived as 308² images and were converted to the roster's
 → white. Advisory Board itself has to stay **white**, because its cards are
 filled `--grey-50` and would disappear into a smoke band.
 
+## The numbered index motif is gone (2026-10-12)
+
+The reference pattern's signature `01` / `E/01` / `V/1` motif was removed from
+the whole site by request. Taken off: the hero's `01 / 05` counter, the sector
+cards, the Education bands, How We Operate, Our Philosophy, What We Stand For,
+Why Choose Us, and the two orphaned components that carried it
+(`Domains`, `PlatformsAlt`, plus `Focus`'s `index` feed into `InfoTabs`).
+
+**`.ls-index` itself stays, and four things still use it** — because they are
+*labels*, not numbering, and the request was about the numbered identity:
+
+| where | what it shows |
+|---|---|
+| `Strengths` (Home) | STRATEGY / BRAND / TECHNOLOGY |
+| `Newsroom` | the post's category |
+| `Platforms` | the product's tagline |
+| `Placeholder` | the unbuilt route's path |
+
+`Card` and `InfoTabs` still accept an `index` prop; only the callers that
+passed a number stopped passing one.
+
+> **One survived the first sweep: the DEI list.** Its `01, 02, 03` came from
+> a CSS `counter(ls-num, decimal-leading-zero)` on `.ls-numlist li::before`,
+> not from JSX, so grepping for `ls-index` could never find it. It is bullets
+> now (`.ls-bullets`), `.ls-numlist` is gone, and there are **no `counter()`
+> rules left in the stylesheet**.
+>
+> When auditing for generated content, walk every element's `::before` and
+> `::after` computed `content` in the browser rather than grepping source.
+> That check now reports zero number-bearing pseudo-elements on all three
+> routes.
+
+Two lists also changed element with their numbers: How We Operate and the DEI
+commitments were `<ol>`s while they were numbered and are `<ul>`s now —
+neither is a sequence, and the markup should not claim otherwise. **No `<ol>`
+remains on any route.**
+
 ## Placeholders that must not ship as-is
 
 Three things on this build are structurally finished and factually empty. All
@@ -722,7 +758,7 @@ three are marked in the UI so the gap is visible rather than quietly wrong.
 
 | What | Where | What is missing |
 |---|---|---|
-| Newsroom links | `footer.newsroom` in `site.js` | Awards, MOU signings, the Indonesia event, the SMC signup and ten years of news. Each category renders as **plain text with a "TBC" badge, not a link.** Give an entry a real `link` and delete its `todo` flag to publish it. |
+| Newsroom content | `footer.newsroom` in `site.js` | Awards, MOU signings, the Indonesia event, the SMC signup and ten years of news — still none of it supplied. **No longer rendered**: the footer now carries a single "Newsroom" link. These belong on `/news-room` when it is built; the `todo`/TBC convention is documented on the export for whatever renders them. |
 | Three social URLs | `company.social` | Facebook, X and YouTube have **no address**. Guessing `facebook.com/mindlogicx` risks pointing the footer at a page the company does not control, so a `null` href renders the mark dimmed and inert instead. Set `href` and it becomes a link. LinkedIn and Instagram are live. |
 | IntelliEXAMS diagram | `educationPage.products[0].image` | The supplied GIF has an **"infogiph.com" watermark** burned into its bottom-right corner, visible on the page. Needs a clean export — a third party's mark should not ship on a corporate site. |
 | Eight affiliation logos | `affiliations.items` | Each tile renders an **abstract geometric mark** from `icons.jsx` (`MarkRing`, `MarkHex`, …). None resembles the real logo of eAA, Don Bosco, IIBA or any trade body — drawing something *close* would ship looking finished. Set `logo` to a real file and `mark` is ignored. |
@@ -757,6 +793,27 @@ image and must be kept in step with it; editing it changes nothing visible.
 > they cannot reflow, be resized by the reader, or be translated. If that
 > matters, ask for the flags as separate files and the previous per-country
 > markup (flag + name as real text, wrapping to two rows) can come back.
+
+## The footer's columns (2026-10-12)
+
+`brand · Company · Domains · Products`.
+
+- **Newsroom is a single link in the Company list.** It went from its own
+  column, to a sub-group with its four categories under it, to one entry
+  among About Company and Careers. `footer.newsroom` — the Awards / MOUs /
+  Events / In the News breakdown with its TBC markers — is **no longer
+  rendered anywhere**; it is still in `site.js`, and those categories belong
+  on the `/news-room` page once that exists.
+- **"Our Leadership" removed.** It pointed at `/about`, the same page as
+  "About Company" directly above it.
+- **Products is new** and holds the two platforms with public sites of their
+  own. These are the only **external** links in the footer, so they are real
+  anchors with `target="_blank"` and `rel="noreferrer noopener"`, not router
+  `Link`s, and they carry an outward arrow.
+
+> ⚠️ `themediax.ai` was supplied as a bare name rather than a URL and is taken
+> at face value as its own domain. That is the obvious reading but it is
+> **unconfirmed** — the one address here nobody gave in full.
 
 ## The footer lost its contact block (2026-10-12)
 

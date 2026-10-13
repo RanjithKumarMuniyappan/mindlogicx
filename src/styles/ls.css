@@ -1021,28 +1021,19 @@ address {
 }
 
 /* A numbered variant, for ordered content that earns the numbers. */
-.ls-numlist {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  counter-reset: ls-num;
-}
-
-.ls-numlist li {
-  display: flex;
-  gap: 20px;
-  counter-increment: ls-num;
-}
-
-.ls-numlist li::before {
-  content: counter(ls-num, decimal-leading-zero);
-  flex: none;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--accent-text);
-  padding-top: 5px;
+/*
+ * The DEI commitments.
+ *
+ * `.ls-numlist` lived here — an `<ol>` whose markers were a CSS
+ * `counter(ls-num, decimal-leading-zero)`. It was the last `01, 02, 03` on
+ * the site and was removed on 2026-10-12; the list now uses `.ls-bullets`
+ * like every other unordered list.
+ *
+ * Only the spacing differs: these six items run to a couple of sentences
+ * each, where `.ls-bullets` is normally used for short phrases.
+ */
+.ls-dei__list {
+  gap: 18px;
 }
 
 /* ========================================================================
@@ -1718,27 +1709,24 @@ address {
  * section. With nothing under the title, a 0 bottom would sit the heading on
  * the band's edge.
  *
- * ## White type, and why the band had to deepen for it
+ * ## The band is the secondary colour, and the title is therefore ink
  *
- * The title is white by request (2026-10-12). White on `--accent-fill`
- * (`#00aeef`) is **2.53:1** — it fails AA at any size, and at 80px it reads
- * as a pale smear rather than a heading.
+ * Asked for the secondary brand colour as the background (2026-10-12), so the
+ * band is `--accent-fill` — true `#00aeef`.
  *
- * So the band drops to `--accent-strong-cyan`, the same hue darkened, which
- * carries white at **5.88:1**. The request was white type; this is the
- * nearest band that actually delivers it.
+ * **The title went back to ink with it, and the two go together.** White on
+ * `#00aeef` is **2.53:1**: it fails AA at any size, and at 80px it reads as a
+ * pale smear. Ink on the same cyan is **7.38:1**. That pairing is exactly what
+ * `--accent-fill` / `--on-accent-fill` exist to express, which is why this
+ * rule now sets neither and simply inherits `.ls-section--accent`.
  *
- * **Both halves of this pair are load-bearing.** Lightening the background
- * back to `--accent-fill` without also returning the type to ink reinstates
- * the 2.53:1 failure, and the override below is what takes the band off the
- * `--accent-fill`/`--on-accent-fill` pairing that `.ls-section--accent`
- * otherwise guarantees.
+ * A previous revision ran white type on a *darkened* cyan (5.88:1) to honour
+ * a white-title request. That is still the only way to have white here — the
+ * band cannot be bright cyan and the type white at the same time.
  */
 .ls-hero--accent {
   padding-top: 72px;
   padding-bottom: 72px;
-  background: var(--accent-strong-cyan);
-  color: var(--white);
 }
 
 .ls-hero--accent .ls-hero__inner {
@@ -2261,9 +2249,6 @@ address {
    under the one above. No special-casing needed — every item has a top
    border and the column break is invisible. */
 
-.ls-ops__index {
-  color: var(--accent-text);
-}
 
 .ls-ops__title {
   margin-top: 10px;
@@ -3124,24 +3109,20 @@ address {
    there. It has to be declared after that file's `.ls-h2` breakpoint
    overrides or they win on source order. */
 
-.ls-ind__meta {
-  margin-top: 22px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 48px;
-}
-
+/*
+ * The lead sets on one line, by request.
+ *
+ * It was capped at 38em and shared a row with the controls, which wrapped it
+ * to two. With the controls moved below the carousel it has the full measure,
+ * and at ~103 characters it needs about 930px of the 1267px available — so no
+ * `nowrap` is required. It simply fits, and still wraps gracefully on a
+ * narrower window instead of overflowing.
+ */
 .ls-ind__lead {
-  max-width: 38em;
+  margin-top: 22px;
+  max-width: none;
 }
 
-.ls-ind__cta {
-  flex: none;
-  /* White rather than the tinted ghost default: this sits on a white band and
-     needs the hairline to read as a control. */
-  background: var(--white);
-}
 
 /*
  * Swiper's own track. The slide heights are equalised so a card with a
@@ -3167,10 +3148,13 @@ address {
 /* ---- controls, in the heading row ------------------------------------- */
 
 .ls-ind__controls {
-  flex: none;
+  /* Below the carousel since 2026-10-12, centred under the track rather than
+     tucked into the heading row. */
+  margin-top: 36px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 12px;
 }
 
 .ls-ind__nav {
@@ -3275,9 +3259,6 @@ address {
   color: var(--accent-text);
 }
 
-.ls-ind__index {
-  color: var(--grey-300);
-}
 
 /* ---- the inset picture --------------------------------------------------- */
 
@@ -3751,12 +3732,23 @@ a.ls-footer__socialbtn:hover {
  */
 .ls-footer__presence {
   display: block;
-  margin-top: 44px;
+  /* No top margin: the row above already ends on the social buttons' own
+     spacing, and the strip is mostly whitespace at its top edge. */
+  margin-top: 0;
   width: 100%;
-  /* 480, down from 720 (2026-10-12). The lettering lands at about 14px, which
-     is still the footer's own body size — below roughly 420 it starts to read
-     as fine print, since the names are pixels and cannot reflow. */
-  max-width: 480px;
+  /*
+   * 360, down from 720 → 480 → 420.
+   *
+   * ⚠️ The baked-in lettering now renders at roughly **10px**, below the
+   * footer's own 14px smallest type. The names are pixels, not text, so they
+   * cannot reflow, be resized by the reader or be zoomed by a browser's text
+   * controls — this is as small as the artwork can go and still be read.
+   *
+   * **Do not reduce this further.** If the strip needs to be smaller, the
+   * flags have to come as separate files with the country names set as real
+   * text; `company.presence` and the markup for that are in the history.
+   */
+  max-width: 360px;
   height: auto;
 }
 
@@ -3780,10 +3772,14 @@ a.ls-footer__socialbtn:hover {
 }
 
 .ls-footer__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 16px;
   color: var(--footer-text);
   transition: color 0.2s ease;
 }
+
 
 .ls-footer__links a:hover {
   color: var(--footer-head);

@@ -89,10 +89,6 @@ export default function PlatformsAlt() {
                     <ProductMockup variant={i} />
                   </span>
 
-                  <span className="ls-index ls-palt__num">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-
                   <span className="ls-palt__name">{product.title}</span>
                   <span className="ls-palt__tag">{product.tagline}</span>
 

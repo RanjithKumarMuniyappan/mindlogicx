@@ -29,7 +29,6 @@ export default function Domains() {
           {process.steps.map((step, i) => (
             <Card
               key={step.title}
-              index={`D/${i + 1}`}
               icon={step.title}
               title={step.title}
               desc={step.content}

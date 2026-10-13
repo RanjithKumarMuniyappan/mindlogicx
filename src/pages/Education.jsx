@@ -20,8 +20,9 @@ import { ArrowUpRight } from '../components/common/icons';
  * are six separate pieces of infrastructure.
  *
  * Bands alternate white and smoke, and the photograph alternates side so the
- * page has a rhythm rather than six identical rows. The index (`E/1`…`E/6`)
- * is the reference pattern's numbered motif.
+ * page has a rhythm rather than six identical rows. Each band carried an
+ * `E/01`…`E/06` index until 2026-10-12, when numbered indices were taken off
+ * the whole site.
  *
  * ## IntelliMINDS
  *
@@ -46,7 +47,6 @@ import { ArrowUpRight } from '../components/common/icons';
  * or remove a product and this needs re-checking.
  */
 function ProductBand({ product, index }) {
-  const n = String(index + 1).padStart(2, '0');
   const flipped = index % 2 === 1;
   const band = flipped ? 'ls-section--white' : 'ls-section--smoke';
 
@@ -55,7 +55,6 @@ function ProductBand({ product, index }) {
       <section className={`ls-section ${band} ls-edu__band ls-edu__band--tbc`}>
         <div className="ls-container">
           <Reveal className="ls-edu__tbc" effect="fadeInUp">
-            <p className="ls-index">E/{n}</p>
             <h2 className="ls-h3 ls-edu__name">{product.name}</h2>
             <p className="ls-edu__tagline">{product.tagline}</p>
             <p className="ls-edu__status">In development</p>
@@ -71,7 +70,6 @@ function ProductBand({ product, index }) {
       <div className="ls-container">
         <div className={`ls-edu__grid${flipped ? ' ls-edu__grid--flip' : ''}`}>
           <Reveal className="ls-edu__copy" effect="fadeInUp">
-            <p className="ls-index">E/{n}</p>
 
             {/* The lockup carries the product name, so the heading beside it
                 would be read twice. The `h2` stays for document structure and

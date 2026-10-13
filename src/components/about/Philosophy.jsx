@@ -36,7 +36,6 @@ export default function Philosophy() {
           {philosophy.pillars.map((pillar, i) => (
             <Card
               key={pillar.title}
-              index={String(i + 1).padStart(2, '0')}
               title={pillar.title}
               desc={pillar.content}
               tint={wash(i)}
