@@ -556,6 +556,10 @@ address {
   gap: 24px;
 }
 
+.ls-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .ls-grid--3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -688,6 +692,10 @@ address {
    ======================================================================== */
 
 .ls-media {
+  /* `block` so the ratio applies whichever element carries the class. It was
+     only ever used on a `div` until the club gallery needed it on a `span`
+     inside a `button`, where an inline box silently drops `aspect-ratio`. */
+  display: block;
   overflow: hidden;
   border-radius: var(--radius-media);
   background: var(--grey-100);
@@ -1709,38 +1717,107 @@ address {
  * section. With nothing under the title, a 0 bottom would sit the heading on
  * the band's edge.
  *
- * ## The band is the secondary colour, and the title is therefore ink
+ * ## ⚠️ White on cyan — a known contrast failure, directed by the client
  *
- * Asked for the secondary brand colour as the background (2026-10-12), so the
- * band is `--accent-fill` — true `#00aeef`.
+ * The band is `--accent-fill` (true `#00aeef`) and the title is white. Both
+ * were asked for explicitly on 2026-10-13, after two earlier rounds on the
+ * same question.
  *
- * **The title went back to ink with it, and the two go together.** White on
- * `#00aeef` is **2.53:1**: it fails AA at any size, and at 80px it reads as a
- * pale smear. Ink on the same cyan is **7.38:1**. That pairing is exactly what
- * `--accent-fill` / `--on-accent-fill` exist to express, which is why this
- * rule now sets neither and simply inherits `.ls-section--accent`.
+ * **This measures 2.53:1 and fails WCAG AA.** Large text needs 3:1, body text
+ * 4.5:1 — so it misses even the large-text bar, and raising the size cannot
+ * rescue it. It is the only knowingly non-conformant colour pairing on the
+ * site, and it is here by instruction rather than oversight: do not "fix" it
+ * silently, and do not copy the pattern elsewhere.
  *
- * A previous revision ran white type on a *darkened* cyan (5.88:1) to honour
- * a white-title request. That is still the only way to have white here — the
- * band cannot be bright cyan and the type white at the same time.
+ * The two conformant arrangements, both previously built and both set aside:
+ *
+ *   - **ink on this cyan** — 7.38:1, which is exactly what `--accent-fill` /
+ *     `--on-accent-fill` were defined to express;
+ *   - **white on `--accent-strong-cyan`** — the same hue darkened, 5.88:1.
+ *
+ * There is no third option: `#00aeef` is too light to carry white type.
+ */
+/*
+ * The page-title band: no background at all (2026-10-13).
+ *
+ * It sits on the page's own white and carries only the `<h1>`, flush left.
+ *
+ * Symmetrical padding, unlike `.ls-hero` above — that one runs its bottom
+ * edge to 0 because a picture hangs below the type and meets the next
+ * section. With nothing under the title, a 0 bottom would sit the heading
+ * directly on the band below it.
+ *
+ * `--plain` rather than reusing `--accent`: the accent variant still exists
+ * below and still means a coloured band. Naming a colourless band "accent"
+ * would have made the next person reading this file wrong.
+ */
+/*
+ * ⚠️ **The two rules below are a pair.** The band's bottom padding and the
+ * following section's top padding stack, so changing one without the other
+ * silently doubles or halves the gap.
+ *
+ * Measured before: 56 + 56 = **112px** of air between the page title and the
+ * first thing under it, on every inner page — each value had been set
+ * assuming the other was not there. Now 24 + 32 = 56px.
+ */
+.ls-hero--plain {
+  padding-top: 72px;
+  padding-bottom: 24px;
+}
+
+.ls-hero--plain + .ls-section {
+  padding-top: 32px;
+}
+
+/*
+ * The prose pages close the gap under their title (2026-10-13).
+ *
+ * The document starts immediately below the heading, so the band's bottom
+ * padding plus the next section's top padding stacked into a noticeable hole
+ * — each was sized assuming the other was not there.
+ *
+ * **Scoped to the prose pages deliberately.** Every inner page uses
+ * `--plain`, but only these two put body copy directly under the title; the
+ * marketing pages open on a section intro that needs the air. A bare
+ * `.ls-hero--plain + .ls-section` rule would have tightened all of them.
+ */
+/* Tighter still, for pages whose body copy starts immediately under the
+   title. Declared after the pair above so it wins on source order. */
+.ls-hero--plain.ls-hero--tight {
+  padding-bottom: 8px;
+}
+
+.ls-hero--plain.ls-hero--tight + .ls-section {
+  padding-top: 24px;
+}
+
+/*
+ * ⚠️ **No longer used by any page.** Kept because the colour pairing is the
+ * hard-won part: cyan carries ink at 7.38:1, and white on it is 2.53:1 and
+ * fails. If a coloured page band ever returns, start here rather than
+ * re-deriving it.
  */
 .ls-hero--accent {
   padding-top: 72px;
   padding-bottom: 72px;
 }
 
+.ls-hero--plain .ls-hero__inner,
 .ls-hero--accent .ls-hero__inner {
   gap: 0;
 }
 
+/*
+ * Left-aligned, full width (2026-10-13). It was centred inside a 940px
+ * column; every page title on the site now sets flush left with the content
+ * beneath it, which is also how the home page's own headings sit.
+ */
 .ls-hero__inner {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 28px;
-  max-width: 940px;
-  margin-inline: auto;
-  text-align: center;
+  text-align: left;
 }
 
 .ls-hero__lead {
@@ -2217,6 +2294,931 @@ address {
     transition: none;
   }
 }
+
+/* ========================================================================
+   PORTED PAGE SECTIONS  (ESG, Global Compliance, and whatever follows)
+
+   Shared by the pages brought over from the 2025 frontend. Built from the
+   existing tokens so a ported page cannot drift from the rest of the site.
+   ======================================================================== */
+
+/* ---- alternating pillar rows: picture one side, copy the other ---------- */
+
+.ls-pillars {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 5vw, 72px);
+  list-style: none;
+  padding: 0;
+}
+
+.ls-pillar {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(32px, 4.5vw, 64px);
+}
+
+/*
+ * Odd rows put the picture second. `order` rather than markup order, so the
+ * heading still precedes its own photograph in the reading order on every
+ * row — the same rule the Education bands follow.
+ */
+.ls-pillar--purple > .ls-pillar__figure {
+  order: 2;
+}
+
+.ls-pillar__figure {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-media);
+  background: var(--grey-100);
+}
+
+.ls-pillar__figure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/*
+ * A figure with no plate behind it.
+ *
+ * `.ls-pillar__figure` fills its box with `--grey-100` so a photograph that
+ * does not quite fill the frame has something behind it. The Mindlogicxian
+ * Club artwork is a **transparent PNG**, so that grey showed straight
+ * through the cut-out — which is the "background colour" it appeared to
+ * have.
+ *
+ * `contain`, not `cover`, comes with it: the artwork is 865x740 (1.17) in a
+ * 4:3 frame, so cover would crop a graphic that is meant to be seen whole.
+ */
+.ls-pillar__figure--plain {
+  background: none;
+  border-radius: 0;
+}
+
+.ls-pillar__figure--plain img {
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
+.ls-pillar__body {
+  display: block;
+}
+
+.ls-pillar__tagline {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ls-pillar--cyan .ls-pillar__tagline {
+  /* The darkened cyan: plain `--brand-cyan` is 2.53:1 on white. */
+  color: var(--accent-strong-cyan);
+}
+
+.ls-pillar--purple .ls-pillar__tagline {
+  color: var(--accent-text);
+}
+
+.ls-pillar__title {
+  margin-top: 10px;
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.ls-pillar__desc {
+  margin-top: 16px;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--grey-500);
+  max-width: 54ch;
+}
+
+.ls-pillar__points {
+  margin-top: 20px;
+}
+
+/* ---- tag row ------------------------------------------------------------ */
+
+.ls-tagrow {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ls-tagrow--tight {
+  margin-top: 18px;
+}
+
+.ls-tagrow__tag {
+  padding: 8px 16px;
+  border-radius: 40px;
+  background: var(--wash-purple);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent-text);
+}
+
+/* ---- callout panel ------------------------------------------------------ */
+
+.ls-callout {
+  padding: 32px;
+  border-radius: var(--radius-card);
+  background: var(--grey-50);
+  box-shadow: inset 0 0 0 1px var(--grey-200);
+}
+
+.ls-callout__title {
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.ls-callout__desc {
+  margin-top: 10px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--grey-500);
+}
+
+/* ---- regulation card ---------------------------------------------------- */
+
+.ls-regcard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 28px;
+  border-radius: var(--radius-card);
+  background: var(--grey-50);
+}
+
+.ls-regcard__title {
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.ls-regcard__desc {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--grey-500);
+}
+
+/* ---- the closing pull quote, on ink ------------------------------------- */
+
+.ls-bigquote {
+  margin: 0;
+  max-width: 24ch;
+  font-size: clamp(28px, 3.4vw, 46px);
+  font-weight: 400;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  /* On the ink band; 18.67:1. */
+  color: var(--white);
+  text-wrap: balance;
+}
+
+/* ========================================================================
+   NEWSROOM  (/news-room)
+
+   Four groups of entries. Every group is empty or placeholder for now —
+   see pages/Newsroom.jsx for why that is deliberate and visible.
+   ======================================================================== */
+
+.ls-news__grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  list-style: none;
+  padding: 0;
+}
+
+.ls-news__grid > li {
+  display: flex;
+}
+
+.ls-news__card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-media);
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--grey-200);
+}
+
+.ls-news__card--link {
+  transition: box-shadow 0.25s ease;
+}
+
+.ls-news__card--link:hover {
+  box-shadow: inset 0 0 0 1px var(--grey-300);
+}
+
+.ls-news__figure {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--grey-100);
+}
+
+.ls-news__figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ls-news__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.ls-news__date {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.ls-news__title {
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.ls-news__summary {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--grey-500);
+}
+
+/*
+ * The "awaiting content" states. Dashed and grey rather than brand-coloured
+ * on purpose: in accent they would read as a feature, where the whole point
+ * is that something is still missing.
+ */
+.ls-news__pending {
+  margin-top: 14px;
+  align-self: flex-start;
+  padding: 5px 12px;
+  border: 1px dashed var(--grey-300);
+  border-radius: 40px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--grey-700);
+}
+
+.ls-news__empty {
+  margin-top: 32px;
+  padding: 28px;
+  border: 1px dashed var(--grey-300);
+  border-radius: var(--radius-card);
+  font-size: 15px;
+  color: var(--grey-700);
+}
+
+.ls-news__go {
+  margin-top: auto;
+  padding-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent-text);
+}
+
+/* ========================================================================
+   CAREERS  (/careers)
+
+   Reuses the pillar rows and the contact form's field styling. See
+   pages/Careers.jsx — in particular, the source has no job listings at all.
+   ======================================================================== */
+
+.ls-careers__join {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 26px;
+}
+
+.ls-careers__jointitle {
+  max-width: 18ch;
+  color: var(--white);
+}
+
+.ls-careers__formwrap {
+  max-width: 820px;
+  padding: clamp(26px, 3vw, 40px);
+  border-radius: var(--radius-card);
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--grey-200);
+}
+
+/* The file input keeps a visible label — unlike the others, which are
+   visually hidden behind their placeholder. A file control shows only
+   "No file chosen" until used, so it needs to say what it wants. */
+.ls-careers__filelabel {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--grey-700);
+}
+
+.ls-contact__form select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--grey-200);
+  border-radius: 10px;
+  background: var(--white);
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.ls-contact__form select:focus-visible,
+.ls-contact__form input[type='file']:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 1px;
+}
+
+.ls-contact__form input[type='file'] {
+  padding: 12px;
+  font-size: 15px;
+}
+
+/* The club band closes the page on its own, so it needs the row spacing the
+   `.ls-pillars` list would otherwise have given it. */
+.ls-section > .ls-container > .ls-pillar {
+  margin-top: 0;
+}
+
+/* ========================================================================
+   CONTACT  (/contact-us)
+
+   Details on the left, form on the right. See pages/ContactUs.jsx for the
+   three things the original had that this does not.
+   ======================================================================== */
+
+.ls-contact {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(40px, 5vw, 80px);
+  align-items: start;
+}
+
+.ls-contact__info {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.ls-contact__boxlabel {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.ls-contact__line {
+  margin-top: 10px;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--grey-500);
+  max-width: 34ch;
+}
+
+.ls-contact__entrylabel {
+  margin-right: 6px;
+  color: var(--grey-700);
+}
+
+.ls-contact__link {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---- the form ---------------------------------------------------------- */
+
+.ls-contact__formwrap {
+  padding: clamp(26px, 3vw, 40px);
+  border-radius: var(--radius-card);
+  background: var(--grey-50);
+}
+
+.ls-contact__form {
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.ls-contact__field--wide,
+.ls-contact__actions,
+.ls-contact__status {
+  grid-column: 1 / -1;
+}
+
+.ls-contact__form input,
+.ls-contact__form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--grey-200);
+  border-radius: 10px;
+  background: var(--white);
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.ls-contact__form textarea {
+  resize: vertical;
+}
+
+/*
+ * A visible focus ring, not just the placeholder going quiet. The field
+ * border alone is a 1px grey hairline — not enough to tell a keyboard user
+ * where they are.
+ */
+.ls-contact__form input:focus-visible,
+.ls-contact__form textarea:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.ls-contact__form ::placeholder {
+  /* 4.76:1 — placeholders are still text and still have to be readable. */
+  color: var(--grey-500);
+  opacity: 1;
+}
+
+.ls-contact__actions {
+  margin-top: 6px;
+}
+
+.ls-contact__status:empty {
+  display: none;
+}
+
+.ls-contact__status {
+  margin-top: 4px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.ls-contact__status--error {
+  color: var(--accent-strong);
+}
+
+.ls-contact__status--sent {
+  color: var(--accent-text);
+}
+
+/* ========================================================================
+   KNOWLEDGE ENGINEERING  (/knowledge-engineering)
+
+   Built from the client's copy deck using this site's existing pattern —
+   the deck's own art direction was not followed. See pages/
+   KnowledgeEngineering.jsx.
+   ======================================================================== */
+
+.ls-ke__lede,
+.ls-ke__prose {
+  max-width: 72ch;
+}
+
+.ls-ke__sub {
+  margin-top: 18px;
+  color: var(--ink);
+}
+
+.ls-ke__para {
+  margin-top: 16px;
+}
+
+.ls-ke__ctas {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ls-ke__grid {
+  margin-top: 40px;
+  list-style: none;
+  padding: 0;
+}
+
+.ls-ke__grid > li {
+  display: flex;
+}
+
+.ls-ke__card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 26px;
+  border-radius: var(--radius-card);
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--grey-200);
+}
+
+.ls-ke__cardtitle {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.ls-ke__carddesc {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--grey-500);
+}
+
+.ls-ke__cardlink {
+  margin-top: auto;
+  padding-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  /* 8.89:1 on the card. */
+  color: var(--accent-text);
+}
+
+/* ---- the framework pipeline -------------------------------------------
+   The deck ships this as a PNG. Rendered as type instead, so the stage
+   labels stay searchable, translatable and readable to a screen reader. */
+
+.ls-flow {
+  margin-top: 44px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+  counter-reset: none;
+}
+
+.ls-flow > li {
+  display: flex;
+}
+
+.ls-flow__stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 22px 20px;
+  border-radius: var(--radius-card);
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--grey-200);
+}
+
+/*
+ * The chevron between stages — decoration, so it is a pseudo-element and
+ * never reaches the accessibility tree. The last stage has none, and below
+ * 992px the pipeline stacks and they are switched off entirely, since a
+ * right-pointing arrow between vertically stacked items points nowhere.
+ */
+.ls-flow > li:not(:last-child) .ls-flow__stage::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -12px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid var(--grey-300);
+  border-right: 2px solid var(--grey-300);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.ls-flow__title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+  color: var(--accent-text);
+}
+
+.ls-flow__items {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  list-style: none;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--grey-500);
+}
+
+.ls-flow__caption {
+  margin-top: 22px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--grey-500);
+  max-width: 70ch;
+}
+
+/* ---- the closing band, on ink ------------------------------------------ */
+
+.ls-ke__closelabel {
+  /* Cyan: purple is 2.10:1 on ink. */
+  color: var(--accent-text-dark);
+}
+
+.ls-ke__closeheading {
+  margin-top: 18px;
+  max-width: 20ch;
+  color: var(--white);
+}
+
+.ls-ke__closebody {
+  margin-top: 20px;
+  max-width: 60ch;
+  font-size: 17px;
+  line-height: 1.65;
+  /* 8.08:1 on ink. */
+  color: rgb(255 255 255 / 72%);
+}
+
+/* ========================================================================
+   AI FIRST  (/ai-first)
+
+   Nine of its ten sections share one shape — heading, subtitle, a grid of
+   items, one highlighted card — so the styling here is deliberately small.
+   See pages/AiFirst.jsx.
+   ======================================================================== */
+
+.ls-aif__grid {
+  margin-top: 40px;
+  list-style: none;
+  padding: 0;
+}
+
+.ls-aif__grid > li {
+  display: flex;
+}
+
+.ls-aif__card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 26px;
+  border-radius: var(--radius-card);
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--grey-200);
+}
+
+/* On the smoke bands the card would otherwise be a white box on near-white;
+   the ring carries it instead. */
+.ls-section--smoke .ls-aif__card {
+  background: var(--white);
+}
+
+.ls-aif__label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.ls-aif__cardtitle {
+  margin-top: 4px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.ls-aif__cardtext,
+.ls-aif__carddesc {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--grey-500);
+}
+
+.ls-aif__outcomes {
+  margin-top: 14px;
+}
+
+.ls-aif__para {
+  margin-top: 18px;
+  max-width: 68ch;
+}
+
+.ls-aif__highlight {
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--accent-text);
+}
+
+/* A plain label, not a link — the source anchors it nowhere. */
+.ls-aif__note {
+  margin-top: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--grey-500);
+}
+
+/* ---- the one dark banner --------------------------------------------- */
+
+.ls-aif__darkcard {
+  width: 100%;
+  padding: 26px;
+  border-radius: var(--radius-card);
+  border: 1px solid rgb(255 255 255 / 15%);
+  background: rgb(255 255 255 / 5%);
+}
+
+.ls-aif__darktitle {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--white);
+}
+
+.ls-aif__darkdesc {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  /* 8.08:1 on ink. */
+  color: rgb(255 255 255 / 72%);
+}
+
+.ls-aif__commitlabel {
+  /* Cyan: purple is 2.10:1 on this band. */
+  color: var(--accent-text-dark);
+}
+
+.ls-aif__commitheading {
+  margin-top: 18px;
+  color: var(--white);
+}
+
+/* ---- brand essence, the closing note ---------------------------------- */
+
+.ls-aif__essence {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.ls-aif__essence .ls-tagrow {
+  margin-top: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.ls-aif__tagline {
+  font-size: clamp(30px, 3.6vw, 48px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ========================================================================
+   PROSE PAGES  (Privacy Policy, Terms & Conditions)
+
+   Long-form documents. See common/ProsePage.jsx for why these get their
+   own, much narrower measure.
+   ======================================================================== */
+
+/*
+ * Full container width, by request (2026-10-13).
+ *
+ * ⚠️ This runs the policy text to the page measure — roughly 190 characters a
+ * line at 1480px, against the 60–80 that is comfortable to read. Long
+ * measures make the eye lose its place on the return sweep, which matters
+ * most in exactly this kind of dense, unbroken legal text.
+ *
+ * It was previously capped at 68ch. If the lines ever read as too long, that
+ * cap is the one line to restore.
+ */
+.ls-prose {
+  max-width: none;
+  color: var(--grey-500);
+}
+
+.ls-prose p {
+  margin-top: 16px;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* The opening paragraphs, before the first heading — set a touch larger so
+   the document has somewhere to start. */
+.ls-prose__intro {
+  font-size: 18px;
+  color: var(--grey-700);
+}
+
+.ls-prose__section {
+  margin-top: 44px;
+}
+
+.ls-prose__h3 {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/*
+ * Several source headings are ALL CAPS in the copy itself. They are left that
+ * way rather than being normalised — but the tracking is opened up, because
+ * uppercase set at default tracking is measurably slower to read.
+ */
+.ls-prose__h4 {
+  margin-top: 28px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+.ls-prose__h3 + p,
+.ls-prose__h4 + p {
+  margin-top: 12px;
+}
+
+.ls-prose__link {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ls-prose__list {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.ls-prose__list > li {
+  position: relative;
+  padding-left: 24px;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.ls-prose__list > li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.68em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-text);
+}
+
 
 /* ========================================================================
    HOW WE OPERATE  (About)
@@ -3602,9 +4604,12 @@ address {
   padding-block: 72px 40px;
 }
 
+/* Brand column plus two link columns since the Domains column went
+   (2026-10-13). The brand keeps the wider track — it holds the logo, the
+   strapline, a paragraph and the social row. */
 .ls-footer__top {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr));
   gap: 56px;
 }
 
@@ -3639,14 +4644,21 @@ address {
   width: auto;
 }
 
+/*
+ * The brand strapline. White, 22px and bold since 2026-10-13 — it reads as a
+ * statement under the logo rather than as the mono micro-label it was.
+ *
+ * Dropped the mono family and the wide tracking with it: both were sized for
+ * 12px uppercase and look mannered at this scale. 18.67:1 on the ink band.
+ */
 .ls-footer__tagline {
   margin-top: 18px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.06em;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
-  color: var(--footer-accent);
+  color: var(--white);
 }
 
 .ls-footer__blurb {
@@ -3994,4 +5006,669 @@ a.ls-footer__socialbtn:hover {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* ========================================================================
+   MINDLOGICXIAN CLUB  (/mindlogicxian-club)
+   ======================================================================== */
+
+/*
+ * The club's member portraits are stylised full-body renders at 2:3, not
+ * headshots. `.ls-person__media` crops square and anchors to the top, which is
+ * right for the leadership photographs on /about but cuts these off at the
+ * chest. Scoped to this page so the About roster is untouched.
+ */
+.ls-club__board .ls-person__media {
+  aspect-ratio: 2 / 3;
+}
+
+.ls-club__logo {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  margin-inline: auto;
+}
+
+.ls-club__strapline {
+  font-size: 22px;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.ls-club__strapline + .ls-club__strapline {
+  margin-top: 6px;
+  color: var(--accent-strong-cyan);
+}
+
+/* ---- Club activities ---- */
+
+.ls-club__cat {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-strong-cyan);
+}
+
+.ls-club__actdesc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--grey-500);
+  text-wrap: pretty;
+}
+
+/* ---- Memories gallery ---- */
+
+.ls-gal__year + .ls-gal__year {
+  margin-top: 56px;
+}
+
+.ls-gal__yearhead {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--grey-200, rgb(0 0 0 / 10%));
+}
+
+.ls-gal__yearnum {
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.ls-gal__yearcount {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--grey-500);
+}
+
+.ls-gal__stacks {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+  list-style: none;
+  padding: 0;
+}
+
+/*
+ * The whole card is the control. It is a real <button> rather than a div with
+ * a click handler, so it is reachable by keyboard and announces its own
+ * expanded state.
+ */
+.ls-gal__stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.ls-gal__stack .ls-media {
+  transition: transform 0.3s ease;
+}
+
+.ls-gal__stack:hover .ls-media,
+.ls-gal__stack:focus-visible .ls-media {
+  transform: translateY(-4px);
+}
+
+.ls-gal__stacktitle {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+}
+
+.ls-gal__stackmeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--grey-500);
+}
+
+.ls-gal__chev {
+  transition: transform 0.25s ease;
+}
+
+.ls-gal__stack[aria-expanded='true'] .ls-gal__chev {
+  transform: rotate(180deg);
+}
+
+.ls-gal__photos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+  list-style: none;
+  padding: 0;
+}
+
+.ls-gal__photo {
+  margin: 0;
+}
+
+.ls-gal__photo figcaption {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--grey-500);
+  text-wrap: pretty;
+}
+
+/* ========================================================================
+   LIGHTBOX  (club gallery; component is page-agnostic)
+   ======================================================================== */
+
+.ls-lb {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: 16px clamp(12px, 3vw, 32px) 20px;
+}
+
+.ls-lb__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(8 8 12 / 94%);
+}
+
+/* Everything above the backdrop needs its own stacking context. */
+.ls-lb > *:not(.ls-lb__backdrop) {
+  position: relative;
+  z-index: 1;
+}
+
+.ls-lb__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #fff;
+}
+
+.ls-lb__count,
+.ls-lb__zoom {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: rgb(255 255 255 / 72%);
+}
+
+.ls-lb__zoom {
+  min-width: 48px;
+  text-align: center;
+}
+
+.ls-lb__tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ls-lb__btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: #fff;
+  background: rgb(255 255 255 / 10%);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.ls-lb__btn:hover:not(:disabled),
+.ls-lb__btn:focus-visible {
+  background: rgb(255 255 255 / 22%);
+}
+
+.ls-lb__btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.ls-lb__btn--close {
+  margin-left: 8px;
+  background: var(--brand-cyan);
+}
+
+.ls-lb__btn--close:hover,
+.ls-lb__btn--close:focus-visible {
+  background: var(--accent-strong-cyan);
+}
+
+.ls-lb__stage {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(8px, 2vw, 24px);
+  min-height: 0;
+}
+
+.ls-lb__nav {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  color: #fff;
+  background: rgb(255 255 255 / 10%);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.ls-lb__nav:hover,
+.ls-lb__nav:focus-visible {
+  background: rgb(255 255 255 / 22%);
+}
+
+/*
+ * `overflow: hidden` is what makes panning readable — the zoomed image is
+ * clipped to the frame instead of spilling over the toolbar and the caption.
+ */
+.ls-lb__frame {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  touch-action: none;
+}
+
+.ls-lb__frame--zoomed {
+  cursor: grab;
+}
+
+.ls-lb__frame--zoomed:active {
+  cursor: grabbing;
+}
+
+.ls-lb__frame img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  /* Only the zoom is animated; dragging sets `transform` every pointer move
+     and a transition there would lag the cursor. */
+  transition: transform 0.18s ease-out;
+  user-select: none;
+}
+
+.ls-lb__frame--zoomed img {
+  transition: none;
+}
+
+.ls-lb__caption {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  color: rgb(255 255 255 / 78%);
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ls-lb__frame img {
+    transition: none;
+  }
+}
+
+/* The thumbnails in the grid are now controls. */
+.ls-gal__photobtn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: zoom-in;
+}
+
+.ls-gal__photobtn .ls-media {
+  transition: transform 0.25s ease;
+}
+
+.ls-gal__photobtn:hover .ls-media,
+.ls-gal__photobtn:focus-visible .ls-media {
+  transform: translateY(-3px);
+}
+
+/* ========================================================================
+   PRODUCT PAGES  (/intellitute, /intelliwork)
+   ======================================================================== */
+
+.ls-prod__breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-strong-cyan);
+}
+
+.ls-prod__breadcrumbs li:not(:last-child)::after {
+  content: '→';
+  margin-left: 10px;
+  color: var(--grey-400, var(--grey-500));
+}
+
+/* ---- pillar cards (subtitle above title, then a feature list) ---- */
+
+.ls-prod__pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  padding: 36px;
+  background: #fff;
+  border-radius: var(--radius-card, 8px);
+}
+
+.ls-section--white .ls-prod__pillar {
+  background: var(--grey-100);
+}
+
+.ls-prod__pillarsub {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-strong-cyan);
+}
+
+.ls-prod__pillartitle {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+}
+
+.ls-prod__pillardesc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--grey-500);
+  text-wrap: pretty;
+}
+
+/* ---- the comparison / metrics panel ---- */
+
+.ls-prod__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 36px;
+  background: var(--grey-100);
+  border-radius: var(--radius-card, 8px);
+}
+
+.ls-section--smoke .ls-prod__stats {
+  background: #fff;
+}
+
+.ls-prod__statstitle {
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.ls-prod__bar + .ls-prod__bar {
+  margin-top: 18px;
+}
+
+.ls-prod__barhead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ls-prod__barlabel {
+  font-size: 15px;
+  color: var(--grey-500);
+}
+
+.ls-prod__barvalue {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.ls-prod__bartrack {
+  height: 8px;
+  overflow: hidden;
+  background: var(--grey-200, rgb(0 0 0 / 8%));
+  border-radius: 99px;
+}
+
+.ls-prod__barfill {
+  height: 100%;
+  background: var(--brand-cyan);
+  border-radius: 99px;
+}
+
+.ls-prod__barfill--muted {
+  background: var(--grey-400, #b9b9c6);
+}
+
+.ls-prod__metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--grey-200, rgb(0 0 0 / 10%));
+}
+
+.ls-prod__metricvalue {
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--accent-strong-cyan);
+}
+
+.ls-prod__metriclabel {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--grey-500);
+}
+
+/* ---- capability chips ---- */
+
+.ls-prod__cap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  padding: 28px;
+  background: var(--grey-100);
+  border-radius: var(--radius-card, 8px);
+}
+
+.ls-section--smoke .ls-prod__cap {
+  background: #fff;
+}
+
+.ls-prod__cappillar {
+  align-self: flex-start;
+  padding: 4px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-strong-cyan);
+  background: var(--accent-50, rgb(0 174 239 / 10%));
+  border-radius: 99px;
+}
+
+.ls-prod__captitle {
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.ls-prod__capdesc {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--grey-500);
+}
+
+/* ---- stakeholder cards ---- */
+
+.ls-prod__shbody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 18px;
+}
+
+.ls-prod__shtitle {
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.ls-prod__shdesc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--grey-500);
+  text-wrap: pretty;
+}
+
+/* The four "Why" points, paired beside the comparison panel. */
+.ls-prod__whygrid {
+  gap: 28px 32px;
+  align-self: start;
+}
+
+/* ---- before / after panels (IntelliWORK outcomes) ---- */
+
+.ls-prod__ba {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.ls-prod__bapanel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 36px;
+  border-radius: var(--radius-card, 8px);
+}
+
+.ls-prod__bapanel--before {
+  background: var(--grey-100);
+}
+
+.ls-prod__bapanel--after {
+  color: #fff;
+  background: var(--accent-strong-cyan);
+}
+
+.ls-prod__balabel {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--grey-500);
+}
+
+.ls-prod__bapanel--after .ls-prod__balabel {
+  color: rgb(255 255 255 / 80%);
+}
+
+.ls-prod__batext {
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--grey-500);
+  text-wrap: pretty;
+}
+
+.ls-prod__baitems {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 20px;
+}
+
+.ls-prod__baitems li {
+  padding-left: 20px;
+  position: relative;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #fff;
+  text-wrap: pretty;
+}
+
+.ls-prod__baitems li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 70%);
+}
+
+/* ---- use-case / ecosystem label grid ---- */
+
+.ls-prod__labels {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ls-prod__label {
+  padding: 20px 24px;
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--ink);
+  background: var(--grey-100);
+  border-radius: var(--radius-card, 8px);
+  text-wrap: pretty;
+}
+
+.ls-section--smoke .ls-prod__label {
+  background: #fff;
 }

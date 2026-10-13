@@ -11,6 +11,17 @@ export const company = {
   name: 'Mindlogicx',
   legalName: 'Mindlogicx Infratec Limited',
   tagline: 'Global Knowledge Engineering Company',
+  /*
+   * The brand strapline, shown under the logo in the footer (2026-10-13).
+   *
+   * Deliberately a separate field from `tagline`. They do different jobs:
+   * `tagline` is the descriptor that says what the company *is* and still
+   * carries the document `<title>` and the logo's alt text; this is the
+   * campaign line. Overwriting `tagline` with it would have left the browser
+   * tab reading "Mindlogicx — Dare to Disrupt" with nothing anywhere saying
+   * what Mindlogicx does.
+   */
+  strapline: 'Dare to Disrupt',
   // The all-black lockup, by request (2026-10-12) — it replaced the
   // full-colour mark that had the cyan/purple X. Both carry the
   // "ARCHITECTING THE FUTURE" tagline. The colour file is still in
@@ -209,7 +220,7 @@ export const products = [
     img: '/assets/images/home-two/project-thu2.webp',
     logo: '/logos/products/intelliwork-colour.webp',
     logoWhite: '/logos/products/intelliwork-white.webp',
-    link: '/products/intelliwork',
+    link: '/intelliwork',
   },
   {
     slug: 'intelliosm',
@@ -227,7 +238,7 @@ export const products = [
     img: '/assets/images/home-two/project-thu4.webp',
     logo: '/logos/products/intellitute-colour.webp',
     logoWhite: '/logos/products/intellitute-white.webp',
-    link: '/products/intellitute',
+    link: '/intellitute',
   },
   {
     slug: 'intellithesis',
@@ -660,7 +671,9 @@ export const trustPillars = [
  */
 export const educationPage = {
   eyebrow: 'Technology / Education',
-  title: 'Six platforms. One governed learner journey.',
+  /* Numerals, not words — house rule from 2026-10-13: quantities are written
+     as digits. Was "Six platforms. One governed learner journey." */
+  title: '6 platforms. 1 governed learner journey.',
   lead: 'The Mindlogicx education portfolio covers assessment, marking, learning, workforce capability and research — each a proprietary platform, each running on the same governed knowledge layer.',
   products: [
     {
@@ -692,6 +705,7 @@ export const educationPage = {
        * this ships.
        */
       image: '/assets/images/aboutus/intelliexams.gif',
+      imageAnim: '/assets/images/aboutus/intelliexams-anim.webp',
       imageStill: '/assets/images/aboutus/intelliexams-still.webp',
       diagram: true,
       /* The alt describes the diagram, not the photo it replaced — this
@@ -707,9 +721,24 @@ export const educationPage = {
       description:
         'A unified ecosystem connecting Academy, Assessment, Certification and Career into a single governed learner journey.',
       logo: '/logos/products/intellitute-colour.webp',
-      image: '/assets/images/products/intellitute.webp',
-      alt: 'A learner working through a guided course on a laptop.',
-      link: '/products/intellitute',
+      /*
+       * Animated capability diagram, supplied 2026-10-13 — see the note on
+       * IntelliEXAMS above for what `diagram`, `imageAnim` and `imageStill`
+       * do. Same arrangement: WebP for the animation, the GIF as fallback,
+       * frame 0 for `prefers-reduced-motion`.
+       *
+       * ⚠️ **The heaviest asset on the site.** The supplied GIF is 3.4MB —
+       * 120 frames over 8s, four times the length of the other two. The WebP
+       * brings it to 1.27MB with every frame kept. Halving the frame rate
+       * would take it to ~665KB; that is the client's call, since it is their
+       * artwork. Also carries the same "infogiph.com" watermark.
+       */
+      image: '/assets/images/aboutus/intelliTUTE.gif',
+      imageAnim: '/assets/images/aboutus/intellitute-anim.webp',
+      imageStill: '/assets/images/aboutus/intellitute-still.webp',
+      diagram: true,
+      alt: 'IntelliTUTE at the centre of a four-stage learner journey: Onboard & Profile, Academy (Learn), Assessment (Certify) and Career (Hired).',
+      link: '/intellitute',
     },
     {
       slug: 'intelliosm',
@@ -733,9 +762,18 @@ export const educationPage = {
       description:
         'Converts organisational knowledge into structured learning, assessment, certification and workforce capability intelligence.',
       logo: '/logos/products/intelliwork-colour.webp',
-      image: '/assets/images/products/intelliwork.webp',
-      alt: 'Colleagues reviewing a capability dashboard together.',
-      link: '/products/intelliwork',
+      /*
+       * Animated capability diagram, supplied 2026-10-13. Unlike the other
+       * two this one is **square** (1080²) rather than 1080×1350 — the
+       * `--diagram` frame reads each image's own ratio, so nothing needed
+       * changing for it. Same "infogiph.com" watermark.
+       */
+      image: '/assets/images/aboutus/IntelliWORK.gif',
+      imageAnim: '/assets/images/aboutus/intelliwork-anim.webp',
+      imageStill: '/assets/images/aboutus/intelliwork-still.webp',
+      diagram: true,
+      alt: 'IntelliWORK at the centre of five connected capabilities: Institutional Knowledge, Workforce Intelligence, Training & Certification, Future-Ready Workforce and HR Capital.',
+      link: '/intelliwork',
     },
     {
       slug: 'intellithesis',
@@ -999,9 +1037,12 @@ export const footer = {
    * at `/about`, the same page as "About Company" directly above it.
    */
   usefulLinks: [
-    { title: 'About Company', link: '/about' },
+    { title: 'Global Compliance', link: '/global-compliance' },
     { title: 'Newsroom', link: '/news-room' },
     { title: 'Careers', link: '/careers' },
+    { title: 'Privacy Policy', link: '/privacy-policy' },
+    { title: 'Terms & Conditions', link: '/terms-and-conditions' },
+    { title: 'Contact Us', link: '/contact-us' },
   ],
 
   /*
@@ -1019,6 +1060,63 @@ export const footer = {
     { title: 'IntelliEXAMS', link: 'https://intelliexams.com/' },
     { title: 'TheMediaX.ai', link: 'https://themediax.ai/' },
   ],
+  /*
+   * The Newsroom page's own content (2026-10-13).
+   *
+   * ⚠️ **Every entry here is a placeholder.** The client asked for the page
+   * structure now and will supply the real awards, links, images and event
+   * write-ups later. Nothing below is a claim about anything that happened:
+   * the `items` arrays are empty on purpose, and each group renders an
+   * explicit "to be supplied" state rather than invented entries.
+   *
+   * Awards, MOUs and press are real-world claims about the company; events
+   * name real occasions. Inventing any of them would be inventing a record.
+   *
+   * To publish a group: push entries onto its `items` array. Each entry takes
+   * `{ title, date, summary, image, link }` — all optional except `title`,
+   * and the card adapts to whatever is present.
+   */
+  newsroomPage: {
+    title: 'Newsroom',
+    lead: 'Awards, partnerships, events and coverage from across the Mindlogicx group.',
+    groups: [
+      {
+        id: 'awards',
+        title: 'Awards & Recognition',
+        blurb: 'Industry recognition for Mindlogicx platforms, people and partnerships.',
+        items: [],
+      },
+      {
+        id: 'mou',
+        title: 'MOUs & Partnerships',
+        blurb: 'Memoranda of understanding and strategic agreements, with signing coverage.',
+        items: [],
+      },
+      {
+        id: 'events',
+        title: 'Events & Coverage',
+        blurb: 'Conferences, launches and the coverage that followed them.',
+        /*
+         * The three the client named. They are `placeholder: true` — the card
+         * shows the name as a heading with a "details to follow" state rather
+         * than a fabricated write-up, because the names are real events and
+         * anything written under them would be invented.
+         */
+        items: [
+          { title: 'Indonesia event', placeholder: true },
+          { title: 'SMC signup', placeholder: true },
+          { title: 'Ten years of events and news', placeholder: true },
+        ],
+      },
+      {
+        id: 'press',
+        title: 'In the News',
+        blurb: 'Other coverage, mentions and announcements about Mindlogicx.',
+        items: [],
+      },
+    ],
+  },
+
   /*
    * NEWSROOM  (requested 2026-10-12)
    *
@@ -1055,11 +1153,14 @@ export const footer = {
     { title: 'LegalTech', link: '/voice-of-law' },
     { title: 'AI First', link: '/ai-first' },
   ],
-  copyright: `© ${new Date().getFullYear()} Mindlogicx. All rights reserved.`,
-  legal: [
-    { title: 'Privacy Policy', link: '/privacy-policy' },
-    { title: 'Terms & Conditions', link: '/terms-and-conditions' },
-  ],
+  copyright: `© ${new Date().getFullYear()} Mindlogicx.`,
+  /*
+   * ⚠️ **Empty since 2026-10-13.** Privacy Policy and Terms & Conditions moved
+   * up into the Company column; leaving them here too would have printed the
+   * same two links twice within ~200px of each other, which reads as a
+   * mistake. Put an entry back and the bottom bar renders it again.
+   */
+  legal: [],
 };
 
 /**

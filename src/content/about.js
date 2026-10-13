@@ -24,7 +24,7 @@ export const intro = {
    */
   subTitle: 'ABOUT MINDLOGICX',
   lead: 'Mindlogicx is a global technology company in the “Knowledge Engineering” domain. The technology products and solutions offered by Mindlogicx maximize clients’ potential by delivering sustainable value and diligently meeting their requirements.',
-  whoWeAreTitle: 'Who We Are',
+  whoWeAreTitle: 'Who We Are?',
   whoWeAreLead:
     'We are a global knowledge engineering company with focus on Edtech, Healthtech, Fintech, LegalTech and MediaTech. Our products and solutions are developed and deployed with the three guiding principles:',
   /*

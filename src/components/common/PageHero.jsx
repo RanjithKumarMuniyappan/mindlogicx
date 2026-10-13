@@ -25,9 +25,9 @@ import Html from './Html';
  * by About now — nothing was deleted, so another page can still open the
  * full way.
  */
-export default function PageHero({ eyebrow, title, lead, image, tone = 'white' }) {
+export default function PageHero({ eyebrow, title, lead, image, tone = 'white', tight = false }) {
   return (
-    <section className={`ls-section ls-section--${tone} ls-hero ls-hero--${tone}`}>
+    <section className={`ls-section ls-section--${tone} ls-hero ls-hero--${tone}${tight ? ' ls-hero--tight' : ''}`}>
       <div className="ls-container">
         <Reveal className="ls-hero__inner" effect="fadeInUp">
           {eyebrow && <span className="ls-eyebrow">{eyebrow}</span>}

@@ -685,3 +685,36 @@ export function ContentIcon({ name, ...rest }) {
   const Glyph = ICONS[name];
   return Glyph ? <Glyph {...rest} /> : null;
 }
+
+/*
+ * The club gallery's lightbox controls. A magnifier with a bar through it —
+ * `+` for in, `−` for out — drawn on the same 20-unit grid as the rest of the
+ * set so they sit level with `Close` in the toolbar.
+ */
+export function ZoomIn({ size = 20, ...rest }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true" {...rest}>
+      <circle cx="8.5" cy="8.5" r="5.75" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M12.8 12.8 17.5 17.5M8.5 6v5M6 8.5h5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function ZoomOut({ size = 20, ...rest }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" aria-hidden="true" {...rest}>
+      <circle cx="8.5" cy="8.5" r="5.75" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M12.8 12.8 17.5 17.5M6 8.5h5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}

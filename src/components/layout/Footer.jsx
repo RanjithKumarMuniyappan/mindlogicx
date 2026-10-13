@@ -43,9 +43,10 @@ export default function Footer() {
                   and the full-colour mark's grey wordmark disappears into it. */}
               <img src={company.logoWhite} alt={company.name} width="160" height="36" />
             </Link>
-            {/* The tagline otherwise appears only in the document title,
-                where it is not on the page for anyone reading it. */}
-            <p className="ls-footer__tagline">{company.tagline}</p>
+            {/* The brand strapline (2026-10-13), not `company.tagline`.
+                `tagline` is still the descriptor behind the document title
+                and the logo's alt text — see the note on both in site.js. */}
+            <p className="ls-footer__tagline">{company.strapline}</p>
             <p className="ls-footer__blurb">{footer.blurb}</p>
 
             <ul className="ls-footer__social">
@@ -108,16 +109,10 @@ export default function Footer() {
             </nav>
           </div>
 
-          <div>
-            <h2 className="ls-footer__coltitle">Domains</h2>
-            <nav className="ls-footer__links" aria-label="Domains">
-              {footer.domains.map((link) => (
-                <Link to={link.link} key={link.title}>
-                  {link.title}
-                </Link>
-              ))}
-            </nav>
-          </div>
+          {/* The "Domains" column was removed on 2026-10-13. Its five links
+              (EdTech, FinTech, HealthTech, LegalTech, AI First) are all still
+              reachable from the Technology menu in the header, and
+              `footer.domains` is still in site.js. */}
 
           {/* External sites, so anchors rather than router `Link`s. */}
           <div>
@@ -165,9 +160,8 @@ export default function Footer() {
               </Link>
             ))}
           </nav>
-          {/* The postal address was removed from here on 2026-10-12.
-              `company.address` is still in `site.js`. */}
-          <span className="ls-footer__legalname">{company.legalName}</span>
+          {/* The postal address went on 2026-10-12 and `company.legalName`
+              on 2026-10-13. Both are still in `site.js`. */}
         </div>
       </div>
     </footer>

@@ -35,8 +35,10 @@ import { ArrowUpRight } from '../components/common/icons';
  *
  * ## Routes
  *
- * Every `link` here points at `/products/*`, which currently renders
- * `Placeholder`. The links are real and will start working when those pages
+ * **IntelliTUTE and IntelliWORK now link to their real pages** (`/intellitute`,
+ * `/intelliwork`, built 2026-10-13). The remaining four still point at
+ * `/products/*`, which renders `Placeholder`. Those links are real and will
+ * start working when those pages
  * are built; nothing here is a dead `href="#"`.
  */
 /*
@@ -98,19 +100,28 @@ function ProductBand({ product, index }) {
             effect={flipped ? 'fadeInLeft' : 'fadeInRight'}
           >
             {/*
-              `<picture>` rather than a plain `<img>` when a still exists: the
-              browser swaps to the static frame under `prefers-reduced-motion`
-              with no JavaScript and no flash of the animation first.
+              `<picture>` rather than a plain `<img>` for the animated
+              diagrams. **Source order is the logic here** — the browser takes
+              the first match, so these cannot be reordered:
 
-              This matters because the GIF loops forever. WCAG 2.2.2 wants a
-              way to stop motion that runs past five seconds, and a looping
-              GIF cannot be paused — so the people most affected get a still
-              instead. A visible pause control would satisfy it more fully;
-              this is the no-JS half of it.
+                1. `prefers-reduced-motion` → the still frame. First, so it
+                   wins over the animation for anyone who asked for less
+                   motion. No JavaScript, and no flash of movement first.
+                2. `image/webp` → the animated WebP. Across the three diagrams
+                   that serves 3.9MB of GIF as 1.6MB.
+                3. the `<img>` → the supplied GIF, for anything supporting
+                   neither.
+
+              The still matters because these loop forever. WCAG 2.2.2 wants a
+              way to stop motion running past five seconds, and neither a GIF
+              nor an animated WebP can be paused — so the people most affected
+              get a still instead. A visible pause control would satisfy it
+              more fully; this is the no-JavaScript half of it.
             */}
             {product.imageStill ? (
               <picture>
                 <source srcSet={product.imageStill} media="(prefers-reduced-motion: reduce)" />
+                {product.imageAnim && <source srcSet={product.imageAnim} type="image/webp" />}
                 <img src={product.image} alt={product.alt} loading="lazy" decoding="async" />
               </picture>
             ) : (

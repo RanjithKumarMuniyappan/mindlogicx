@@ -53,7 +53,7 @@ export default function About() {
         still on the page — and it is no longer printed twice 400px apart.
         `banner.bgImg` is now unrendered; it is still in `about.js`.
       */}
-      <PageHero title={banner.title} tone="accent" />
+      <PageHero title={banner.title} tone="plain" />
       {SECTIONS.map(([name, Section]) => (
         <ErrorBoundary key={name} name={name}>
           <Section />

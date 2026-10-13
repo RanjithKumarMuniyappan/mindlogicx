@@ -347,6 +347,44 @@
     margin-top: 40px;
   }
 
+  /* Ported pages: pillar rows stack, and `order` is reset so the heading
+     always precedes its own photograph once they are one above the other. */
+  .ls-pillar {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .ls-pillar--purple > .ls-pillar__figure {
+    order: 0;
+  }
+
+  .ls-pillar__title {
+    font-size: 28px;
+  }
+
+  /* The framework pipeline stacks; its chevrons are switched off, since a
+     right-pointing arrow between vertically stacked stages points nowhere. */
+  .ls-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ls-flow > li:not(:last-child) .ls-flow__stage::after {
+    display: none;
+  }
+
+  .ls-news__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ls-contact {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .ls-contact__form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   /* ---- Who We Are (About) ---- */
   .ls-intro2__top {
     grid-template-columns: minmax(0, 1fr);
@@ -903,4 +941,53 @@
     white-space: nowrap;
     font-size: min(52px, 3.5vw);
   }
+}
+
+/* ---- Mindlogicxian Club ---- */
+@media (max-width: 991px) {
+  .ls-gal__stacks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ls-gal__photos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 575px) {
+  .ls-gal__stacks,
+  .ls-gal__photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ls-club__strapline { font-size: 19px; }
+}
+
+/* ---- Lightbox ---- */
+@media (max-width: 767px) {
+  /* The arrows would eat most of a phone's width beside the picture, so they
+     move on top of it at the edges. */
+  .ls-lb__stage { grid-template-columns: minmax(0, 1fr); }
+  .ls-lb__nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; }
+  .ls-lb__nav--prev { left: 0; }
+  .ls-lb__nav--next { right: 0; }
+  .ls-lb__caption { font-size: 13px; }
+}
+
+/* ---- Product pages ---- */
+@media (max-width: 991px) {
+  .ls-prod__pillar { padding: 28px; }
+  .ls-prod__stats { padding: 28px; }
+}
+
+@media (max-width: 575px) {
+  .ls-prod__metrics { grid-template-columns: minmax(0, 1fr); }
+  .ls-prod__metricvalue { font-size: 32px; }
+}
+
+@media (max-width: 575px) {
+  .ls-prod__whygrid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 991px) {
+  .ls-prod__ba { grid-template-columns: minmax(0, 1fr); }
+  .ls-prod__labels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ls-prod__bapanel { padding: 28px; }
+}
+
+@media (max-width: 575px) {
+  .ls-prod__labels,
+  .ls-prod__baitems { grid-template-columns: minmax(0, 1fr); }
 }
