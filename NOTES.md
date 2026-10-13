@@ -552,17 +552,26 @@ behaviour too, not a breakpoint bug.
 Reduced 2026-10-12 to a compact band carrying only the `<h1>`. It previously
 held the eyebrow, the lead and `banner.bgImg`.
 
-**The band is the secondary brand colour, and the title is therefore ink.**
-Asked for `--accent-fill` — true `#00aeef` — as the background (2026-10-12),
-so `.ls-hero--accent` now sets no colours at all and simply inherits
-`.ls-section--accent`, whose `--accent-fill` / `--on-accent-fill` pairing is
-ink on cyan at **7.38:1**.
+### ⚠️ White on cyan: the site's one known contrast failure
 
-> **The band cannot be bright cyan and the type white at the same time.**
-> White on `#00aeef` is **2.53:1** — it fails AA at any size, and at 80px it
-> reads as a pale smear. An earlier revision ran white on a *darkened* cyan
-> (`--accent-strong-cyan`, 5.88:1) to honour a white-title request; that
-> remains the only way to have white here. Pick the colour or pick the white.
+The band is `--accent-fill` (true `#00aeef`) and the title is **white**. Both
+were asked for explicitly on 2026-10-13, after two earlier rounds on the same
+question.
+
+**It measures 2.53:1 and fails WCAG AA.** Large text needs 3:1 and body text
+4.5:1, so it misses even the large-text bar — raising the size cannot rescue
+it. This is the only knowingly non-conformant colour pairing on the site, and
+it is here by instruction rather than by oversight: **do not "fix" it
+silently, and do not copy the pattern anywhere else.**
+
+The two conformant arrangements, both previously built and both set aside:
+
+| | contrast |
+|---|---|
+| ink on this cyan (`--on-accent-fill`) | 7.38:1 |
+| white on `--accent-strong-cyan` (same hue, darkened) | 5.88:1 |
+
+There is no third option — `#00aeef` is too light to carry white type.
 
 `PageHero` kept its `eyebrow`, `lead` and `image` props — About simply stops
 passing them, so another page can still open the full way. Two strings went
@@ -750,6 +759,422 @@ Two lists also changed element with their numbers: How We Operate and the DEI
 commitments were `<ol>`s while they were numbered and are `<ul>`s now —
 neither is a sequence, and the markup should not claim otherwise. **No `<ol>`
 remains on any route.**
+
+## Numbers are written as digits
+
+House rule from 2026-10-13: quantities are set as numerals, not spelled out.
+The Education page title went from "Six platforms. One governed learner
+journey." to **"6 platforms. 1 governed learner journey."**
+
+Two rendered strings still contain number *words*, both deliberately left:
+
+- **"One World. One Digital Operating System."** — hero slide 5's name and
+  heading. This is a slogan, where "One" means *unified*, not *a count of
+  one*. "1 World. 1 Digital Operating System." would change what it says.
+- **"Two decades of building systems…"** — the Why Mindlogicx body. Flowing
+  prose rather than a figure being quoted.
+
+Everything else the grep turns up is inside comments, not rendered copy. If
+the rule is meant to cover slogans and prose too, those two are the only
+remaining changes.
+
+## Pages ported from the 2025 frontend (2026-10-13)
+
+Source: `~/Documents/ClaudeProjects/OfficeProjects/Mindlogicx_India/mlx-website-2025-frontend`
+— a *different* codebase from the one MindGENIE and the Education copy came
+from. It is Next-style (`src/app/<route>/page.tsx`) and much older.
+
+Copy is **verbatim** in every case. Each module in `src/content/pages/` opens
+with a header comment recording its source paths and everything the client
+needs to check. Live so far:
+
+| route | source | state |
+|---|---|---|
+| `/privacy-policy` | `components/PrivacyPolicy/` | done |
+| `/terms-and-conditions` | `components/TermsAndConditions/` | done |
+| `/esg-sustainability` | `app/esg_sustainability/` | done |
+| `/global-compliance` | `app/global_compliance/` | done |
+| `/ai-first` | `app/ai_first/` + 10 components | content extracted |
+| `/products/intelliexams` | `app/intelliexam/` | content extracted |
+| `/contact-us` | `app/contact-us/` | content extracted |
+
+### Two things the port must not "tidy"
+
+- **The ESG ecosystem sentence is broken in the original**: "spanning EdTech,
+  and CommerceTech." reads oddly because HealthTech, FinTech and LegalTech
+  were commented out in the source JSX. Reproduced as-is — restoring three
+  verticals to a public ESG claim is the client's decision.
+- **Only one of three Global Compliance regulation cards has `tags`.** The
+  other two are rendered without, rather than back-filled: inventing tags for
+  a compliance card is inventing claims.
+
+### A render error used to blank the entire site
+
+The missing `tags` array threw a one-line TypeError, which escaped to the
+React root and **unmounted everything** — header, footer, the lot — leaving a
+white page with nothing in the console. `ErrorBoundary` wrapped the sections
+*inside* Home/About/Education but nothing wrapped the routes.
+
+`<Routes>` is now inside an `ErrorBoundary`. A bad page degrades to an error
+panel with the rest of the chrome intact. This matters most for the ported
+pages, whose content shapes come from another codebase and are not uniform —
+assume optional arrays and guard with `?.`.
+
+> **Debugging note.** The console tool showed *nothing* for this — no error,
+> in a fresh tab. What found it was calling the page component as a plain
+> function (`const el = Comp()`), which runs its body and throws synchronously
+> with a usable stack. Worth reaching for whenever a route renders blank.
+
+### Images
+
+Local assets are copied to `public/assets/images/pages/` and the content
+modules repointed. **Remote stock photography (Unsplash) is dropped, not
+carried** — three ESG pillars had dead stock URLs alongside the real artwork.
+
+## The Knowledge Engineering page came from a copy deck, not a codebase
+
+`/knowledge-engineering` is built from
+`Mindlogicx_Knowledge_Engineering_Webpage_Content_Oct2026_REVISED.docx`
+(client's own, v4.0). Copy is verbatim.
+
+**The deck's "Visual Design Direction" blocks were deliberately ignored** —
+gradients, glows, isometric diagrams, animated transitions. Only "Website
+Content" was taken, and none of the direction text is even in the content
+module. The page is built from this site's existing pattern.
+
+### Two things to check before it ships
+
+- **The framework diagram exists in the deck only as an embedded PNG.** Its
+  five stage labels were transcribed from that image (flagged
+  `transcribedFromImage: true`) and are rendered as a typographic pipeline —
+  which keeps them searchable and legible to a screen reader, but **they need
+  proofreading against the original artwork**. The deck itself is inconsistent
+  here: the diagram writes "AI & INTELLIGENCE LAYER - MindGENIE®" with a
+  hyphen where the heading uses an en dash.
+- **CTA label drift in the deck**: the Page Overview calls the primary CTA
+  "Talk to Our Experts", the closing section says "Connect with Our Experts".
+  Both are kept verbatim.
+
+### Routes the deck names do not exist here
+
+Mapped rather than shipped dead; the deck's own paths stay in the content
+module so the difference is auditable.
+
+| deck | this site |
+|---|---|
+| `/education/` | `/ed-tech` |
+| `/healthcare/` | `/health-tech` |
+| `/legal/` | `/voice-of-law` |
+| `/finance/` | `/mxpay` |
+| `/contact-us/` | `/contact-us` — **not built yet** |
+
+## Page titles have no band (2026-10-13)
+
+`PageHero tone="plain"`: no background, left-aligned, flush with the content
+below. Every inner page uses it.
+
+### The title gap is a pair of values, not one
+
+`.ls-hero--plain`'s `padding-bottom` and `.ls-hero--plain + .ls-section`'s
+`padding-top` **stack**. Each had been set assuming the other was not there,
+which put **112px** of air between the page title and the first thing under it
+on every inner page. Now 24 + 32 = **56px**.
+
+Change one and you silently double or halve the gap — they move together.
+`--tight` (Careers, Privacy, Terms) overrides both and is declared after, so
+it wins on source order.
+
+`.ls-hero--accent` is kept but **unused**. Its value is the colour pairing, not
+the padding: cyan carries ink at 7.38:1 and white at 2.53:1. If a coloured
+page band ever returns, start from that rule rather than re-deriving it.
+
+> The prose pages (Privacy, Terms) also run at the **full page measure** by
+> request — about 190 characters a line, against the 60–80 that reads
+> comfortably. `max-width` on `.ls-prose` is the single line to restore if
+> that ever reads as too long.
+
+## Careers and Contact (2026-10-13)
+
+Both ported from the 2025 frontend. Copy verbatim, including its typos.
+
+### ⚠️ The Careers page has no jobs
+
+The original has **zero job listings** — no titles, locations or role
+descriptions, and no API fetching any. Its "Check out our open jobs" line
+links nowhere. The only route in is one general application form. Nothing was
+invented to fill the gap.
+
+### Both forms post to the real endpoints
+
+| page | endpoint | encoding |
+|---|---|---|
+| Contact | `api/contact_us_form_submit/` | JSON |
+| Careers | `api/career_form_submit/` | **multipart** — it carries a CV |
+
+Base URL is **`VITE_API_BASE_URL`**, which is what the reference's own `.env`
+defines. Its *code* reads `NEXT_PUBLIC_API_BASE_URL` in places — a leftover
+from the Next build that Vite never exposes, so the `.env` name is the one to
+trust. Until it is set, both forms say so rather than posting to a relative
+path that would 404 and read as a server fault.
+
+**Neither has reCAPTCHA.** The reference commits a site key under
+`NEXT_PUBLIC_CAPTCHA_KEY`, a prefix Vite does not expose, so it would not have
+worked there either. Worth restoring before launch — an open endpoint that
+accepts file uploads is worth spamming.
+
+**Country/State/City are text inputs**, not the original's cascading selects:
+`countrycitystatejson` is not a dependency here. Field names and values are
+unchanged, so the payload the backend receives is identical. Careers'
+Department remains a real `<select>`.
+
+### Deliberate improvements on the originals
+
+- **Every field has a real `<label>`**, visually hidden behind the same
+  placeholder wording. The originals had placeholders only — the field's name
+  vanishes the moment anyone types, and a screen reader announces an
+  unlabelled box. Careers' file input keeps its label *visible*, since a file
+  control shows only "No file chosen" until used.
+- **The Careers form is always on the page.** The original hid it behind an
+  "Apply Now" button; that button is now an anchor that scrolls to it. An
+  application form one click from invisible costs applications for nothing.
+- Submission results are announced via `role="status"`.
+
+### For the client
+
+- Contact's partner email **mismatches in the source**: visible text reads
+  `partners@mindlogix.com` (no "c"), the link goes to `info@mindlogicx.com`.
+  Both reproduced exactly — guessing which is right would be worse.
+- Validation strings carry the originals' typos: "charactors", "atleast",
+  "alteast", **"Massage is required"**. One-line fixes on request.
+- **"Join Us. Your Future is secured"** is a strong promise to put to
+  applicants in writing. Worth a legal read.
+- Phone validates to exactly 10 characters on both forms, rejecting most
+  non-Indian numbers. Inherited.
+- Only **one** office has an address; Contact's map implied four, so the map
+  is omitted rather than shown with three empty pins.
+- The club CTA points at `/mindlogicxian_club/`, which does not exist here.
+
+## Newsroom (/news-room) — scaffolding on purpose
+
+Built 2026-10-13. Four groups: Awards & Recognition, MOUs & Partnerships,
+Events & Coverage, In the News.
+
+**None has real entries, and that is the point.** Awards and MOUs are claims
+about things the company has won and signed; press coverage claims someone
+published something. Writing any of it would be inventing a record. Each
+empty group renders a visible "Content to be supplied" panel rather than
+disappearing — an empty Awards section that says so is more honest than one
+quietly missing, and it stays a reminder that something is owed.
+
+The three events the client named — the Indonesia event, the SMC signup, and
+ten years of back catalogue — are titled cards marked `placeholder: true`,
+showing a dashed "Details to follow" badge instead of a fabricated write-up.
+
+**To publish:** push entries onto a group's `items` array in
+`footer.newsroomPage`. An entry is `{ title, date, summary, image, link }` —
+only `title` is required and the card adapts to whatever is present. A card
+becomes a link **only** once `link` is set; one that looks clickable and is
+not is worse than one that plainly is not ready.
+
+## Mindlogicxian Club (`/mindlogicxian-club`) — 2026-10-13
+
+Ported from the live page and the 2025 frontend's
+`src/components/MindlogicxianClub/`. Reached from **"Explore the Club"** on
+`/careers`.
+
+**The route is renamed.** The source's own path is `/mindlogicxian_club/`
+(underscores); this site uses `/mindlogicxian-club`, matching every other
+route here. The original path is still in the content layer as
+`buttonHref` so the difference stays auditable — the Careers CTA hard-codes
+the real one.
+
+**The page had no title.** The live banner renders `pageTitle="."` — a single
+literal full stop — with the real title commented out one line above it.
+"Mindlogicxian Club" comes from that commented line.
+
+⚠️ **Singular vs plural is inconsistent in the source and is left that way**:
+body copy and headings say "Mindlogicx*ians* Club", the menu and route say
+"Mindlogicx*ian* Club". Likewise "GOVERNING BOARD" is literally all-caps in
+the source while "Club Activities" and "Memories" beside it are title case,
+and the objectives heading carries a trailing colon ("Objectives:"). All
+verbatim. One of each pair should win before launch.
+
+### The board is one roster, not four groups
+
+The source splits members into office-bearers / cultural / food / sports, but
+**every group's `heading` is null** — the grouping survives only inside the
+designations. Rendered as a single continuous roster; inventing group labels
+would be publishing org structure the client never did.
+
+The portraits are **stylised AI-generated superhero renders** — the source's
+own art direction, carried as found. They are 2:3 full-body compositions, so
+`.ls-club__board` overrides the roster's usual square crop; the shared
+`.ls-person__media` still crops square for the real photographs on `/about`.
+
+⚠️ **Sixteen real people with job titles, details unverified.** Priyanka and
+"CJ Priyanka" share one portrait file, so one of them shows the wrong face.
+Filenames disagree with displayed names for Poovendhan, Kritika, Arvind and
+Shrinivas; five people are listed by a single name. Four further members
+(Anjali, Riya Rai, Zabiulla A, Pranay Kumar) are commented out in the source
+and are **not** rendered — their portraits were not copied either.
+
+### The gallery
+
+628 photographs, 7 years, 28 categories, served as hard-coded URLs from
+Mindlogicx's own S3 bucket. There is no API and no CMS: the source array is
+literally named `MOCK_GALLERY_DATA`.
+
+**Only the 28 covers load with the page**; a category's photographs mount when
+it is opened, one category at a time. Loading all 628 up front would be ~600
+requests to a third-party host before anyone scrolled.
+
+⚠️ **The captions are unreliable** and are reproduced as written: all 64 of the
+2018 images say "Christmas celebration", and the 2025 yoga category is titled
+"Sports Activities & Competitions". Several name individual employees. There
+is a **2009–2024 gap** in the years. The source's own typos ("trofy",
+"kabbadi", "Independance") and its decorative Unicode are preserved.
+
+Not carried: the source's lightbox (zoom, fullscreen, slideshow autoplay). Its
+labels are kept in the content module's `ui` block if it is ever wanted.
+
+### Assets
+
+The 39 local images copied in at **43.9 MB** — the member portraits were
+1024×1536 at ~2 MB each, rendering into ~260 px cards. Resampled to their
+rendered size at q82: **43.9 MB → 1.1 MB**. Eleven were then deleted outright
+as unrendered: the commented-out banner PNG, the four commented-out members,
+and six `studie-shape*` decorations whose renderer is also commented out.
+(`studie-shape7/8/9` were referenced but never existed in the source.)
+
+`.ls-media` gained `display: block` in the same change. It had only ever been
+used on a `div`; the gallery needs it on a `span` inside a `button`, and an
+inline box silently drops `aspect-ratio`.
+
+## The gallery viewer (`Lightbox.jsx`) — 2026-10-13
+
+Opening a category in the club gallery reveals its photographs in the page;
+clicking one opens a full-screen viewer with prev/next, zoom and pan.
+
+The component is **page-agnostic** — give it `images`, a start index and an
+`onClose`. The club page passes the *category's* list, not one photograph, so
+prev/next walk that event and stop at its edges; paging across a year boundary
+into a different event would make the "3 / 24" counter meaningless.
+
+The source's own `aria-*` strings are reused from the content module's `ui`
+block rather than invented ("Close image view", "Previous image", …). Not
+carried from the source's viewer: fullscreen and slideshow autoplay — those
+labels are still in `ui` if either is wanted.
+
+Keyboard: `Esc` closes, `←`/`→` switch, `+`/`-` zoom, `0` resets. Focus moves
+to the close button on open and returns to the thumbnail on close.
+
+### Two traps in it
+
+**The focus trap must skip disabled buttons.** The zoom controls disable at
+the ends of their range, and the *first* control in DOM order is "zoom out" —
+disabled at the default 100%. Wrapping focus onto a disabled button does
+nothing at all, so the first version's trap silently failed in exactly the
+state every viewer opens in. The selector is `button:not(:disabled)`, and it
+is load-bearing.
+
+**Pan offset is applied before scale**: `translate(x, y) scale(z)`. In the
+other order the offset is multiplied by the zoom factor and dragging
+accelerates as you zoom in.
+
+Testing note: calling `.click()` on a thumbnail does **not** move focus the
+way a real activation does, so a focus-restore assertion will read `<body>`
+and look like a bug. Focus the trigger first, then click.
+
+## Product pages: IntelliTUTE and IntelliWORK — 2026-10-13
+
+Built from the **UAE site** (`mindlogicx.ae/intellitute/`, `/intelliwork/`),
+laid out in this site's pattern. Linked from `/ed-tech` and the home-page
+platform cards, which previously pointed at `/products/*` placeholders. The
+other four products still do.
+
+Both source pages are client-rendered SPAs — the served HTML is an empty
+`<div id="root">`, so the copy had to be read after render, not from the
+markup.
+
+**On both, the `h1` is not the product name.** IntelliTUTE's is "One
+Ecosystem"; IntelliWORK's is "The Digital Workforce Intelligence". The product
+name lives only in the banner. Here the banner title is the page title and the
+source's `h1` opens the body, so each page is identifiable from a tab, a
+search result or a link preview.
+
+### ⚠️ Every image on both pages is hotlinked from mindlogicx.ae
+
+Nothing was downloaded. Consequences:
+
+- **IntelliTUTE's ecosystem diagram is a 2.85 MB PNG** rendered at 522 px.
+- **IntelliWORK's nine images total ~13.5 MB** of unoptimised PNG.
+- Both pages break if that host moves, renames or blocks hotlinking.
+
+Localising and converting to WebP is the same treatment the club portraits
+got (43.9 MB → 1.1 MB). It needs a decision because it means copying assets
+off another property.
+
+**Worse: seven of IntelliWORK's nine images are not IntelliWORK artwork.**
+They are borrowed from the ESG, "Our Strength", Global Compliance and AI First
+folders — `AI_first_Banner_image.png` is that page's *banner*, and the
+enterprise-training section is illustrated by `Creative marketing.png`. They
+are carried so the page is not empty, but they are **placeholders**.
+
+Because of that, IntelliWORK's images are all rendered **decorative**
+(`alt=""`). The source's alt text describes pictures that are not what is
+shown, and one reads "Workforce transformation **in the UAE**" — wrong for
+this site. A wrong description is worse than none.
+
+### What was deliberately not rendered
+
+- **IntelliTUTE's mock UI cards** — a "92% Employability Score" with a
+  progress bar and an "IntelliGENIE recommendation". Decoration drawn to look
+  like a product screenshot, but real indexable text on the live page. A
+  fabricated score presented as a page statement is worse than missing
+  decoration.
+- **IntelliWORK's "Compliance & Governance built in" badge** — an
+  unsubstantiated trust claim overlaid on a photograph, duplicating a
+  capability card on the same screen.
+- **The `01`–`09` on IntelliWORK's use cases**, per the site-wide no-numbering
+  rule. They were ordinals on an unordered list of parallel scenarios.
+
+### ⚠️ Content the client must settle
+
+- **IntelliTUTE's comparison panel is unsourced**: "3x Hiring Confidence",
+  "50% Faster Onboarding", and 40%-vs-95% bars against an unnamed "Traditional
+  Platforms". The bar widths are styling, not data, so the bars are
+  `aria-hidden` and the labels beside them carry the meaning.
+- **IntelliTUTE's closing CTA had no button** — the source says "Talk to
+  Mindlogicx" and offers no link, phone or form. A Contact Us button pointing
+  at this site's `/contact-us` was **added**; remove it if the dead end was
+  deliberate.
+- **Trademark symbols are inconsistent across the estate.** Neither UAE page
+  uses ® or ™ at all; this site writes IntelliWORK® / MindGENIE® /
+  IntelliTUTE™. One is wrong.
+- **IntelliGENIE vs MindGENIE®** — IntelliTUTE names the first, everything
+  else the second. If they are one product, one name is wrong.
+- Source grammar kept verbatim: "Candidates set goals, **chooses** a role
+  pathway, and **establishes** a baseline." IntelliWORK mixes en-GB and en-US
+  inside single sentences ("analyse", "cost centre" vs "organizations",
+  "personalize").
+- IntelliWORK repeats itself: "Transform HR Cost to HR Capital" is both a
+  journey step and a section heading; "Institutional Knowledge Processing" is
+  a card title twice. Not merged.
+
+## The Careers form is a disclosure
+
+Hidden until "Apply Now", as in the original — but built as a real
+disclosure rather than a CSS toggle:
+
+- the button carries `aria-expanded` and `aria-controls`;
+- the form is **unmounted** while closed, so its nine fields stay out of the
+  tab order and out of the accessibility tree;
+- **focus moves to the form's heading** when it opens (`tabIndex={-1}` so it
+  is focusable programmatically without joining the tab order).
+
+That last point is the one worth keeping. Without it the button is pressed,
+the page grows *below* the keyboard user's focus position, nothing is
+announced, and the form is effectively unreachable without hunting for it.
 
 ## Placeholders that must not ship as-is
 
@@ -1179,10 +1604,11 @@ Do not write copy for it.
 Every `link` points at `/products/*`, which still renders `Placeholder`. They
 are real routes that will start working, not dead `href="#"`s.
 
-### IntelliEXAMS carries an animated diagram, and it is framed differently
+### Three products carry animated diagrams, framed differently from photos
 
-Supplied 2026-10-12, replacing the stock photograph. `diagram: true` on the
-product switches the band from the photographic treatment to an artwork one:
+IntelliEXAMS (2026-10-12), then IntelliTUTE and IntelliWORK (2026-10-13),
+each replacing a stock photograph. `diagram: true` on the product switches
+the band from the photographic treatment to an artwork one:
 
 | | photograph | diagram |
 |---|---|---|
@@ -1191,32 +1617,60 @@ product switches the band from the photographic treatment to an artwork one:
 | size | full column width | capped at 560px tall, centred |
 | radius | `--radius-media` | none |
 
-**Cropping this one to 4:3 cut about 40% of its height** — it is 1080×1350,
-and the 4:3 frame took "Authoring" off the top and "OMR"/"Scanning" off the
-bottom. The artwork is a capability map, so losing nodes loses meaning. The
-other four bands still use `cover` and were not touched.
+**Cropping IntelliEXAMS to 4:3 cut about 40% of its height** — it is
+1080×1350, and the 4:3 frame took "Authoring" off the top and "OMR"/"Scanning"
+off the bottom. These are capability maps, so losing nodes loses meaning.
 
-The `alt` was rewritten with it. The old one described the photograph ("an
-examiner reviewing assessment analytics"); the diagram carries information the
-surrounding copy does not, so it now names all seven capabilities.
+Each keeps its own ratio: IntelliEXAMS and IntelliTUTE are 1080×1350 (0.80),
+**IntelliWORK is square** (1080²) and renders 560×560. Nothing needed changing
+for it — `--diagram` reads whatever ratio the file has. IntelliOSM and
+IntelliTHESIS are still photographs on `cover` and were not touched.
 
-**It loops infinitely** — 33 frames, 2.19s a cycle — which is what WCAG 2.2.2
-asks for an escape from, and a GIF cannot be paused. Frame 0 is extracted to
-`intelliexams-still.webp` and served through a `<picture>` whose `<source>`
-matches `prefers-reduced-motion: reduce`: no JavaScript, and no flash of the
-animation before the swap. Verified by forcing the source's media to `all` and
-confirming the browser resolves to the still.
+**Every `alt` was rewritten.** The old ones described the photographs they
+replaced ("an examiner reviewing assessment analytics", "a learner working
+through a guided course"); these diagrams carry information the surrounding
+copy does not, so each now names its nodes — seven for IntelliEXAMS, the
+four-stage journey for IntelliTUTE, five for IntelliWORK.
+
+**They all loop infinitely** — 33, 120 and 27 frames — which is what WCAG
+2.2.2 asks for an escape from, and neither a GIF nor an animated WebP can be
+paused. Frame 0 of each is extracted to `*-still.webp`.
+
+The `<picture>` has **three sources and the order is the logic** — the browser
+takes the first match, so they cannot be reordered:
+
+1. `media="(prefers-reduced-motion: reduce)"` → the still. First, so it beats
+   the animation for anyone who asked for less motion. No JavaScript, and no
+   flash of movement before the swap.
+2. `type="image/webp"` → the animated WebP.
+3. the `<img>` → the supplied GIF, for anything supporting neither.
+
+Verified by forcing source 1's media to `all` and confirming the browser
+resolves to the still.
 
 > A visible pause control would satisfy 2.2.2 more fully — this is the
 > no-JavaScript half of it. Worth adding if more animated artwork arrives.
 
-> ⚠️ **The supplied GIF has an "infogiph.com" watermark** burned into its
-> bottom-right corner, from whatever tool produced it. It is visible at full
-> size on the page. This needs a clean export before the site ships — it is
-> a third party's mark on a corporate page.
+> ⚠️ **All three supplied GIFs carry an "infogiph.com" watermark** burned in,
+> from whatever tool produced them — bottom-right on IntelliEXAMS and
+> IntelliWORK, bottom-left as rendered on IntelliTUTE. Visible at full size on
+> the page. These need clean exports before the site ships: it is a third
+> party's mark on a corporate page.
 
-At 203KB the GIF is the heaviest asset on the site. An animated WebP of the
-same artwork would be roughly a third of that if it is ever re-exported.
+**Weight.** The GIFs total 3.9MB; the animated WebPs serve the same artwork in
+1.6MB with every frame kept.
+
+| | GIF | WebP | frames |
+|---|---|---|---|
+| IntelliEXAMS | 208KB | 181KB | 33 |
+| **IntelliTUTE** | **3434KB** | **1272KB** | **120** |
+| IntelliWORK | 216KB | 107KB | 27 |
+
+IntelliTUTE is the outlier by an order of magnitude — 120 frames over 8
+seconds, four times the length of the others. Dropping it to every second
+frame would halve the WebP again to ~665KB, but that is the client's call:
+it is their artwork and 7.5fps may judder on a slow orbit. Encoder quality is
+*not* the lever — q70→q50 only moves it 1323KB→1153KB.
 
 **IntelliMINDS has no product record at all** — it is not in `products`, so it
 has no tagline, no artwork and no page. It appears as a label and a
