@@ -991,3 +991,8 @@
   .ls-prod__labels,
   .ls-prod__baitems { grid-template-columns: minmax(0, 1fr); }
 }
+
+@media (max-width: 767px) {
+  .ls-iex__facts { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .ls-iex__factnum { font-size: 44px; }
+}

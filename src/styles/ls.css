@@ -3815,7 +3815,7 @@ address {
   display: grid;
   place-items: center;
   max-width: 100%;
-  max-height: 48px;
+  max-height: 250px;
   width: auto;
   object-fit: contain;
   filter: grayscale(1);
@@ -5671,4 +5671,46 @@ a.ls-footer__socialbtn:hover {
 
 .ls-section--smoke .ls-prod__label {
   background: #fff;
+}
+
+/* ---- IntelliEXAMS ---- */
+
+.ls-iex__logo {
+  width: 240px;
+  max-width: 100%;
+  height: auto;
+}
+
+/*
+ * The statistics row sits on the solid-cyan band. The text is **ink, not
+ * white**: white on `#00aeef` measures **2.53:1**, which fails AA for the
+ * 16px labels (4.5:1) and even for the 56px figures as large text (3:1).
+ * Ink on the same cyan is **7.38:1**, and the label at 78% is **5.17:1** —
+ * both pass. This is also what the palette asks for: cyan is a fill, and
+ * what sits on it has to earn its contrast.
+ *
+ * The figures themselves are the source's own and uncited — see the page.
+ */
+.ls-iex__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  text-align: center;
+}
+
+.ls-iex__factnum {
+  display: block;
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.ls-iex__factlabel {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: rgb(18 18 23 / 78%);
+  text-wrap: pretty;
 }
