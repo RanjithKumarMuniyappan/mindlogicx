@@ -359,8 +359,15 @@ export const heroSlides = [
     name: 'One World. One Digital Operating System.',
     // No eyebrow on this one, by request.
     heading: 'One World. One Digital Operating System.<br>Engineered for scale.',
-    content:
-      'A unified digital foundation engineered to support global audiences, consistent operations and scalable institutional ecosystems.',
+    /*
+     * Commented out 2026-10-12, by request — not deleted, so it can be put
+     * back by uncommenting. This was the only hero slide with a supporting
+     * paragraph; with it gone, all five slides are heading-only and
+     * `.ls-heroslide__text` renders nowhere.
+     *
+     * content:
+     *   'A unified digital foundation engineered to support global audiences, consistent operations and scalable institutional ecosystems.',
+     */
   },
 ].map((slide, i) => ({
   ...slide,
@@ -462,6 +469,8 @@ export const industries = {
   subTitle: 'WHERE WE APPLY IT',
   title: 'Engineering That Transforms Knowledge into Intelligence.',
   lead: 'Where knowledge is specialised, regulated and consequential, structure and governance are not optional.',
+  /** ⚠️ No longer rendered — the "Explore Solutions" button was removed from
+   *  this section on 2026-10-12. Kept in case it returns. */
   ctaText: 'Explore Solutions',
   /** `icon` keys into the glyph set in `common/icons.jsx`. */
   sectors: [
@@ -985,10 +994,30 @@ export const footer = {
     'Mindlogicx is a global knowledge engineering company building AI-first platforms across EdTech, FinTech, HealthTech and LegalTech.',
   newsletter:
     'Subscribe for product releases, research and newsroom updates from Mindlogicx.',
+  /*
+   * The Company column. "Our Leadership" was removed 2026-10-12 — it pointed
+   * at `/about`, the same page as "About Company" directly above it.
+   */
   usefulLinks: [
     { title: 'About Company', link: '/about' },
-    { title: 'Our Leadership', link: '/about' },
+    { title: 'Newsroom', link: '/news-room' },
     { title: 'Careers', link: '/careers' },
+  ],
+
+  /*
+   * The third column: the two products with live public sites of their own.
+   *
+   * These are **external**, unlike every other footer link, so they render
+   * with `target="_blank"` and `rel="noreferrer noopener"`.
+   *
+   * ⚠️ `themediax.ai` was given as a bare name rather than a URL. It is taken
+   * at face value as its own domain, which is the obvious reading — but it has
+   * not been confirmed, and it is the one address here nobody supplied in
+   * full. Worth checking before this ships.
+   */
+  external: [
+    { title: 'IntelliEXAMS', link: 'https://intelliexams.com/' },
+    { title: 'TheMediaX.ai', link: 'https://themediax.ai/' },
   ],
   /*
    * NEWSROOM  (requested 2026-10-12)
@@ -1001,12 +1030,16 @@ export const footer = {
    * company. They are therefore listed as the categories that were asked
    * for, with `todo: true` on every entry that still needs its destination.
    *
-   * A `todo` entry renders with a visible "TBC" marker and is **not a link**,
-   * so nothing can ship looking finished while pointing nowhere. To publish
-   * one: give it a real `link` and delete its `todo` flag. To add the
-   * individual stories (the Indonesia event, the SMC signup, each award),
-   * put them on the `/news-room` page itself — this footer column is a way
-   * in, not the index.
+   * ⚠️ **No longer rendered** (2026-10-12). The footer now carries a single
+   * "Newsroom" link in the Company list instead of this breakdown. These four
+   * categories belong on the `/news-room` page once it is built — that is
+   * where the individual stories (the Indonesia event, the SMC signup, each
+   * award) go too.
+   *
+   * The `todo` convention is kept for whatever renders them next: such an
+   * entry shows a visible "TBC" and is **not a link**, so nothing can ship
+   * looking finished while pointing nowhere. To publish one, give it a real
+   * `link` and delete its `todo` flag.
    */
   newsroom: [
     { title: 'Awards & Recognition', link: '/news-room/awards', todo: true },

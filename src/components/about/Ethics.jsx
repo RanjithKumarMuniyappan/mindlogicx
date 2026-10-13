@@ -39,11 +39,13 @@ export default function Ethics() {
       <div className="ls-container">
         <SectionIntro eyebrow={ethics.subTitle} title={ethics.title} />
 
-        <ol className="ls-ops__list">
+        {/* `<ul>`, not `<ol>`: it was ordered while each set carried an
+            `01`–`10` index. With those gone nothing about these ten rule sets
+            is sequential — they are a set, and the markup should say so. */}
+        <ul className="ls-ops__list">
           {ethics.items.map((item, i) => (
             <li className="ls-ops__item" key={item.title}>
               <Reveal effect="fadeInUp" delay={Math.min(i, 5) * 60}>
-                <p className="ls-index ls-ops__index">{String(i + 1).padStart(2, '0')}</p>
                 <h3 className="ls-ops__title">{item.title}</h3>
                 <ul className="ls-ops__points">
                   {item.points.map((point) => (
@@ -53,7 +55,7 @@ export default function Ethics() {
               </Reveal>
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
     </section>
   );

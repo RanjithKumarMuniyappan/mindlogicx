@@ -74,9 +74,9 @@ export default function Industries() {
     <section className="ls-section ls-section--white ls-ind">
       <div className="ls-container">
         {/*
-          The title owns a full-width row of its own so it can set on one line;
-          the lead and the controls share the row beneath it. Putting the title
-          beside the controls is what forced it to wrap.
+          Heading, then the lead on its own full-width row — both set on a
+          single line. The controls moved below the carousel on 2026-10-12,
+          which is also what freed the lead to run full width.
         */}
         <Reveal className="ls-ind__head" effect="fadeInUp">
           <p className="ls-wwd__eyebrow">
@@ -86,37 +86,7 @@ export default function Industries() {
 
           <h2 className="ls-h2 ls-ind__title">{industries.title}</h2>
 
-          <div className="ls-ind__meta">
-            <p className="ls-body ls-ind__lead">{industries.lead}</p>
-
-            <div className="ls-ind__controls">
-              {/*
-                Swiper's own arrows are replaced by these so they can carry the
-                site's styling and sit where the comp puts them. The class names
-                are what `navigation` is pointed at below.
-              */}
-              <button
-                type="button"
-                className="ls-ind__nav ls-ind-prev"
-                aria-label="Previous sectors"
-              >
-                <ArrowLeft size={16} />
-              </button>
-              <button
-                type="button"
-                className="ls-ind__nav ls-ind-next"
-                aria-label="Next sectors"
-              >
-                <ArrowRight size={16} />
-              </button>
-
-              {/* No destination yet — see the note above. */}
-              <button type="button" className="ls-pill ls-pill--ghost ls-ind__cta">
-                {industries.ctaText}
-                <ArrowUpRight size={14} />
-              </button>
-            </div>
-          </div>
+          <p className="ls-body ls-ind__lead">{industries.lead}</p>
         </Reveal>
 
         <Swiper
@@ -162,13 +132,14 @@ export default function Industries() {
                 to={sector.link}
               >
                 {/* `__cardhead`, not `__head` — the latter is already the
-                    section's own heading block further up this file. */}
+                    section's own heading block further up this file.
+
+                    The numbered index that sat opposite the glyph was removed
+                    on 2026-10-12 with every other one on the site, so this row
+                    now holds the glyph alone. */}
                 <span className="ls-ind__cardhead">
                   <span className="ls-ind__icon">
                     <ContentIcon name={sector.icon} />
-                  </span>
-                  <span className="ls-index ls-ind__index">
-                    {String(i + 1).padStart(2, '0')}
                   </span>
                 </span>
 
@@ -195,6 +166,26 @@ export default function Industries() {
             </SwiperSlide>
           ))}
         </Swiper>
+
+        {/*
+          The prev/next controls, below the carousel since 2026-10-12.
+          Swiper's own arrows are replaced by these so they carry the site's
+          styling; the class names are what `navigation` above is pointed at,
+          and it resolves them by selector, so moving them in the DOM needs no
+          change to the Swiper config.
+
+          They stay *after* the track in source order, which is also the right
+          reading order — you reach the controls having passed what they
+          control.
+        */}
+        <div className="ls-ind__controls">
+          <button type="button" className="ls-ind__nav ls-ind-prev" aria-label="Previous sectors">
+            <ArrowLeft size={16} />
+          </button>
+          <button type="button" className="ls-ind__nav ls-ind-next" aria-label="Next sectors">
+            <ArrowRight size={16} />
+          </button>
+        </div>
       </div>
     </section>
   );

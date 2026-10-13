@@ -25,7 +25,6 @@ export default function StandFor() {
           {standFor.items.map((item, i) => (
             <Card
               key={item.title}
-              index={`V/${i + 1}`}
               title={item.title}
               desc={item.content}
               tint={wash(i)}

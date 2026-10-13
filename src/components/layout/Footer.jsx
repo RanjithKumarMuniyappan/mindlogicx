@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { company, footer } from '../../content/site';
-import { Facebook, X, LinkedIn, Instagram, YouTube } from '../common/icons';
+import { Facebook, X, LinkedIn, Instagram, YouTube, ArrowUpRight } from '../common/icons';
 
 /** Keyed by `company.social[].id`. */
 const SOCIAL_MARKS = { facebook: Facebook, x: X, linkedin: LinkedIn, instagram: Instagram, youtube: YouTube };
@@ -87,6 +87,16 @@ export default function Footer() {
 
           </div>
 
+          {/*
+            Newsroom is a single link in this list (2026-10-12). It was its
+            own column, then a sub-group here with the four categories under
+            it; now it is one entry among the others.
+
+            `footer.newsroom` — the Awards / MOUs / Events / In the News
+            breakdown, with its TBC markers — is no longer rendered anywhere.
+            It is still in `site.js`, and the `/news-room` page is where those
+            categories belong once it exists.
+          */}
           <div>
             <h2 className="ls-footer__coltitle">Company</h2>
             <nav className="ls-footer__links" aria-label="Company">
@@ -109,28 +119,21 @@ export default function Footer() {
             </nav>
           </div>
 
+          {/* External sites, so anchors rather than router `Link`s. */}
           <div>
-            <h2 className="ls-footer__coltitle">Newsroom</h2>
-            <nav className="ls-footer__links" aria-label="Newsroom">
-              {footer.newsroom.map((link) =>
-                /*
-                 * A `todo` entry has no destination yet, so it renders as
-                 * plain text with a visible "TBC" rather than as a link.
-                 * Shipping it as an anchor would look finished and dead-end
-                 * the reader; this way the gap is obvious to everyone,
-                 * including whoever is filling it in. See `site.js`.
-                 */
-                link.todo ? (
-                  <span className="ls-footer__todo" key={link.title}>
-                    {link.title}
-                    <span className="ls-footer__tbc">TBC</span>
-                  </span>
-                ) : (
-                  <Link to={link.link} key={link.title}>
-                    {link.title}
-                  </Link>
-                )
-              )}
+            <h2 className="ls-footer__coltitle">Products</h2>
+            <nav className="ls-footer__links" aria-label="Product sites">
+              {footer.external.map((link) => (
+                <a
+                  href={link.link}
+                  key={link.title}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  {link.title}
+                  <ArrowUpRight size={12} />
+                </a>
+              ))}
             </nav>
           </div>
         </div>

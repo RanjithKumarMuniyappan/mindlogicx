@@ -5,11 +5,16 @@ import Html from '../common/Html';
 /**
  * The closing band: diversity, equity and inclusion.
  *
- * `dei.lead` ends "...such as:" and six items follow, so this is an ordered
- * list by the content's own construction and gets the numbered variant rather
- * than bullets. The numbers reuse the same mono index that marks every card
- * and accordion row on the site, which is what ties the list to the rest of
- * the pattern instead of looking like a stray `<ol>`.
+ * `dei.lead` ends "...such as:" and six items follow.
+ *
+ * **Bulleted, not numbered** (2026-10-12). It was an `<ol>` whose markers came
+ * from a CSS `counter(ls-num, decimal-leading-zero)` — the last `01, 02, 03`
+ * on the site, and the one the earlier sweep missed because the numbers were
+ * generated in CSS rather than written in JSX. Grep for `counter(`, not just
+ * for the index class.
+ *
+ * It is a `<ul>` now because nothing about these six commitments is ordered —
+ * they are a set, and the lead introduces them as one.
  *
  * `dei.title` carries an `&amp;`, so it goes through `Html`.
  *
@@ -35,13 +40,11 @@ export default function Dei() {
           </h2>
           <p className="ls-body">{dei.lead}</p>
 
-          <ol className="ls-numlist">
+          <ul className="ls-bullets ls-dei__list">
             {dei.points.map((point) => (
-              <li key={point.slice(0, 40)}>
-                <span className="ls-body">{point}</span>
-              </li>
+              <li key={point.slice(0, 40)}>{point}</li>
             ))}
-          </ol>
+          </ul>
         </FeatureLayout>
       </div>
     </section>

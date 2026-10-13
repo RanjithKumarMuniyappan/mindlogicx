@@ -149,12 +149,12 @@ export default function Hero() {
             />
 
             <div className="ls-container ls-container--fluid ls-heroslide__inner">
-              <p className="ls-heroslide__count">
-                <span className="ls-index">
-                  {String(i + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
-                </span>
-                <span className="ls-heroslide__rule" aria-hidden="true" />
-              </p>
+              {/*
+                The "01 / 05" counter and its accent rule were removed on
+                2026-10-12, with every other numbered index on the site. The
+                dots below the slider still say where you are in the set, so
+                nothing was lost but the decoration.
+              */}
 
               {/*
                 Where the product lockup used to be. These slides are

@@ -320,13 +320,9 @@
     padding: 32px;
   }
 
-  /* The controls drop under the lead — side by side they were squeezing the
-     paragraph to about twenty characters a line. */
-  .ls-ind__meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 28px;
-  }
+  /* `.ls-ind__meta` used to live here, stacking the lead above the controls.
+     Both moved on 2026-10-12 — the lead has its own full-width row and the
+     controls sit below the carousel, so neither needs a breakpoint. */
 
   /* The two columns stack. `order` is reset so the photograph always follows
      its copy once they are one above the other — a flipped band would

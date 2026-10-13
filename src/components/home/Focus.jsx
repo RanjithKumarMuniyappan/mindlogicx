@@ -24,7 +24,6 @@ export default function Focus() {
 
   const items = services.items.map((item, i) => ({
     // Zero-padded, which is how the reference numbers a short list.
-    index: String(i + 1).padStart(2, '0'),
     title: item.title,
     body: <p className="ls-body">{item.desc}</p>,
     figure: (

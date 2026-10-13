@@ -52,7 +52,6 @@ export default function WhyChooseUs() {
           {whyChooseUs.reasons.map((reason, i) => (
             <Card
               key={reason.title}
-              index={String(i + 1).padStart(2, '0')}
               title={reason.title}
               desc={reason.content}
               tint={wash(i)}
