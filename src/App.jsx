@@ -19,6 +19,7 @@ import Newsroom from './pages/Newsroom';
 import MindlogicxianClub from './pages/MindlogicxianClub';
 import IntelliTute from './pages/IntelliTute';
 import IntelliWork from './pages/IntelliWork';
+import IntelliExams from './pages/IntelliExams';
 import Placeholder from './pages/Placeholder';
 
 /** Routed navigation should land at the top of the next page, not mid-scroll. */
@@ -75,6 +76,7 @@ export default function App() {
           <Route path="/mindlogicxian-club" element={<MindlogicxianClub />} />
           <Route path="/intellitute" element={<IntelliTute />} />
           <Route path="/intelliwork" element={<IntelliWork />} />
+          <Route path="/intelliexams" element={<IntelliExams />} />
             {/* Remaining routes are stubbed until each page is built out on the
                 same pattern, so navigation never dead-ends during review. */}
             <Route path="*" element={<Placeholder />} />

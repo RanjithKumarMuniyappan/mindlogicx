@@ -211,7 +211,7 @@ export const products = [
     img: '/assets/images/home-two/project-thu1.webp',
     logo: '/logos/products/intelliexams-colour.webp',
     logoWhite: '/logos/products/intelliexams-white.webp',
-    link: '/products/intelliexams',
+    link: '/intelliexams',
   },
   {
     slug: 'intelliwork',
@@ -686,32 +686,18 @@ export const educationPage = {
         'Unified digital assessment infrastructure covering high-stakes event-based examinations and continuous student lifecycle assessment.',
       logo: '/logos/products/intelliexams-colour.webp',
       /*
-       * An animated capability diagram, supplied 2026-10-12, replacing the
-       * stock photograph that was here.
+       * Reverted to the photograph 2026-10-13 at the client's request. The
+       * animated capability diagram that was here (GIF + WebP + still frame)
+       * is kept in `public/assets/images/aboutus/` — restoring it means
+       * putting `image`/`imageAnim`/`imageStill`/`diagram` back; `Education`
+       * switches to `<picture>` whenever `imageStill` is present.
        *
-       * `diagram: true` changes how it is framed: diagrams are shown **whole**
-       * (`object-fit: contain`, their own aspect ratio) rather than cropped to
-       * the band's 4:3 like a photograph. This one is 1080×1350 — cropping it
-       * to 4:3 would cut roughly 40% of its height, taking "Authoring" off the
-       * top and "OMR"/"Scanning" off the bottom.
-       *
-       * `imageStill` is frame 0, shown instead of the animation under
-       * `prefers-reduced-motion`. The GIF loops **infinitely** (33 frames,
-       * 2.19s a cycle), and motion that never stops is exactly what WCAG
-       * 2.2.2 asks for a way out of.
-       *
-       * ⚠️ **The supplied GIF carries an "infogiph.com" watermark** in its
-       * bottom-right corner — see NOTES.md. It needs a clean export before
-       * this ships.
+       * The alt text was rewritten with it: the old one described the
+       * diagram's labelled stages, which this photograph does not show.
        */
-      image: '/assets/images/aboutus/intelliexams.gif',
-      imageAnim: '/assets/images/aboutus/intelliexams-anim.webp',
-      imageStill: '/assets/images/aboutus/intelliexams-still.webp',
-      diagram: true,
-      /* The alt describes the diagram, not the photo it replaced — this
-         artwork carries information the surrounding copy does not. */
-      alt: 'IntelliEXAMS at the centre of seven connected capabilities: Authoring, Generation, Delivery, Scanning, OMR, On Screen Marking and Result.',
-      link: '/products/intelliexams',
+      image: '/assets/images/products/intelliexams.webp',
+      alt: 'A technician reviewing analytics on a tablet beside a screen showing an AI dashboard.',
+      link: '/intelliexams',
     },
     {
       slug: 'intellitute',
@@ -722,22 +708,17 @@ export const educationPage = {
         'A unified ecosystem connecting Academy, Assessment, Certification and Career into a single governed learner journey.',
       logo: '/logos/products/intellitute-colour.webp',
       /*
-       * Animated capability diagram, supplied 2026-10-13 — see the note on
-       * IntelliEXAMS above for what `diagram`, `imageAnim` and `imageStill`
-       * do. Same arrangement: WebP for the animation, the GIF as fallback,
-       * frame 0 for `prefers-reduced-motion`.
+       * Reverted to the photograph 2026-10-13 at the client's request. The
+       * animated capability diagram that was here (GIF + WebP + still frame)
+       * is kept in `public/assets/images/aboutus/` — restoring it means
+       * putting `image`/`imageAnim`/`imageStill`/`diagram` back; `Education`
+       * switches to `<picture>` whenever `imageStill` is present.
        *
-       * ⚠️ **The heaviest asset on the site.** The supplied GIF is 3.4MB —
-       * 120 frames over 8s, four times the length of the other two. The WebP
-       * brings it to 1.27MB with every frame kept. Halving the frame rate
-       * would take it to ~665KB; that is the client's call, since it is their
-       * artwork. Also carries the same "infogiph.com" watermark.
+       * The alt text was rewritten with it: the old one described the
+       * diagram's labelled stages, which this photograph does not show.
        */
-      image: '/assets/images/aboutus/intelliTUTE.gif',
-      imageAnim: '/assets/images/aboutus/intellitute-anim.webp',
-      imageStill: '/assets/images/aboutus/intellitute-still.webp',
-      diagram: true,
-      alt: 'IntelliTUTE at the centre of a four-stage learner journey: Onboard & Profile, Academy (Learn), Assessment (Certify) and Career (Hired).',
+      image: '/assets/images/products/intellitute.webp',
+      alt: 'Two interviewers taking notes as a candidate answers across the desk.',
       link: '/intellitute',
     },
     {
@@ -763,16 +744,17 @@ export const educationPage = {
         'Converts organisational knowledge into structured learning, assessment, certification and workforce capability intelligence.',
       logo: '/logos/products/intelliwork-colour.webp',
       /*
-       * Animated capability diagram, supplied 2026-10-13. Unlike the other
-       * two this one is **square** (1080²) rather than 1080×1350 — the
-       * `--diagram` frame reads each image's own ratio, so nothing needed
-       * changing for it. Same "infogiph.com" watermark.
+       * Reverted to the photograph 2026-10-13 at the client's request. The
+       * animated capability diagram that was here (GIF + WebP + still frame)
+       * is kept in `public/assets/images/aboutus/` — restoring it means
+       * putting `image`/`imageAnim`/`imageStill`/`diagram` back; `Education`
+       * switches to `<picture>` whenever `imageStill` is present.
+       *
+       * The alt text was rewritten with it: the old one described the
+       * diagram's labelled stages, which this photograph does not show.
        */
-      image: '/assets/images/aboutus/IntelliWORK.gif',
-      imageAnim: '/assets/images/aboutus/intelliwork-anim.webp',
-      imageStill: '/assets/images/aboutus/intelliwork-still.webp',
-      diagram: true,
-      alt: 'IntelliWORK at the centre of five connected capabilities: Institutional Knowledge, Workforce Intelligence, Training & Certification, Future-Ready Workforce and HR Capital.',
+      image: '/assets/images/products/intelliwork.webp',
+      alt: 'Two colleagues reviewing printed reports with an employee across the table.',
       link: '/intelliwork',
     },
     {

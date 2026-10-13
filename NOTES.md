@@ -1161,6 +1161,86 @@ this site. A wrong description is worse than none.
   journey step and a section heading; "Institutional Knowledge Processing" is
   a card title twice. Not merged.
 
+## IntelliEXAMS (`/intelliexams`) — 2026-10-13
+
+Built from `https://www.mindlogicx.com/intelliexam/`. The live site is a
+client-rendered SPA serving an empty root div, so the copy came out of the
+deployed page chunk and was cross-checked string for string against the
+reference project's components — both agree throughout.
+
+Linked from `/ed-tech` and the home platform cards. With this, **three of six
+products have real pages**; IntelliOSM, IntelliTHESIS and IntelliMINDS still
+point at `/products/*` placeholders.
+
+### ⚠️ There are two IntelliEXAMS pages on the live site
+
+The deployed route table also carries **`/new_intelliexams`** — newer and
+structurally different (IntelliEXAMS **Prime** / **NG**, "Powered by
+MindGENIE", OBE/CLO/PLO mapping, a comparison table). It calls
+`getMetadata("/intelliexam")`, so **both routes emit the same title and
+description** — the live site is duplicate-content against itself.
+
+Only `/intelliexam` was built, as asked. Nothing was merged from the other.
+**Which is canonical is the client's call**, and it wants making before this
+ships.
+
+### The statistics band fails AA in white — so it is not white
+
+White on the solid cyan `#00aeef` is **2.53:1**: short of AA for the 16px
+labels (4.5:1) and short even for the 56px figures as large text (3:1). The
+band now carries **ink** — `7.38:1` for the figures, `5.17:1` for the label at
+78%. Same arithmetic as the "About Us" title exception recorded elsewhere in
+this file; the difference is that one was client-directed and this one was
+not.
+
+⚠️ **The figures themselves are uncited**: "95+ m", "55+ m", "10+ m" with no
+source or date, and **the bare "m" is never expanded anywhere on the source**
+— so the row literally reads "95+ m Answer Scripts Evaluated". Rendered as
+found; writing "million" would be inventing precision. The CTA's "globally
+acclaimed" and "over 10 million users" are uncited the same way.
+
+### ⚠️ Nine named institutions need written permission
+
+VIT, AKTU, Amity, CSVTU, GIIS, GTU, Maulana Abul Kalam Azad University of
+Technology, Mata Gujri and RGUHS. Real third-party marks, carried because they
+are already on the client's own live page — but each needs consent and
+confirmation the engagement is current and actually IntelliEXAMS. A tenth
+logo (AKU) sits unused in the asset folder.
+
+Rendered as a **static grid, not the source's autoplaying carousel**: nine
+logos fit on one screen, and an auto-advancing strip with no pause control is
+a WCAG 2.2.2 problem for no gain.
+
+### Changed from the source
+
+- **Every link on the source is `href="#"`** — six feature cards, nine client
+  logos. Rendered as plain cards rather than links that go nowhere.
+- **"Request To Demo" pointed at `/appointment/`** via a redux dispatch this
+  project has no store for, and that page does not exist here. Now
+  `/contact-us`, matching IntelliTUTE and IntelliWORK. The source's Calendly
+  URL is still in the content module if a booking flow is wanted.
+- **The floating "Visit Website" overlay is not reproduced** — a fixed GIF
+  with no accessible name and no new-window warning. Its destination is now a
+  labelled secondary button in the closing band.
+- **Alt text rewritten.** Five content images and all nine logos use
+  `alt="Mindlogicx"` on the source, which describes none of them. Decorative
+  ones are `alt=""`; logos name their institution.
+- **Heading outline fixed.** The source's banner is an `h2`, there is no `h1`
+  at all, and the statistics component emits **three `h1`s containing `<p>`**
+  (invalid HTML). This page has one `h1` and a normal outline.
+- The asset with a literal `&` in its filename
+  (`Question-paper-authoring-&-delivery.webp`) was renamed
+  `qp-authoring-and-delivery.webp`.
+- Images copied local and recompressed: **2.39 MB → 1.36 MB**.
+
+### Verbatim faults, preserved
+
+Singular heading **"Feature"**; double space in "examination management
+ platform"; a missing word in "transform how create, deliver and evaluate";
+**"Request To Demo"**; "Question Paper Delivered"; `®` on IntelliEXAMS® in the
+body but not the title or CTA; "On Screen Marking" and "On-Screen Marking"
+both used.
+
 ## The Careers form is a disclosure
 
 Hidden until "Apply Now", as in the original — but built as a real
@@ -1185,7 +1265,7 @@ three are marked in the UI so the gap is visible rather than quietly wrong.
 |---|---|---|
 | Newsroom content | `footer.newsroom` in `site.js` | Awards, MOU signings, the Indonesia event, the SMC signup and ten years of news — still none of it supplied. **No longer rendered**: the footer now carries a single "Newsroom" link. These belong on `/news-room` when it is built; the `todo`/TBC convention is documented on the export for whatever renders them. |
 | Three social URLs | `company.social` | Facebook, X and YouTube have **no address**. Guessing `facebook.com/mindlogicx` risks pointing the footer at a page the company does not control, so a `null` href renders the mark dimmed and inert instead. Set `href` and it becomes a link. LinkedIn and Instagram are live. |
-| IntelliEXAMS diagram | `educationPage.products[0].image` | The supplied GIF has an **"infogiph.com" watermark** burned into its bottom-right corner, visible on the page. Needs a clean export — a third party's mark should not ship on a corporate site. |
+| ~~IntelliEXAMS diagram~~ | — | **No longer on the page** (reverted to the photograph 2026-10-13). The watermark problem stands if the animated diagrams are ever restored: all three supplied GIFs carry an **"infogiph.com" watermark** burned into the bottom-right corner, and a third party's mark should not ship on a corporate site. |
 | Eight affiliation logos | `affiliations.items` | Each tile renders an **abstract geometric mark** from `icons.jsx` (`MarkRing`, `MarkHex`, …). None resembles the real logo of eAA, Don Bosco, IIBA or any trade body — drawing something *close* would ship looking finished. Set `logo` to a real file and `mark` is ignored. |
 | Memberships strip | `affiliations` in `site.js` | Logo files for eAA, Don Bosco Group, IIBA and five trade bodies. Each tile sets the organisation's **name in type** — nothing here draws or approximates anyone's mark. Drop a file in `public/assets/images/affiliations/` and set `logo`; the tile swaps with no other change. |
 | IntelliMINDS | `educationPage.products` | Approved positioning copy and artwork. Carries the source project's own "not approved yet" wording. |
@@ -1604,7 +1684,28 @@ Do not write copy for it.
 Every `link` points at `/products/*`, which still renders `Placeholder`. They
 are real routes that will start working, not dead `href="#"`s.
 
-### Three products carry animated diagrams, framed differently from photos
+### ~~Three products carry animated diagrams~~ — REVERTED 2026-10-13
+
+> **The client asked for the photographs back on 2026-10-13.** IntelliEXAMS,
+> IntelliTUTE and IntelliWORK are now `/assets/images/products/<slug>.webp`
+> again, like the other three products — no `imageAnim`, no `imageStill`, no
+> `diagram`. `/ed-tech` renders all five photographs identically: 4:3,
+> `object-fit: cover`, plain `<img>`.
+>
+> **The alt text was rewritten with them.** It described the diagrams'
+> labelled stages ("IntelliEXAMS at the centre of seven connected
+> capabilities: Authoring, Generation, …"), which the photographs do not show.
+> Leaving it would have described a picture that is not on the page.
+>
+> Nothing was deleted: the GIFs, animated WebPs and still frames are all still
+> in `public/assets/images/aboutus/`, and `Education.jsx` still has its
+> `<picture>` branch — it switches over whenever `imageStill` is present on a
+> product. Restoring is putting four fields back.
+>
+> The section below is kept because it documents how that branch works, and
+> the watermark problem below still applies to the artwork if it returns.
+
+### How the animated diagrams worked (inactive)
 
 IntelliEXAMS (2026-10-12), then IntelliTUTE and IntelliWORK (2026-10-13),
 each replacing a stock photograph. `diagram: true` on the product switches
