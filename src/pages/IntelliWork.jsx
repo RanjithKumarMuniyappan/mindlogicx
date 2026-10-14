@@ -16,27 +16,28 @@ import Pill from '../components/common/Pill';
  * stated three times in the first viewport). Here "IntelliWORK" is the page
  * title and the tagline opens the body.
  *
- * ## ⚠️ The photographs are borrowed from unrelated pages
+ * ## The images are the client's, supplied 2026-10-14
  *
- * **Seven of the nine images on the source are not IntelliWORK artwork.** They
- * come from the ESG, "Our Strength", Global Compliance and AI First folders —
- * `AI_first_Banner_image.png` is that page's *banner* reused as a product
- * graphic, and the enterprise-training section is illustrated with a file
- * called `Creative marketing.png`.
+ * This page renders **two** images — the hero and the MindGENIE band — and
+ * both were replaced with new artwork from `public/assets/images/intelliWork/`
+ * and converted to WebP. **Nothing is hotlinked from mindlogicx.ae any more.**
  *
- * They are carried so the page is not empty, but **they are placeholders** and
- * should be replaced with real IntelliWORK artwork.
+ * That also retires the previous problem: seven of the nine images on the UAE
+ * source were borrowed from the ESG, "Our Strength", Global Compliance and AI
+ * First folders, and one carried the alt text "Workforce transformation **in
+ * the UAE**". The other seven were never rendered here anyway — the journey,
+ * ecosystem and use-case bands are typographic.
  *
- * Because of that, every one is rendered **decorative** (`alt=""`): the
- * source's alt text describes pictures that are not what is actually shown,
- * and one of them reads "Workforce transformation **in the UAE**" — wrong for
- * this site. A wrong description is worse than none, and nothing here is
- * load-bearing information.
+ * ⚠️ **The new hero photograph is a Dubai skyline** — the Burj Khalifa is
+ * plainly identifiable behind the group. That is UAE imagery on the India
+ * corporate site. It was supplied deliberately so it is used as given, but it
+ * is worth a second look before launch.
  *
- * They are also **hotlinked** from `mindlogicx.ae` and total **~13.5 MB** of
- * unoptimised PNG. Nothing was downloaded. Localised and converted to WebP
- * they would be a fraction of that; as it stands every visitor pulls them from
- * the UAE host.
+ * Both are **decorative** (`alt=""`): they illustrate the copy beside them
+ * rather than carrying information of their own.
+ *
+ * The supplied `.png` originals are still in that folder beside the `.webp`,
+ * and everything under `public/` ships — dead weight until removed.
  *
  * ## What was changed, and why
  *
@@ -77,7 +78,7 @@ export default function IntelliWork() {
   /* The source writes these with a trailing slash; this site does not. */
   const route = (link) => link.replace(/\/+$/, '') || '/';
 
-  /* Every photograph here is a borrowed placeholder — see the file note. */
+  /* Decorative by design — see the file note. */
   const art = (src) => (
     <span className="ls-media ls-media--4x3">
       <img src={src} alt="" aria-hidden="true" loading="lazy" />

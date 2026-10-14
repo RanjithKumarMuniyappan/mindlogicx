@@ -17,15 +17,23 @@ import Pill from '../components/common/Pill';
  * and "One Ecosystem" opens the body, so the page is identifiable from the
  * tab, a search result and a link preview.
  *
- * ## ⚠️ The images are hotlinked from mindlogicx.ae
+ * ## The images are the client's, supplied 2026-10-14
  *
- * All five still point at `https://mindlogicx.ae/latest_images/...`. Nothing
- * was downloaded. Two consequences worth a decision:
+ * All four were replaced with new artwork from
+ * `public/assets/images/intelliTute/` and converted to WebP (12 MB of PNG
+ * across both product pages became 0.41 MB). **Nothing is hotlinked from
+ * mindlogicx.ae any more** — the earlier build pulled a 2.85 MB PNG from the
+ * UAE host on every view.
  *
- * - **The ecosystem diagram is a 2.85 MB PNG.** Every visitor pulls it from
- *   the UAE host on every view. Localised and converted to WebP it would be
- *   roughly 100 KB — the same treatment the club portraits got.
- * - The page breaks if that host moves, renames or blocks hotlinking.
+ * The supplied `.png` originals are still in that folder beside the `.webp`.
+ * Everything under `public/` ships, so they are dead weight in the bundle
+ * until someone removes them.
+ *
+ * All four are **decorative** (`alt=""`): they are photographs that
+ * illustrate the copy beside them rather than carrying information of their
+ * own, and each stakeholder card already names its audience in the heading.
+ * The hero's old alt — "IntelliTUTE Learning Ecosystem" — described the
+ * capability diagram that used to be there.
  *
  * ## What was deliberately not rendered
  *
@@ -75,7 +83,10 @@ export default function IntelliTute() {
             reverse
             media={
               <span className="ls-media ls-media--4x3">
-                <img src={hero.visual.image} alt={hero.visual.imageAlt} loading="lazy" />
+                {/* Decorative: the old alt described a capability diagram, and
+                    this is a photograph that illustrates the copy beside it
+                    rather than adding to it. */}
+                <img src={hero.visual.image} alt="" aria-hidden="true" loading="lazy" />
               </span>
             }
           >

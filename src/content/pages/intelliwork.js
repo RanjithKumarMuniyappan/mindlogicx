@@ -252,7 +252,7 @@ export const intelliworkPage = {
       logoImage: "https://mindlogicx.ae/latest_images/intelliwork/IE_Work.png",
       logoImageAlt: "IntelliWORK",
       image:
-        "https://mindlogicx.ae/latest_images/ESG_sustainability/ESGsustainability3.png",
+        "/assets/images/intelliWork/IntelliWORK-The-Digital-Workforce-Intelligence.webp",
       imageAlt: "Workforce transformation in the UAE, powered by IntelliWORK",
       imageNote:
         "Borrowed from the ESG & Sustainability image folder. Alt text names the UAE — see concerns 2 and 3.",
@@ -397,7 +397,7 @@ export const intelliworkPage = {
       // One sentence, with the second half wrapped in a <span> for emphasis.
       highlight: "From Workforce Data to Workforce Decisions.",
       highlightEmphasis: "Workforce Decisions.",
-      image: "https://mindlogicx.ae/latest_images/Our%20Strength/Futuristic.png",
+      image: "/assets/images/intelliWork/IntelliWORK-Powered-by-MindGENIE.webp",
       imageAlt:
         "MindGENIE intelligence layer visualised through futuristic workforce analytics",
       imageNote:
