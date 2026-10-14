@@ -1102,28 +1102,35 @@ name lives only in the banner. Here the banner title is the page title and the
 source's `h1` opens the body, so each page is identifiable from a tab, a
 search result or a link preview.
 
-### ⚠️ Every image on both pages is hotlinked from mindlogicx.ae
+### Images: client-supplied, 2026-10-14 — nothing is hotlinked any more
 
-Nothing was downloaded. Consequences:
+The client supplied replacement artwork in `public/assets/images/intelliTute/`
+(4 files) and `public/assets/images/intelliWork/` (2 files), which is exactly
+what the two pages render — IntelliWORK's journey, ecosystem and use-case
+bands are typographic, so it only ever showed a hero and a MindGENIE image.
 
-- **IntelliTUTE's ecosystem diagram is a 2.85 MB PNG** rendered at 522 px.
-- **IntelliWORK's nine images total ~13.5 MB** of unoptimised PNG.
-- Both pages break if that host moves, renames or blocks hotlinking.
+Converted to WebP at 1120px (covers the 535px render at 2×):
+**12.0 MB of PNG → 0.41 MB**, a 97% saving.
 
-Localising and converting to WebP is the same treatment the club portraits
-got (43.9 MB → 1.1 MB). It needs a decision because it means copying assets
-off another property.
+⚠️ **The supplied `.png` originals are still in those folders.** They are
+untracked in git, so they were not deleted — but everything under `public/`
+is copied into the build, so 12 MB of unused PNG ships until someone removes
+them.
 
-**Worse: seven of IntelliWORK's nine images are not IntelliWORK artwork.**
-They are borrowed from the ESG, "Our Strength", Global Compliance and AI First
-folders — `AI_first_Banner_image.png` is that page's *banner*, and the
-enterprise-training section is illustrated by `Creative marketing.png`. They
-are carried so the page is not empty, but they are **placeholders**.
+⚠️ **The new IntelliWORK hero is a Dubai skyline** — the Burj Khalifa is
+plainly identifiable behind the group. UAE imagery on the India corporate
+site. Supplied deliberately, so used as given, but worth a second look.
 
-Because of that, IntelliWORK's images are all rendered **decorative**
-(`alt=""`). The source's alt text describes pictures that are not what is
-shown, and one reads "Workforce transformation **in the UAE**" — wrong for
-this site. A wrong description is worse than none.
+All six are **decorative** (`alt=""`): photographs that illustrate the copy
+beside them rather than carrying information of their own, and each
+stakeholder card already names its audience in its heading. IntelliTUTE's
+hero alt was "IntelliTUTE Learning Ecosystem", which described the capability
+diagram that used to be there.
+
+This retires what was here before: the pages hotlinked ~16 MB from
+`mindlogicx.ae`, and seven of IntelliWORK's nine source images were borrowed
+from the ESG, "Our Strength", Global Compliance and AI First folders, one of
+them carrying the alt text "Workforce transformation **in the UAE**".
 
 ### What was deliberately not rendered
 

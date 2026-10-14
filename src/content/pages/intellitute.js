@@ -183,8 +183,8 @@ export const intellitutePage = {
       ctas: [], // none — see concern 2
       visual: {
         image:
-          "https://mindlogicx.ae/latest_images/intellitute/One_eco_system.png",
-        imageAlt: "IntelliTUTE Learning Ecosystem",
+          "/assets/images/intelliTute/IntelliTUTE-One-Ecosystem.webp",
+        imageAlt: "",
         // Decorative mock-UI overlay cards. Real DOM text, but illustrative
         // only — not live data. See concern 5.
         decorative: true,
@@ -367,7 +367,7 @@ export const intellitutePage = {
           benefit:
             "Clear AI-guided path to become employable with certifications and transcripts that prove capability.",
           image:
-            "https://mindlogicx.ae/latest_images/intellitute/Candidates_Final-yearStudents_Freshers.jpg",
+            "/assets/images/intelliTute/IntelliTUTE-Candidates-Freshers.webp",
           imageAlt: "Candidates & Freshers", // alt is bound to the card title
           // Filename covers "Final-year Students" too — see concern 9.
         },
@@ -376,7 +376,7 @@ export const intellitutePage = {
           benefit:
             "End-to-end ecosystem for skilling and standardized governance for certifications and outcomes.",
           image:
-            "https://mindlogicx.ae/latest_images/intellitute/InstitutionsAcademiesTrainingProviders.jpg",
+            "/assets/images/intelliTute/IntelliTUTE-Institutions-Academies.webp",
           imageAlt: "Institutions & Academies",
           // Filename covers "Training Providers" too — see concern 9.
         },
@@ -385,7 +385,7 @@ export const intellitutePage = {
           benefit:
             "Access to verified, job-ready talent with transparent evidence including scorecards and portfolios.",
           image:
-            "https://mindlogicx.ae/latest_images/intellitute/Employers.jpg",
+            "/assets/images/intelliTute/IntelliTUTE-Employers.webp",
           imageAlt: "Employers",
         },
       ],
