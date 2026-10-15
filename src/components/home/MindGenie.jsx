@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { mindgenie, agents } from '../../content/site';
 import Reveal from '../common/Reveal';
-import AgentOrchestration from '../common/AgentOrchestration';
 import { ContentIcon, ArrowRight } from '../common/icons';
 
 /**
@@ -12,8 +11,26 @@ import { ContentIcon, ArrowRight } from '../common/icons';
  * head with the orchestration diagram beside the argument, the six agent
  * classes below it, and the human-in-the-loop principle closing the section.
  *
- * It is the only dark band in the page body, which is how the source has it —
- * there, the only fully inverse section on the page.
+ * ## It used to be the page's only dark band
+ *
+ * Flipped to `--white` on 2026-10-14 at the client's request, so the home page
+ * is light throughout. That is not just a background swap: the whole section
+ * was coloured for ink, and **cyan was doing the accent work precisely because
+ * purple is unreadable on near-black** (2.10:1). On white the two trade
+ * places — purple reads at 8.6:1 and cyan would be 2.5:1 — so every accent
+ * here is now `--accent-text` (purple), the headings are ink, the body is
+ * `--grey-500`, and the agent cards are real white cards with a hairline
+ * instead of 3.5%-white-on-ink.
+ *
+ * The git history has the ink version if it is ever wanted back; flipping the
+ * tone alone would leave the type unreadable.
+ *
+ * ## The visual
+ *
+ * The agent-orchestration diagram (`AgentOrchestration.jsx`) was replaced with
+ * the MindGENIE character at the client's request. **The component is still in
+ * the tree and still imported by nothing else** — restoring it is swapping the
+ * `<img>` back for `<AgentOrchestration />`.
  *
  * ## What changed in the port, and why
  *
@@ -28,12 +45,10 @@ import { ContentIcon, ArrowRight } from '../common/icons';
  *   this build has no animation library, so `Reveal` handles the entrance
  *   and the diagram renders settled. See `AgentOrchestration.jsx`.
  *
- * The diagram is hidden below 768px, as in the source — the agent cards carry
- * the same information in a layout built for narrow screens.
  */
 export default function MindGenie() {
   return (
-    <section className="ls-section ls-section--ink ls-mg">
+    <section className="ls-section ls-section--white ls-mg">
       <div className="ls-container">
         <div className="ls-mg__head">
           <Reveal className="ls-mg__intro" effect="fadeInUp">
@@ -56,7 +71,17 @@ export default function MindGenie() {
           </Reveal>
 
           <Reveal className="ls-mg__visual" effect="fadeInRight">
-            <AgentOrchestration />
+            {/* The MindGENIE character, in place of the agent-orchestration
+                diagram that was here. Decorative: the headline, the definition
+                and the six agent cards below carry the meaning, and the
+                picture restates none of it. */}
+            <img
+              className="ls-mg__portrait"
+              src={mindgenie.coreImage}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+            />
           </Reveal>
         </div>
 

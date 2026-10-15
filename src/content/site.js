@@ -208,7 +208,7 @@ export const products = [
     slug: 'intelliexams',
     title: 'IntelliEXAMS®',
     tagline: 'Assessment Intelligence',
-    img: '/assets/images/home-two/project-thu1.webp',
+    img: '/assets/images/products/intelliexams.webp',
     logo: '/logos/products/intelliexams-colour.webp',
     logoWhite: '/logos/products/intelliexams-white.webp',
     link: '/intelliexams',
@@ -217,7 +217,7 @@ export const products = [
     slug: 'intelliwork',
     title: 'IntelliWORK™',
     tagline: 'Workforce Intelligence',
-    img: '/assets/images/home-two/project-thu2.webp',
+    img: '/assets/images/products/intelliwork.webp',
     logo: '/logos/products/intelliwork-colour.webp',
     logoWhite: '/logos/products/intelliwork-white.webp',
     link: '/intelliwork',
@@ -226,7 +226,7 @@ export const products = [
     slug: 'intelliosm',
     title: 'IntelliOSM™',
     tagline: 'Marking Intelligence',
-    img: '/assets/images/home-two/project-thu3.webp',
+    img: '/assets/images/products/intelliosm.webp',
     logo: '/logos/products/intelliosm-colour.webp',
     logoWhite: '/logos/products/intelliosm-white.webp',
     link: '/products/intelliosm',
@@ -235,7 +235,7 @@ export const products = [
     slug: 'intellitute',
     title: 'IntelliTUTE™',
     tagline: 'Learning Intelligence',
-    img: '/assets/images/home-two/project-thu4.webp',
+    img: '/assets/images/products/intellitute.webp',
     logo: '/logos/products/intellitute-colour.webp',
     logoWhite: '/logos/products/intellitute-white.webp',
     link: '/intellitute',
@@ -244,7 +244,7 @@ export const products = [
     slug: 'intellithesis',
     title: 'IntelliTHESIS™',
     tagline: 'Research Intelligence',
-    img: '/assets/images/home-two/project-thu5.webp',
+    img: '/assets/images/products/intellithesis.webp',
     logo: '/logos/products/intellithesis-colour.webp',
     logoWhite: '/logos/products/intellithesis-white.webp',
     link: '/products/intellithesis',
@@ -323,14 +323,20 @@ export const BRAND = [
  * order by hand — reordering one silently mismatched every slide. Looking up
  * by id makes that impossible.
  *
- * Supplied as 1672×941 PNGs at ~1.8MB each (8.65MB for the set); re-encoded
- * to WebP at 0.40MB total, which is a 95% saving on the heaviest thing on the
- * site. The originals are kept in `hero_background/new_bg/`.
+ * **Replaced 2026-10-14** with a second set of client artwork, same five
+ * subjects and the same five filenames. Supplied as 1672×941 PNGs at ~1.9MB
+ * each (9.5MB for the set); re-encoded to WebP at 0.46MB total. The PNG
+ * originals were deleted at the client's request, as were the previous
+ * backdrops and their `new_bg/` originals.
  *
  * Every frame puts its subject on the **right** and leaves the left open.
- * That is what the hero's left-to-right white scrim and left-aligned copy
- * depend on; a frame with its subject on the left would put the copy on top
- * of it. Check that before swapping any one of these.
+ * That is what the hero's left-to-right scrim and left-aligned copy depend
+ * on; a frame with its subject on the left would put the copy on top of it.
+ * Check that before swapping any one of these.
+ *
+ * ⚠️ These five are also the artwork on `/knowledge-engineering` and
+ * `/ai-first` (see the `ART` map at the top of each page component). Swapping
+ * a backdrop changes both places.
  */
 const BACKDROPS = {
   'knowledge-engineering': '/assets/images/hero_background/knowledge-engineering.webp',
@@ -490,7 +496,7 @@ export const industries = {
       title: 'Education',
       icon: 'EdTech',
       desc: '',
-      image: '/assets/images/home-two/project-thu1.webp',
+      image: '/assets/images/sectors/education.webp',
       link: '/ed-tech',
     },
     {
@@ -498,7 +504,7 @@ export const industries = {
       title: 'HealthCare',
       icon: 'HealthTech',
       desc: '',
-      image: '/assets/images/home-two/project-thu2.webp',
+      image: '/assets/images/sectors/healthcare.webp',
       link: '/health-tech',
     },
     {
@@ -506,7 +512,7 @@ export const industries = {
       title: 'Media',
       icon: 'Media',
       desc: '',
-      image: '/assets/images/home-two/project-thu3.webp',
+      image: '/assets/images/sectors/media.webp',
       link: '/media-tech',
     },
     {
@@ -514,7 +520,7 @@ export const industries = {
       title: 'Legal',
       icon: 'LegalTech',
       desc: '',
-      image: '/assets/images/home-two/project-thu4.webp',
+      image: '/assets/images/sectors/legal.webp',
       link: '/voice-of-law',
     },
     {
@@ -522,7 +528,7 @@ export const industries = {
       title: 'Finance',
       icon: 'FinTech',
       desc: '',
-      image: '/assets/images/home-two/project-thu5.webp',
+      image: '/assets/images/sectors/finance.webp',
       link: '/mxpay',
     },
   ],
@@ -553,7 +559,7 @@ export const mindgenie = {
   ctaText: 'Discover MindGENIE',
   ctaLink: '/mindgenie',
   /** The hexagonal core of the orchestration diagram. Copied from the source. */
-  coreImage: '/assets/images/mindgenie.jpeg',
+  coreImage: '/assets/images/mindgenie.webp',
 };
 
 /** The six agent classes, in the source's order. `glyph` keys into `icons.jsx`. */

@@ -1473,36 +1473,35 @@ address {
 }
 
 /*
- * A white scrim over the left of the artwork.
+ * The scrim over the left of the artwork.
  *
- * The supplied frames are already very light on that side, but "already very
- * light" is not a contrast guarantee — it depends on the crop, and the crop
- * depends on the viewport. The scrim makes the text's background a known
- * quantity at every width instead of a property of the photograph.
- */
-/*
- * The scrim that makes the copy readable over the artwork.
+ * ## It is dark now, and the copy is white — 2026-10-14
  *
- * **Widened and strengthened 2026-10-12, when the new photography went in.**
- * The previous stops (86% → 72% at 28% → 0% at 62%) were tuned against
- * backdrops whose middle was bright and empty. The new frames have real
- * subject matter there — monitors, dark clothing — and four of the five
- * slides failed: measured against actual glyph boxes, the headings ran to
- * between 51% and 57% across and bottomed out at **2.62, 2.42 and 1.17:1**,
- * with one body paragraph at 3.12:1.
+ * The client asked for the white overlay to go. **It could not simply be
+ * deleted.** The new photography is high-dynamic-range in exactly the region
+ * the copy occupies: every one of the five frames contains both near-black
+ * pixels (the dark boardroom, suits) and near-white ones (the windows and
+ * sky) under the text. Measured against the glyph area of each frame:
  *
- * The stops below are derived, not eyeballed. Ink text (`#121217`, relative
- * luminance 0.0062) over a **pure black** pixel needs the white wash at:
+ *   - the old ink copy with **no scrim**: 1.08–1.12:1 — invisible
+ *   - white copy with **no scrim**: 1.00–1.05:1 — also invisible
  *
- *   - **38%** for the 55px heading to clear 3:1
- *   - **49%** for body copy to clear 4.5:1
+ * There is no text colour that works unaided, so the choice was a scrim or
+ * unreadable type. A dark one was picked over the old white wash because it
+ * keeps the photography looking like photography rather than bleaching it,
+ * which is what the client was objecting to.
  *
- * Glyphs reach 57.3% across at the furthest, so the wash holds 60% out to
- * 58% before falling away — comfortably past both floors with the worst
- * possible pixel underneath. It is back to nothing by 80%, which is where
- * every frame's subject sits, so the person in shot stays unwashed.
+ * The stops are derived, not eyeballed. White over the **brightest pixel**
+ * found under the glyphs needs black at:
  *
- * **If the copy column is ever widened, or the heading size raised, re-measure
+ *   - **45%** for the 55px heading to clear 3:1   (measured 3.35:1)
+ *   - **55%** for body copy to clear 4.5:1        (measured 4.76:1)
+ *
+ * 62% at the left with 58% held out to 58% across gives both a margin at the
+ * worst possible pixel. It is back to nothing by 80%, which is where every
+ * frame's subject sits, so the people in shot stay unwashed.
+ *
+ * **If the copy column is widened or the heading size raised, re-measure
  * against the glyph boxes — not the column box.** The column is 68% wide and
  * most of that is empty; measuring it instead of the text reports failures
  * that are not there and hides the ones that are.
@@ -1513,10 +1512,10 @@ address {
   inset: 0;
   background: linear-gradient(
     to right,
-    rgb(255 255 255 / 92%) 0%,
-    rgb(255 255 255 / 84%) 35%,
-    rgb(255 255 255 / 60%) 58%,
-    rgb(255 255 255 / 0%) 80%
+    rgb(0 0 0 / 62%) 0%,
+    rgb(0 0 0 / 60%) 35%,
+    rgb(0 0 0 / 58%) 58%,
+    rgb(0 0 0 / 0%) 80%
   );
 }
 
@@ -1551,7 +1550,7 @@ address {
 }
 
 .ls-heroslide__count .ls-index {
-  color: var(--grey-500);
+  color: rgb(255 255 255 / 72%);
 }
 
 .ls-heroslide__rule {
@@ -1570,8 +1569,16 @@ address {
   margin-top: 26px;
 }
 
+/* The eyebrow is tinted per slide on a light ground by default; over the dark
+   scrim it needs to be white, or it drops to the slide tint on near-black. */
+.ls-heroslide .ls-eyebrow {
+  color: rgb(255 255 255 / 80%);
+}
+
 .ls-heroslide__heading {
   margin-top: 28px;
+  /* White, over the dark scrim above. `.ls-h1` sets ink. */
+  color: var(--white);
   /*
    * Still below the 80px `.ls-h1` this class inherits from: the heading shares
    * its band with a logo, a paragraph and a button, where a page's h1 has the
@@ -1601,7 +1608,8 @@ address {
   max-width: 26em;
   font-size: 25px;
   line-height: 1.5;
-  color: var(--grey-700);
+  /* White over the dark scrim — see the note on `.ls-heroslide::after`. */
+  color: rgb(255 255 255 / 88%);
 }
 
 .ls-heroslide__cta {
@@ -2113,25 +2121,25 @@ address {
  * made the words invisible. Only the bar takes a background.
  */
 .ls-mg__rule {
-  background: var(--accent-text-dark);
+  background: var(--accent-text);
 }
 
 .ls-mg .ls-eyebrow {
-  color: var(--accent-text-dark);
+  color: var(--accent-text);
 }
 
 .ls-mg__title {
   margin-top: 24px;
   font-size: 50px;
   line-height: 1.12;
-  color: var(--white);
+  color: var(--ink);
 }
 
 .ls-mg__body {
   margin-top: 26px;
   max-width: 50ch;
   /* 8.08:1 on ink. */
-  color: var(--grey-300);
+  color: var(--grey-500);
 }
 
 /* The definition. A rule, not quotation marks — it is a definition, not a
@@ -2139,11 +2147,11 @@ address {
 .ls-mg__definition {
   margin-top: 34px;
   padding-left: 24px;
-  border-left: 2px solid var(--accent-text-dark);
+  border-left: 2px solid var(--accent-text);
   max-width: 46ch;
   font-size: 17px;
   line-height: 1.6;
-  color: var(--white);
+  color: var(--ink);
 }
 
 .ls-mg__cta {
@@ -2153,7 +2161,7 @@ address {
   gap: 10px;
   font-size: 15px;
   font-weight: 500;
-  color: var(--accent-text-dark);
+  color: var(--accent-text);
 }
 
 .ls-mg__cta svg {
@@ -2188,8 +2196,8 @@ address {
   /* The source's `border-white/10` on `bg-white/[0.035]` — a card that is
      told apart from the band by a hairline rather than elevation, which is
      also how this site's cards work. */
-  border: 1px solid rgb(255 255 255 / 10%);
-  background: rgb(255 255 255 / 3.5%);
+  border: 1px solid var(--grey-200);
+  background: var(--white);
   transition:
     background-color 0.25s ease,
     border-color 0.25s ease,
@@ -2198,8 +2206,8 @@ address {
 
 .ls-mg__agent:hover {
   transform: translateY(-4px);
-  border-color: rgb(255 255 255 / 25%);
-  background: rgb(255 255 255 / 7%);
+  border-color: var(--accent-text);
+  background: var(--white);
 }
 
 .ls-mg__agenthead {
@@ -2212,7 +2220,7 @@ address {
 .ls-mg__glyph {
   display: grid;
   place-items: center;
-  color: var(--accent-text-dark);
+  color: var(--accent-text);
 }
 
 .ls-mg__glyph svg {
@@ -2227,7 +2235,7 @@ address {
   text-transform: uppercase;
   text-align: right;
   /* White at 60% composites to ~7:1 on ink. */
-  color: rgb(255 255 255 / 60%);
+  color: var(--grey-500);
 }
 
 .ls-mg__agentname {
@@ -2236,14 +2244,14 @@ address {
   font-weight: 400;
   line-height: 1.25;
   letter-spacing: -0.02em;
-  color: var(--white);
+  color: var(--ink);
 }
 
 .ls-mg__agentbody {
   margin-top: 12px;
   font-size: 15px;
   line-height: 1.6;
-  color: var(--grey-300);
+  color: var(--grey-500);
 }
 
 /* ---- human-in-the-loop ------------------------------------------------- */
@@ -2256,8 +2264,8 @@ address {
   gap: 32px;
   padding: 40px;
   border-radius: 16px;
-  border: 1px solid color-mix(in srgb, var(--brand-cyan) 25%, transparent);
-  background: color-mix(in srgb, var(--brand-cyan) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brand-purple) 22%, transparent);
+  background: var(--tint-purple-50);
 }
 
 .ls-mg__principletitle {
@@ -2265,7 +2273,7 @@ address {
   font-weight: 400;
   line-height: 1.3;
   letter-spacing: -0.02em;
-  color: var(--white);
+  color: var(--ink);
 }
 
 .ls-mg__principlebody {
@@ -2273,14 +2281,14 @@ address {
   max-width: 64ch;
   font-size: 15px;
   line-height: 1.6;
-  color: var(--grey-300);
+  color: var(--grey-500);
 }
 
 .ls-mg__principleglyph {
   flex: none;
   display: grid;
   place-items: center;
-  color: var(--accent-text-dark);
+  color: var(--accent-text);
 }
 
 .ls-mg__principleglyph svg {
@@ -3301,9 +3309,8 @@ address {
 .ls-intro2 {
   position: relative;
   overflow: hidden;
-  /* Under the backdrop: the artwork is pale, so this only shows if the image
-     fails, and white keeps the ink type readable if it does. */
-  background: var(--white);
+  /* The tone now comes from `--smoke` on the section itself — the backdrop
+     image this sat under was removed 2026-10-14. */
 }
 
 /*
@@ -3869,7 +3876,7 @@ address {
   overflow: hidden;
   /* Behind the photograph, so a failed or slow image leaves white type on
      near-black rather than on the page's white. */
-  background: var(--ink);
+  background: var(--grey-50);
 }
 
 /*
@@ -3902,7 +3909,7 @@ address {
 
 .ls-why__title {
   margin-top: 24px;
-  color: var(--white);
+  color: var(--ink);
 }
 
 .ls-why__bodywrap {
@@ -3912,7 +3919,7 @@ address {
 .ls-why__body {
   max-width: 24rem;
   text-align: right;
-  color: rgb(255 255 255 / 72%);
+  color: var(--grey-500);
 }
 
 /* ---- the counters ------------------------------------------------------ */
@@ -3954,7 +3961,7 @@ address {
   font-weight: 300;
   line-height: 1.05;
   letter-spacing: -0.03em;
-  color: var(--white);
+  color: var(--ink);
 }
 
 .ls-why__label {
@@ -3964,7 +3971,7 @@ address {
   font-size: 22px;
   font-weight: 400;
   line-height: 1.25;
-  color: var(--white);
+  color: var(--ink);
 }
 
 /* Lining figures, so the number does not jitter as it counts. */
@@ -3977,7 +3984,7 @@ address {
   left: 30px;
   top: 0;
   width: 1px;
-  background: rgb(255 255 255 / 25%);
+  background: var(--grey-200);
 }
 
 .ls-why__glyph {
@@ -3991,9 +3998,9 @@ address {
   border-radius: 50%;
   /* A purple-tinted dark disc, as the source has it, with a hairline ring —
      the pattern has no elevation to lean on. */
-  background: color-mix(in srgb, var(--brand-purple) 28%, #141021);
+  background: var(--tint-purple-50);
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 10%);
-  color: var(--brand-cyan);
+  color: var(--accent-text);
   transform: translate(-50%, -50%);
   transition:
     background-color 0.3s ease,
@@ -4007,6 +4014,8 @@ address {
 
 .ls-why__metric:hover .ls-why__glyph {
   background: var(--brand-purple);
+  /* White, not ink — this one disc is solid purple on hover, so it is the
+     only place in the band that is still a dark surface. */
   color: var(--white);
 }
 
@@ -4024,7 +4033,7 @@ address {
   place-items: center;
   width: 20px;
   height: 20px;
-  border: 1px solid rgb(255 255 255 / 50%);
+  border: 1px solid var(--grey-300);
   border-radius: 50%;
 }
 
@@ -4033,7 +4042,7 @@ address {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--brand-cyan);
+  background: var(--accent-text);
 }
 
 /* ---- the trust pillars ------------------------------------------------- */
@@ -4057,9 +4066,9 @@ address {
   flex-direction: column;
   width: 100%;
   padding: 28px;
-  border: 1px solid rgb(255 255 255 / 15%);
+  border: 1px solid var(--grey-200);
   border-radius: 16px;
-  background: rgb(255 255 255 / 5%);
+  background: var(--white);
   backdrop-filter: blur(6px);
 }
 
@@ -4067,14 +4076,14 @@ address {
   font-size: 22px;
   font-weight: 400;
   line-height: 1.25;
-  color: var(--white);
+  color: var(--ink);
 }
 
 .ls-why__pillarbody {
   margin-top: 12px;
   font-size: 15px;
   line-height: 1.6;
-  color: rgb(255 255 255 / 72%);
+  color: var(--grey-500);
 }
 
 .ls-why__cta {
@@ -5713,4 +5722,63 @@ a.ls-footer__socialbtn:hover {
   line-height: 1.4;
   color: rgb(18 18 23 / 78%);
   text-wrap: pretty;
+}
+
+/*
+ * The MindGENIE character, in the slot the orchestration diagram used to
+ * occupy. `contain` because the artwork is a figure on a flat ground — the
+ * old slot cropped a 1:1 SVG that was drawn to fill it, and cropping a
+ * character cuts off a head or a hand.
+ */
+.ls-mg__portrait {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  margin-inline: auto;
+  object-fit: contain;
+}
+
+/* ========================================================================
+   TENETS  —  the editorial principles list (/about, "Our Principles")
+   ======================================================================== */
+
+/*
+ * Rows, not cards. The hairline sits on the *top* of each row rather than the
+ * bottom, so the list opens with a rule under the section intro and does not
+ * close with a stray one under the last item.
+ */
+.ls-tenets__row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 24px 48px;
+  align-items: start;
+  padding: 28px 0;
+  border-top: 1px solid var(--grey-200);
+}
+
+.ls-tenets__title {
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.ls-tenets__body {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--grey-500);
+  text-wrap: pretty;
+}
+
+/* The MindGENIE character on /ai-first — a figure, so it is contained and
+   centred rather than cropped into a media frame. */
+.ls-aif__genie {
+  display: block;
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  margin-inline: auto;
 }

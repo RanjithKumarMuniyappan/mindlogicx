@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { knowledgeEngineeringPage as ke } from '../content/pages/knowledge-engineering';
 import PageHero from '../components/common/PageHero';
 import SectionIntro from '../components/common/SectionIntro';
+import FeatureLayout from '../components/common/FeatureLayout';
 import Reveal from '../components/common/Reveal';
 import Pill from '../components/common/Pill';
 import { ArrowUpRight } from '../components/common/icons';
@@ -45,6 +46,26 @@ import { ArrowUpRight } from '../components/common/icons';
  * rather than as a picture — which keeps them real text, but **they need
  * proofreading against the original artwork**.
  */
+
+/*
+ * ⚠️ **These three are the home page's hero backdrops, reused.**
+ *
+ * They were chosen because they are the only bespoke Mindlogicx artwork in the
+ * project that is actually about this page's subject — `knowledge-engineering`
+ * is a developer at a workflow diagram, `ai-native` is the MindGENIE character
+ * at a live assessment, `one-world` is the global-operations board. Everything
+ * else in `public/assets/images` is either a product shot, a portrait, or
+ * already carrying another page.
+ *
+ * The cost is that a visitor who scrolls the home hero will meet all three
+ * again here. **Dedicated artwork for this page would be better**; swapping it
+ * in is three paths.
+ */
+const ART = {
+  hero: '/assets/images/hero_background/knowledge-engineering.webp',
+  mindgenie: '/assets/images/hero_background/ai-native.webp',
+  why: '/assets/images/hero_background/one-world.webp',
+};
 
 /** The deck's routes, mapped to this site's. See the table above. */
 const ROUTES = {
@@ -91,11 +112,18 @@ export default function KnowledgeEngineering() {
     <>
       <PageHero title={hero.heading} tone="plain" />
 
-      {/* Hero copy. The title above carries the heading, so this opens on the
-          eyebrow and the supporting lines. */}
+      {/* Hero copy beside the page's own photograph. The title above carries
+          the heading, so this opens on the eyebrow and the supporting lines. */}
       <section className="ls-section ls-section--white">
         <div className="ls-container">
-          <Reveal className="ls-ke__lede" effect="fadeInUp">
+          <FeatureLayout
+            reverse
+            media={
+              <span className="ls-media ls-media--3x2">
+                <img src={ART.hero} alt="" aria-hidden="true" loading="lazy" />
+              </span>
+            }
+          >
             <span className="ls-eyebrow">{hero.eyebrow}</span>
             <p className="ls-lead ls-ke__sub">{hero.subheading}</p>
             {hero.body.map((p) => (
@@ -117,7 +145,7 @@ export default function KnowledgeEngineering() {
                 </Pill>
               ))}
             </div>
-          </Reveal>
+          </FeatureLayout>
         </div>
       </section>
 
@@ -188,14 +216,21 @@ export default function KnowledgeEngineering() {
 
       <section className="ls-section ls-section--white">
         <div className="ls-container">
-          <SectionIntro eyebrow={mindgenie.sectionTitle} title={mindgenie.heading} />
-          <div className="ls-ke__prose">
+          <FeatureLayout
+            media={
+              <span className="ls-media ls-media--3x2">
+                <img src={ART.mindgenie} alt="" aria-hidden="true" loading="lazy" />
+              </span>
+            }
+          >
+            <span className="ls-eyebrow">{mindgenie.sectionTitle}</span>
+            <h2 className="ls-h2 ls-h2--sm">{mindgenie.heading}</h2>
             {mindgenie.body.map((p) => (
               <p className="ls-body ls-ke__para" key={p.slice(0, 40)}>
                 {p}
               </p>
             ))}
-          </div>
+          </FeatureLayout>
 
           <h3 className="ls-h3 ls-mt-lg">{mindgenie.itemsHeading}</h3>
           <ItemGrid items={mindgenie.items} />
@@ -220,14 +255,22 @@ export default function KnowledgeEngineering() {
 
       <section className="ls-section ls-section--white">
         <div className="ls-container">
-          <SectionIntro eyebrow={why.sectionTitle} title={why.heading} />
-          <div className="ls-ke__prose">
+          <FeatureLayout
+            reverse
+            media={
+              <span className="ls-media ls-media--3x2">
+                <img src={ART.why} alt="" aria-hidden="true" loading="lazy" />
+              </span>
+            }
+          >
+            <span className="ls-eyebrow">{why.sectionTitle}</span>
+            <h2 className="ls-h2 ls-h2--sm">{why.heading}</h2>
             {why.body.map((p) => (
               <p className="ls-body ls-ke__para" key={p.slice(0, 40)}>
                 {p}
               </p>
             ))}
-          </div>
+          </FeatureLayout>
           <ItemGrid items={why.items} />
         </div>
       </section>

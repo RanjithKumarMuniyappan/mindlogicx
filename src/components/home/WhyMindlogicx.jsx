@@ -18,25 +18,28 @@ import { ContentIcon, ArrowRight } from '../common/icons';
  * - four trust pillars in translucent cards
  * - the closing link
  *
- * ## The photograph carries the band
+ * ## The photograph was removed on 2026-10-14
  *
- * `why-mindlogicx.jpg` is the source's own
- * `PerspectivesOnKnowledgeGovernanceAndAppliedIntelligence.jpg`, laid in
- * full-bleed with **no scrim** — which is the source's choice and is safe
- * here because the picture is genuinely dark: its *brightest* pixel is 0.024
- * relative luminance, so white type holds **14.1:1 at the worst point in the
- * frame**. Swapping in a lighter photograph would break that; it would need a
- * scrim, like the sector cards have.
+ * At the client's request this is now a plain `--smoke` band, like the rest of
+ * the page. `why-mindlogicx.jpg` is no longer rendered; it is still in
+ * `public/` and still `whyMindlogicx.image` in `site.js`.
  *
- * `--ink` sits behind it so a failed or still-loading image leaves white type
- * on near-black rather than on white.
+ * **It was not just a background.** The whole band was built as white-on-dark:
+ * the picture is genuinely dark (its *brightest* pixel is 0.024 relative
+ * luminance, so white type held 14.1:1 at the worst point in the frame) and
+ * `--ink` sat behind it as the fallback. Taking the picture away means every
+ * one of those colours had to inverted — headings and figures to ink, body to
+ * `--grey-500`, the counters' rail to `--grey-200`, the glyph discs from a
+ * dark plate with cyan on them to a purple tint with purple on it, and the
+ * trust pillars from 5%-white-on-ink to real white cards with a hairline.
  *
- * ## Why it reads as a separate band from MindGENIE above it
+ * The one survivor is the glyph's **hover** state, which is solid purple and
+ * therefore still a dark surface — its icon stays white.
  *
- * Both are inverse, which normally means two sections' padding stacking into
- * a dead gap. The photograph is what separates them — this band is a picture,
- * the one above is flat ink. **If the photograph is ever removed, this needs a
- * different tone**, or the two will run together.
+ * The old note here warned that this band and MindGENIE above it were both
+ * inverse and only the photograph separated them. That is resolved rather
+ * than broken: MindGENIE is now `--white` and this is `--smoke`, so the two
+ * alternate like every other pair on the page.
  *
  * ## The line-and-glyph rail is desktop only
  *
@@ -51,17 +54,7 @@ const LINE_HEIGHT = 335;
 
 export default function WhyMindlogicx() {
   return (
-    <section className="ls-section ls-section--ink ls-why">
-      {/* Decorative: the section's own heading carries the meaning. */}
-      <img
-        className="ls-why__bg"
-        src={whyMindlogicx.image}
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        decoding="async"
-      />
-
+    <section className="ls-section ls-section--smoke ls-why">
       <div className="ls-container">
         <div className="ls-why__head">
           <Reveal effect="fadeInUp">

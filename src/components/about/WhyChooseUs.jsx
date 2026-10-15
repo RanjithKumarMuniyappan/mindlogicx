@@ -20,7 +20,7 @@ import { wash } from '../common/washes';
  */
 export default function WhyChooseUs() {
   return (
-    <section className="ls-section ls-section--smoke">
+    <section className="ls-section ls-section--white">
       <div className="ls-container">
         <FeatureLayout
           media={

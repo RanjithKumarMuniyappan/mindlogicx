@@ -85,7 +85,7 @@ export const esgPage = {
             'Cloud Scalability',
             'Low Resource Footprint',
           ],
-          image: '/assets/images/pages/Environmental.jpg',
+          image: '/assets/images/pages/esg/environmental.webp',
           stockImage: null,
         },
         {
@@ -97,7 +97,7 @@ export const esgPage = {
             'Faculty Enablement',
             'Skill Gap Reduction',
           ],
-          image: '/assets/images/pages/Social.jpg',
+          image: '/assets/images/pages/esg/social.webp',
           stockImage: null,
         },
         {
@@ -109,7 +109,7 @@ export const esgPage = {
             'Data Sovereignty',
             'Transparent Audits',
           ],
-          image: '/assets/images/pages/Governance.jpg',
+          image: '/assets/images/pages/esg/governance.webp',
           stockImage: null,
         },
       ],
