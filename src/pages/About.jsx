@@ -4,7 +4,7 @@ import { banner } from '../content/about';
 import Intro from '../components/about/Intro';
 import Ethics from '../components/about/Ethics';
 import Leadership from '../components/about/Leadership';
-import AdvisoryBoard from '../components/about/AdvisoryBoard';
+// import AdvisoryBoard from '../components/about/AdvisoryBoard';
 import StandFor from '../components/about/StandFor';
 import Philosophy from '../components/about/Philosophy';
 import WhyChooseUs from '../components/about/WhyChooseUs';
@@ -33,7 +33,19 @@ const SECTIONS = [
   ['Intro', Intro],
   ['Ethics', Ethics],
   ['Leadership', Leadership],
-  ['AdvisoryBoard', AdvisoryBoard],
+  /*
+   * Advisory Board — commented out 2026-10-14 at the client's request.
+   * `about/AdvisoryBoard.jsx`, `advisoryBoard` in `about.js` and the three
+   * advisor portraits all stand; restoring it is uncommenting the import and
+   * this line.
+   *
+   * ⚠️ **Removing it flipped every band below.** It was `--white` between two
+   * `--smoke` bands, so without it Leadership and StandFor were both smoke and
+   * ran together as one block. StandFor → white, Philosophy → smoke,
+   * WhyChooseUs → white, Dei → smoke. Put Advisory Board back and all four
+   * have to flip again.
+   */
+  // ['AdvisoryBoard', AdvisoryBoard],
   ['StandFor', StandFor],
   ['Philosophy', Philosophy],
   ['WhyChooseUs', WhyChooseUs],

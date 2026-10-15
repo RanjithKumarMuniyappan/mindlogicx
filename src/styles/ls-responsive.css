@@ -266,12 +266,14 @@
     padding-right: 20%;
   }
 
+  /* Dark since 2026-10-14, like the desktop scrim — see the long note on
+     `.ls-heroslide::after` in ls.css for why it is not simply absent. */
   .ls-heroslide::after {
     background: linear-gradient(
       to right,
-      rgb(255 255 255 / 92%) 0%,
-      rgb(255 255 255 / 82%) 40%,
-      rgb(255 255 255 / 0%) 78%
+      rgb(0 0 0 / 66%) 0%,
+      rgb(0 0 0 / 60%) 40%,
+      rgb(0 0 0 / 0%) 78%
     );
   }
 
@@ -668,22 +670,24 @@
 
   /*
    * Fully opaque through the copy, not merely near-opaque. At 96-98% the
-   * labels inside the artwork's UI card — "Better Engagement", "Data-Driven
-   * Decisions" — stayed legible enough to read as stray text sitting behind
-   * the paragraph. A couple of percent of photograph is not worth seeing
-   * through a body paragraph; the artwork gets the bottom of the frame
-   * instead, where it is unobstructed.
+   * labels inside the artwork's UI card stayed legible enough to read as
+   * stray text sitting behind the paragraph. A couple of percent of
+   * photograph is not worth seeing through a body paragraph; the artwork
+   * gets the bottom of the frame instead, where it is unobstructed.
+   *
+   * Dark since 2026-10-14. At 100% black the white copy is on pure black —
+   * 21:1, the most contrast there is.
    */
   .ls-heroslide::after {
     background: linear-gradient(
       to bottom,
-      rgb(255 255 255 / 100%) 0%,
+      rgb(0 0 0 / 100%) 0%,
       /* Holds past the "Learn More" pill — at 54% the fade began level with
          the button and fragments of the artwork's UI card surfaced beside it,
          which reads as a rendering glitch rather than as a photograph. */
-      rgb(255 255 255 / 100%) 64%,
-      rgb(255 255 255 / 55%) 82%,
-      rgb(255 255 255 / 0%) 100%
+      rgb(0 0 0 / 100%) 64%,
+      rgb(0 0 0 / 55%) 82%,
+      rgb(0 0 0 / 0%) 100%
     );
   }
 
@@ -723,8 +727,13 @@
     height: 34px;
   }
 
-  .ls-mg__visual {
-    display: none;
+  /*
+   * The orchestration diagram used to be hidden here, because the agent cards
+   * below repeated everything it said. The MindGENIE character that replaced
+   * it repeats nothing, so it stays — just smaller, above the copy.
+   */
+  .ls-mg__portrait {
+    max-width: 240px;
   }
 
   .ls-mg__title {
@@ -995,4 +1004,15 @@
 @media (max-width: 767px) {
   .ls-iex__facts { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .ls-iex__factnum { font-size: 44px; }
+}
+
+/* ---- Tenets ---- */
+@media (max-width: 767px) {
+  /* One column: at this width the 0.8fr heading column wraps to three or four
+     words a line and the pairing stops reading as a pairing. */
+  .ls-tenets__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 22px 0;
+  }
 }

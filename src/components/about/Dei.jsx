@@ -25,7 +25,7 @@ import Html from '../common/Html';
  */
 export default function Dei() {
   return (
-    <section className="ls-section ls-section--white">
+    <section className="ls-section ls-section--smoke">
       <div className="ls-container">
         <FeatureLayout
           media={

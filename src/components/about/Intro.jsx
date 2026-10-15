@@ -7,10 +7,21 @@ import { ContentIcon } from '../common/icons';
 /**
  * "Who We Are" — rebuilt 2026-10-12 to a supplied comp.
  *
- * Two columns over three cards, on the client's own backdrop
- * (`aboutus_intro_bg.png`): the lockup and the company statement on the left,
- * the "Who We Are" heading with its three principle pills on the right, then
- * the cards along the bottom.
+ * Two columns over three cards: the lockup and the company statement on the
+ * left, the "Who We Are" heading with its three principle pills on the right,
+ * then the cards along the bottom.
+ *
+ * ## The backdrop was removed on 2026-10-14
+ *
+ * `aboutus_intro_bg.png` is no longer rendered, at the client's request. It is
+ * still in `public/` and still `intro.bgImage` in `about.js`.
+ *
+ * The band is **`--smoke`, not white**, and that is load-bearing. The pale
+ * backdrop was the only thing separating this section from the white page
+ * title above it and the white Ethics band below; plain white would have run
+ * all three together into one undifferentiated block. Smoke keeps the whole
+ * page alternating: title white → this smoke → Ethics white → Leadership
+ * smoke, and so on.
  *
  * This replaced a photo-and-bullets feature band plus two long paragraphs and
  * a statement block.
@@ -40,16 +51,7 @@ export default function Intro() {
   const rest = restWords.join(' ');
 
   return (
-    <section className="ls-section ls-intro2">
-      {/* Decorative: the backdrop carries no information. */}
-      <img
-        className="ls-intro2__bg"
-        src={intro.bgImage}
-        alt=""
-        aria-hidden="true"
-        fetchPriority="low"
-      />
-
+    <section className="ls-section ls-section--smoke ls-intro2">
       <div className="ls-container">
         <div className="ls-intro2__top">
           <Reveal className="ls-intro2__brand" effect="fadeInUp">

@@ -5,7 +5,7 @@ import Industries from '../components/home/Industries';
 import Strengths from '../components/home/Strengths';
 import MindGenie from '../components/home/MindGenie';
 import WhyMindlogicx from '../components/home/WhyMindlogicx';
-import Affiliations from '../components/home/Affiliations';
+// import Affiliations from '../components/home/Affiliations';
 
 /**
  * Section order:
@@ -87,7 +87,16 @@ const SECTIONS = [
   ['Strengths', Strengths],
   ['MindGenie', MindGenie],
   ['WhyMindlogicx', WhyMindlogicx],
-  ['Affiliations', Affiliations],
+  /*
+   * Memberships & Affiliations — commented out 2026-10-14 at the client's
+   * request. Nothing was deleted: `home/Affiliations.jsx`, `affiliations` in
+   * `site.js` and the logo files all stand. Restoring it is uncommenting the
+   * import and this line.
+   *
+   * It was the page's last `--white` band, so the page now ends on
+   * `WhyMindlogicx`'s smoke. Put it back and the alternation still holds.
+   */
+  // ['Affiliations', Affiliations],
 ];
 
 export default function Home() {

@@ -1248,6 +1248,159 @@ Singular heading **"Feature"**; double space in "examination management
 body but not the title or CTA; "On Screen Marking" and "On-Screen Marking"
 both used.
 
+## The 2026-10-14 light-mode pass
+
+The client asked for the two dark bands on the home page to go light, two
+sections to be commented out, and the About intro's backdrop removed. None of
+those is a background swap — each one moved type onto a surface it was not
+coloured for, and each one disturbed the page's tone alternation.
+
+### Flipping a band inverts its whole palette
+
+`MindGENIE` (home) was the page's only ink band and **cyan was doing all its
+accent work precisely because purple is unreadable on near-black** (2.10:1).
+On white the two trade places: purple is 8.6:1, cyan would be 2.5:1. So the
+flip meant every accent → `--accent-text` (purple), headings → `--ink`, body →
+`--grey-500`, and the agent cards from 3.5%-white-on-ink to real white cards
+with a hairline.
+
+`Why Mindlogicx` was worse: it was a full-bleed photograph with **no scrim**,
+which was safe only because the picture's brightest pixel is 0.024 relative
+luminance. Removing it meant inverting the counters' rail, the glyph discs,
+the ring markers and the trust-pillar cards as well as the type.
+
+**One rule had to stay white**: `.ls-why__metric:hover .ls-why__glyph` is solid
+purple on hover, so it is the only dark surface left in the band. A blanket
+`--white` → `--ink` swap broke it and had to be put back.
+
+All 17 text styles across the two bands were re-measured afterwards: lowest is
+**4.59:1** (the MindGENIE principle body on its purple tint), everything else
+≥ 4.73. None below AA.
+
+> ⚠️ Measuring trap: `color-mix()` computes to `color(srgb 0.96 0.95 0.97)` —
+> components are **0..1, not 0..255**. A contrast probe that assumes `rgb()`
+> reads that near-white plate as near-black and reports a failure that is not
+> there. It cost one false alarm at "4.12:1".
+
+### Removing a section inverts every band below it
+
+- **Home**: `Affiliations` was the last `--white` band. Commented out, the page
+  now ends on `WhyMindlogicx`'s smoke — no other change needed.
+- **About**: `AdvisoryBoard` was `--white` **between two `--smoke` bands**.
+  Commenting it out left Leadership and StandFor both smoke, running together
+  as one block. Four sections had to flip: StandFor → white, Philosophy →
+  smoke, WhyChooseUs → white, Dei → smoke. **Put Advisory Board back and all
+  four flip again.**
+- **About intro**: its pale backdrop was the only thing separating it from the
+  white page title above and the white Ethics band below. It is now `--smoke`,
+  not white, or all three would have merged.
+
+Both pages were re-measured for adjacent same-tone bands afterwards: none.
+
+Nothing was deleted. `home/Affiliations.jsx`, `about/AdvisoryBoard.jsx`,
+`common/AgentOrchestration.jsx`, `aboutus_intro_bg.png` and
+`why-mindlogicx.jpg` all stand, with their content still in `site.js` /
+`about.js`.
+
+### "Our Principles" is a list now, not a card grid
+
+Nine principles, 3×3 tinted cards → hairline-ruled rows, heading left and
+paragraph right. The paragraphs run 23–48 words, and in a card grid every tile
+stretches to the tallest in its row, so a third of the grid was whitespace.
+The six-colour wash rotation also repeated after six, implying a grouping the
+flat list does not have.
+
+### ⚠️ The product pages' imagery is reused, not new
+
+`/knowledge-engineering` and `/ai-first` each gained three photographic bands
+to break up what was ten near-identical `SectionIntro` + `ItemGrid` + callout
+sections.
+
+**Every image is already in use elsewhere on the site.** There is no unused
+relevant artwork in `public/assets/images` — everything there is a product
+shot, a portrait, or already carrying another page. What was picked is the
+only bespoke Mindlogicx artwork that is genuinely *about* each section:
+
+| page | section | image | also used by |
+|---|---|---|---|
+| knowledge-engineering | lede | `knowledge-engineering.webp` | home hero |
+| knowledge-engineering | MindGENIE | `ai-native.webp` | home hero |
+| knowledge-engineering | Why Mindlogicx | `one-world.webp` | home hero |
+| ai-first | MindGENIE | `mindgenie.webp` | home MindGENIE band |
+| ai-first | AI Labs | `security-by-design.webp` | home hero |
+| ai-first | Why AI-First | `built-for-trust.webp` | home hero |
+
+`ai-native.webp` is deliberately **not** on `/ai-first` even though it suits a
+MindGENIE band — `/knowledge-engineering` takes it, and using it on both would
+put one photograph on two sibling pages.
+
+**Dedicated artwork for these two pages would be better.** Swapping it in is
+six paths, in the `ART` map at the top of each page component.
+
+## The hero scrim is dark now, and it could not simply be deleted (2026-10-14)
+
+The client asked for the white overlay on the hero to go, along with new
+photography for all five slides.
+
+**Deleting it was not an option.** The new frames are high-dynamic-range in
+exactly the region the copy occupies — every one contains both near-black
+pixels (dark boardroom, suits) and near-white ones (windows, sky) under the
+text. Measured over the glyph area of each frame:
+
+| copy colour | scrim | worst contrast |
+|---|---|---|
+| ink (as built) | none | **1.08 – 1.12 : 1** |
+| white | none | **1.00 – 1.05 : 1** |
+
+Neither colour works unaided. So the choice was a scrim or unreadable type,
+and a **dark** one was chosen over the old white wash because it keeps the
+photography looking like photography instead of bleaching it — which is what
+the client was objecting to. The copy flipped to white with it.
+
+The stops are derived. White over the **brightest pixel** under the glyphs
+needs black at **45%** for the 55px heading (3:1) and **55%** for body copy
+(4.5:1). Shipped at 62% → 58% across the copy side, back to zero by 80% where
+every frame's subject sits.
+
+Re-measured in the browser afterwards against **real glyph boxes** (Range
+rectangles, sampling the composited photo+scrim pixel under each): worst case
+across all five slides is **4.53:1**, best 7.08:1. Nothing below AA.
+
+> ⚠️ **There are three scrim rules, not one.** `ls.css` has the desktop
+> gradient and `ls-responsive.css` overrides it twice — a wider horizontal one
+> below 992px and a fully-opaque *vertical* one on mobile, where the copy sits
+> over the top of the frame and the artwork gets the bottom. Changing only the
+> desktop rule looks correct on a desktop and leaves the other two inverted. A
+> probe at 618px wide read the mobile rule and reported a white gradient after
+> the desktop one had already been changed.
+
+### The image swap
+
+All three sets were supplied as PNGs and converted:
+
+| set | where | PNG → WebP |
+|---|---|---|
+| 5 hero slides | `hero_background/*.webp` (same five names) | 9.5 MB → 0.46 MB |
+| 5 sector cards | `sectors/*.webp` | 0.75 MB → 0.13 MB |
+| 3 ESG pillars | `pages/esg/*.webp` | 6.4 MB → 0.22 MB |
+
+Superseded files deleted at the client's request: the five old hero backdrops
+(overwritten in place), their `new_bg/` PNG originals, `project-thu1–5.webp`,
+and `Environmental.jpg` / `Social.jpg` / `Governance.jpg`. The supplied PNG
+source folders were removed too.
+
+**Two deletions had non-obvious dependants:**
+
+- The five hero backdrops are **also** the artwork on `/knowledge-engineering`
+  and `/ai-first` (the `ART` maps added on the same day). Overwriting in place
+  rather than renaming kept both pages working and gave them the new art for
+  free. Swapping a backdrop still changes both places.
+- `project-thu1–5.webp` were used **twice** in `site.js`: by the sector cards
+  *and* by the platform cards, which are not rendered on any page since
+  `Platforms`/`PlatformsAlt` came off the home page. Deleting them would have
+  left dangling references in live content. The platform cards now point at
+  `products/<slug>.webp`, which already existed and actually match them.
+
 ## The Careers form is a disclosure
 
 Hidden until "Apply Now", as in the original — but built as a real

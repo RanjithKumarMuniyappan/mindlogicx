@@ -1,6 +1,7 @@
 import { aiFirstPage } from '../content/pages/ai-first';
 import PageHero from '../components/common/PageHero';
 import SectionIntro from '../components/common/SectionIntro';
+import FeatureLayout from '../components/common/FeatureLayout';
 import Reveal from '../components/common/Reveal';
 
 /**
@@ -25,6 +26,29 @@ import Reveal from '../components/common/Reveal';
  * components below rather than written out nine times. Bands alternate
  * white/smoke, with the two pull-quote moments on ink.
  */
+/*
+ * ⚠️ **Two of these three are the home page's hero backdrops, reused**, and
+ * the third is the MindGENIE character already used on the home page.
+ *
+ * They were chosen because they are the only bespoke Mindlogicx artwork in the
+ * project that is actually about this page's subject — `security-by-design` is
+ * an engineer at a build/test/release board, `built-for-trust` is a compliance
+ * review. Everything else in `public/assets/images` is a product shot, a
+ * portrait, or already carrying another page.
+ *
+ * The cost is repetition across the site. **Dedicated artwork for this page
+ * would be better**; swapping it in is three paths.
+ *
+ * `ai-native.webp` is deliberately *not* used here even though it suits a
+ * MindGENIE band — `/knowledge-engineering` already takes it, and using it on
+ * both would put the same photograph on two sibling pages.
+ */
+const ART = {
+  mindgenie: '/assets/images/mindgenie.webp',
+  labs: '/assets/images/hero_background/security-by-design.webp',
+  why: '/assets/images/hero_background/built-for-trust.webp',
+};
+
 function ItemGrid({ items, columns = 3 }) {
   return (
     <ul className={`ls-grid ls-grid--${columns} ls-aif__grid`}>
@@ -98,12 +122,18 @@ export default function AiFirst() {
       {/* MindGENIE */}
       <section className="ls-section ls-section--white">
         <div className="ls-container">
-          <SectionIntro title={s.mindgenie.heading} />
-          {s.mindgenie.paragraphs.map((p) => (
-            <p className="ls-body ls-aif__para" key={p.slice(0, 40)}>
-              {p}
-            </p>
-          ))}
+          <FeatureLayout
+            media={
+              <img className="ls-aif__genie" src={ART.mindgenie} alt="" aria-hidden="true" loading="lazy" />
+            }
+          >
+            <h2 className="ls-h2 ls-h2--sm">{s.mindgenie.heading}</h2>
+            {s.mindgenie.paragraphs.map((p) => (
+              <p className="ls-body ls-aif__para" key={p.slice(0, 40)}>
+                {p}
+              </p>
+            ))}
+          </FeatureLayout>
           <Highlight card={s.mindgenie.trustCard} />
 
           <h3 className="ls-h3 ls-mt-lg">{s.mindgenie.featuresTitle}</h3>
@@ -114,7 +144,17 @@ export default function AiFirst() {
       {/* AI Labs */}
       <section className="ls-section ls-section--smoke">
         <div className="ls-container">
-          <SectionIntro title={s['ai-labs'].heading} lead={s['ai-labs'].intro} />
+          <FeatureLayout
+            reverse
+            media={
+              <span className="ls-media ls-media--3x2">
+                <img src={ART.labs} alt="" aria-hidden="true" loading="lazy" />
+              </span>
+            }
+          >
+            <h2 className="ls-h2 ls-h2--sm">{s['ai-labs'].heading}</h2>
+            <p className="ls-lead">{s['ai-labs'].intro}</p>
+          </FeatureLayout>
           <ItemGrid items={s['ai-labs'].capabilities} />
           <Highlight card={s['ai-labs'].callout} />
         </div>
@@ -170,7 +210,16 @@ export default function AiFirst() {
       {/* Why AI-First matters */}
       <section className="ls-section ls-section--smoke">
         <div className="ls-container">
-          <SectionIntro title={s['why-ai-first'].heading} lead={s['why-ai-first'].subtitle} />
+          <FeatureLayout
+            media={
+              <span className="ls-media ls-media--3x2">
+                <img src={ART.why} alt="" aria-hidden="true" loading="lazy" />
+              </span>
+            }
+          >
+            <h2 className="ls-h2 ls-h2--sm">{s['why-ai-first'].heading}</h2>
+            <p className="ls-lead">{s['why-ai-first'].subtitle}</p>
+          </FeatureLayout>
           <ItemGrid items={s['why-ai-first'].items} />
           <Highlight card={s['why-ai-first'].partnerCard} />
         </div>
