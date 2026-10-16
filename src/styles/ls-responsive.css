@@ -1122,12 +1122,10 @@
 @media (max-width: 767px) {
   /* Left-aligned on a phone: the columns above are left-aligned there, and a
      right-aligned block under them reads as a mistake rather than a choice. */
+  /* The strip goes left with everything else on a phone. */
   .ls-footer__meta {
-    align-items: flex-start;
-    margin-top: 32px;
+    justify-content: flex-start;
   }
-
-  .ls-footer__meta .ls-footer__social { justify-content: flex-start; }
 
   .ls-footer__links--two {
     grid-auto-flow: row;

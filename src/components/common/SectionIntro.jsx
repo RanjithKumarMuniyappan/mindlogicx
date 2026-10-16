@@ -16,10 +16,16 @@ export default function SectionIntro({
   lead,
   center = false,
   titleSize = 'ls-h2',
+  className = '',
   children,
 }) {
   return (
-    <Reveal className={center ? 'ls-intro ls-intro--center' : 'ls-intro'} effect="fadeInUp">
+    <Reveal
+      className={[center ? 'ls-intro ls-intro--center' : 'ls-intro', className]
+        .filter(Boolean)
+        .join(' ')}
+      effect="fadeInUp"
+    >
       {eyebrow && <span className="ls-eyebrow">{eyebrow}</span>}
       {title && (
         <h2 className={titleSize}>

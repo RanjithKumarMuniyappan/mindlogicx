@@ -2340,6 +2340,58 @@ scroll — the footer is on all of them. Capped with
 >   (`scrollWidth 150` in a `clientWidth 1` clipped box). That is what
 >   visually-hidden *is*; exclude them or the check cries wolf.
 
+## 2026-10-16, second batch (10 changes)
+
+### Footer
+
+Both column headings ("Company", "Products") removed; the social row moved
+back into the brand column under the blurb, left-aligned; the countries strip
+now has the right-aligned row to itself with **no top spacing**.
+
+`.ls-footer__coltitle` is kept but marked unused — the columns still exist and
+may want labelling again.
+
+### ⚠️ Three more pages lost their last CTA
+
+- **`/health-tech`** — "Explore Our Healthcare Vision" removed. It scrolled to
+  the vision band, which is still the next section down, so nothing became
+  unreachable.
+- **`/voice-of-law`** — "Explore Our Legal Vision" *and* "Contact Us" removed
+  from the hero. With yesterday's closing-band removal, **this page now has
+  no outbound route at all.**
+
+Everything is intact in the content modules.
+
+### Width modifiers, applied per section
+
+`.ls-intro` caps at 760px and `.ls-ke__prose` at 72ch. Both are right for a
+reading column, but they left three bands visibly narrower than the grids
+around them — Legal's "Building the Future…", Finance's "Our Vision for the
+Future of Finance" and "How the Platform Is Envisioned to Work".
+
+`--wide` lifts the cap on those three only. `SectionIntro` gained a
+`className` prop to carry it.
+
+> ⚠️ At 1152px a full-measure paragraph is roughly **150 characters a line**,
+> well past the 60–80 that reads comfortably. It suits a short lead and a
+> couple of sentences — do not reach for `--wide` on long-form prose.
+
+### Other
+
+| # | change | measured |
+|---|---|---|
+| 3 | AI-First MindGENIE: copy left, lockup right via `reverse` | image right of copy ✓ |
+| 5 | "Our Commitment" heading `clamp(24px, 3.2vw, 44px)` | 4 lines → **1** at 41px |
+
+`reverse` only applies above 992px, so the lockup still leads on mobile —
+separating copy from its own picture by the height of the copy reads worse in
+one column.
+
+Verified across 20 routes at desktop and 6 at 375px: one `h1` each, no broken
+images, no error boundaries, and **no page can actually scroll sideways**
+(`scrollTo(400,0)` leaves `scrollX` at 0). Footer flags fit at 334px on a
+phone with the strip left-aligned there.
+
 ## The Careers form is a disclosure
 
 Hidden until "Apply Now", as in the original — but built as a real
