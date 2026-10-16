@@ -31,7 +31,12 @@ import { ContentIcon } from '../common/icons';
  *   rule, the quote bar and the link; cyan only in the icon dots and the
  *   gradient under the photograph, neither of which is read.
  *
- * The image is a placeholder — see `whatWeDo.image` in `site.js`.
+ * The image is the client's `We_Engineer_Knowledge.jpg`, supplied 2026-10-15.
+ *
+ * ⚠️ **It is only 410×311.** The slot is ~300px tall and the full width of its
+ * column, so the picture is upscaled to fill it — soft on a normal screen and
+ * softer on a retina one. Nothing here can add detail that is not in the file;
+ * a larger original is the only fix.
  */
 export default function WhatWeDo() {
   return (

@@ -20,6 +20,10 @@ import MindlogicxianClub from './pages/MindlogicxianClub';
 import IntelliTute from './pages/IntelliTute';
 import IntelliWork from './pages/IntelliWork';
 import IntelliExams from './pages/IntelliExams';
+import VoiceOfLaw from './pages/VoiceOfLaw';
+import HealthTech from './pages/HealthTech';
+import MediaTech from './pages/MediaTech';
+import Finance from './pages/Finance';
 import Placeholder from './pages/Placeholder';
 
 /** Routed navigation should land at the top of the next page, not mid-scroll. */
@@ -77,6 +81,10 @@ export default function App() {
           <Route path="/intellitute" element={<IntelliTute />} />
           <Route path="/intelliwork" element={<IntelliWork />} />
           <Route path="/intelliexams" element={<IntelliExams />} />
+          <Route path="/voice-of-law" element={<VoiceOfLaw />} />
+          <Route path="/health-tech" element={<HealthTech />} />
+          <Route path="/media-tech" element={<MediaTech />} />
+          <Route path="/mxpay" element={<Finance />} />
             {/* Remaining routes are stubbed until each page is built out on the
                 same pattern, so navigation never dead-ends during review. */}
             <Route path="*" element={<Placeholder />} />

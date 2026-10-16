@@ -1,6 +1,4 @@
 import ErrorBoundary from '../components/common/ErrorBoundary';
-import PageHero from '../components/common/PageHero';
-import { banner } from '../content/about';
 import Intro from '../components/about/Intro';
 import Ethics from '../components/about/Ethics';
 import Leadership from '../components/about/Leadership';
@@ -56,16 +54,16 @@ export default function About() {
   return (
     <>
       {/*
-        A plain accent band with the title and nothing else, by request
-        (2026-10-12). It previously carried the eyebrow, `intro.lead` and
-        `banner.bgImg`.
+        No page title band. Removed 2026-10-15 at the client's request — the
+        page opened on the words "About Us" and then immediately said "Who We
+        Are?" below them, which was the same statement twice.
 
-        Dropping the lead here costs nothing: the redesigned `Intro` below
-        renders `intro.lead` as its left-hand statement, so the sentence is
-        still on the page — and it is no longer printed twice 400px apart.
-        `banner.bgImg` is now unrendered; it is still in `about.js`.
+        **`Intro`'s "Who We Are?" is the page's `h1` now.** Deleting the title
+        outright would have left the page with no `h1` at all: no document
+        outline for a screen reader, and nothing for a search result or a link
+        preview to use as the page name. `banner.title` and `banner.bgImg` are
+        still in `about.js`, unrendered.
       */}
-      <PageHero title={banner.title} tone="plain" />
       {SECTIONS.map(([name, Section]) => (
         <ErrorBoundary key={name} name={name}>
           <Section />

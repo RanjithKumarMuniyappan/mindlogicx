@@ -434,14 +434,42 @@ export const contactPage = {
 
   // Verbatim mirror of the three contact-info boxes, in page order.
   infoBoxes: [
+    /*
+     * ⚠️ The client supplied this address again on 2026-10-15 as a "region
+     * branch" to be added. It is **the same street address already here** as
+     * Head Office — the only new information was the legal entity name, so
+     * that was added to this entry rather than rendered as a second,
+     * identical card. The line breaks are the client's own.
+     */
     {
+      id: "head-office",
       type: "address",
       label: "Head Office ", // trailing space is in the source <strong>
+      name: "Mindlogicx Infratec Limited",
       lines: [
-        "10/1B, Graphite India Main Rd, KEB Colony, Industrial Area, Whitefield, Bengaluru, Karnataka 560048",
+        "10/1B, Graphite India Main Rd,",
+        "KEB Colony, Industrial Area,",
+        "Whitefield, Bengaluru,",
+        "Karnataka 560048.",
+      ],
+    },
+    /*
+     * Added 2026-10-15, verbatim — including the client's capitalisation
+     * ("MINDLOGICX ASIA SDN. BHD", no full stop after BHD) and line breaks.
+     */
+    {
+      id: "asia-office",
+      type: "address",
+      label: null,
+      name: "MINDLOGICX ASIA SDN. BHD",
+      lines: [
+        "Block 3B-02-06, Plaza Sentral, Jalan Stesen Sentral 5,",
+        "Kuala Lumpur Sentral, Kuala Lumpur,",
+        "W.P. Kuala Lumpur, 50470",
       ],
     },
     {
+      id: "email",
       type: "email",
       entries: [
         { label: "Sales :", value: "sales@mindlogicx.com", href: "mailto:sales@mindlogicx.com" },
@@ -455,6 +483,7 @@ export const contactPage = {
       ],
     },
     {
+      id: "whatsapp",
       type: "whatsapp",
       label: null, // a "Call Here" heading exists but is commented out
       entries: [

@@ -132,19 +132,13 @@ export default function KnowledgeEngineering() {
               </p>
             ))}
 
-            <div className="ls-ke__ctas">
-              {hero.ctas.map((cta, i) => (
-                <Pill
-                  key={cta.label}
-                  variant={i === 0 ? 'solid' : 'ghost'}
-                  to={cta.link.startsWith('#') ? undefined : route(cta.link)}
-                  href={cta.link.startsWith('#') ? cta.link : undefined}
-                  arrow
-                >
-                  {cta.label}
-                </Pill>
-              ))}
-            </div>
+            {/*
+              "Explore Our Capabilities" and "Talk to Our Experts" were here;
+              removed 2026-10-15 at the client's request. `hero.ctas` still
+              holds both in the content module, so restoring them is putting
+              this block back — the deck's own link targets are preserved
+              there alongside each label.
+            */}
           </FeatureLayout>
         </div>
       </section>
@@ -191,14 +185,29 @@ export default function KnowledgeEngineering() {
             lead={framework.body[0]}
           />
 
-          <ol className="ls-flow">
+          {/*
+            Five stages read left to right on a single connecting rail — see
+            `.ls-kef` in `ls.css`, which records why this is the third design
+            for this section. The node fill deepens across the five, which is
+            how progression is shown without numbering them.
+          */}
+          <ol className="ls-kef">
             {framework.diagram.stages.map((stage, i) => (
               <li key={stage.title}>
-                <Reveal className="ls-flow__stage" effect="fadeInUp" delay={i * 60}>
-                  <h3 className="ls-flow__title">{stage.title}</h3>
-                  <ul className="ls-flow__items">
+                <Reveal
+                  className="ls-kef__stage"
+                  effect="fadeInUp"
+                  delay={i * 60}
+                  style={{
+                    '--kef-depth': `${25 + (75 * i) / (framework.diagram.stages.length - 1)}%`,
+                  }}
+                >
+                  <h3 className="ls-kef__title">{stage.title}</h3>
+                  <ul className="ls-kef__items">
                     {stage.items.map((item) => (
-                      <li key={item}>{item}</li>
+                      <li className="ls-kef__item" key={item}>
+                        {item}
+                      </li>
                     ))}
                   </ul>
                 </Reveal>
@@ -206,7 +215,10 @@ export default function KnowledgeEngineering() {
             ))}
           </ol>
 
-          <Reveal className="ls-flow__caption" effect="fadeInUp">
+          {/* The spanning layer, drawn under all five rather than as a sixth
+              stage: the caption says it runs the whole lifecycle. */}
+          <Reveal className="ls-kef__span" effect="fadeInUp">
+            <span className="ls-kef__spanmark" aria-hidden="true" />
             {framework.diagram.caption}
           </Reveal>
 
@@ -277,7 +289,7 @@ export default function KnowledgeEngineering() {
 
       <section className="ls-section ls-section--ink">
         <div className="ls-container">
-          <Reveal className="ls-ke__close" effect="fadeInUp">
+          <Reveal className="ls-ke__close ls-ke__close--single" effect="fadeInUp">
             <span className="ls-eyebrow ls-ke__closelabel">{why.closingCta.label}</span>
             <h2 className="ls-h2 ls-ke__closeheading">{why.closingCta.heading}</h2>
             <p className="ls-ke__closebody">{why.closingCta.body}</p>
