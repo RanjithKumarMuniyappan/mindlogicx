@@ -712,12 +712,17 @@
   }
 
   /*
-   * The orchestration diagram used to be hidden here, because the agent cards
-   * below repeated everything it said. The MindGENIE character that replaced
-   * it repeats nothing, so it stays — just smaller, above the copy.
+   * The lockup is already above the copy at every width, so there is no
+   * reordering to do here — only a sensible cap. 320px on a 375px screen
+   * leaves it comfortably inside the gutters, and since the file is 486px
+   * wide this is the one width where it is genuinely sharp.
    */
-  .ls-mg__portrait {
-    max-width: 240px;
+  .ls-mg__lockup {
+    margin-bottom: 32px;
+  }
+
+  .ls-mg__lockup img {
+    max-width: 320px;
   }
 
   .ls-mg__title {
@@ -1070,4 +1075,45 @@
      single column leaves the photographs wider than they are tall by a long
      way, and the grid stops reading as a set. */
   .ls-fin__status { font-size: 12px; }
+}
+
+/* ---- Why Mindlogicx: the figures need the whole column on a phone ---- */
+@media (max-width: 575px) {
+  /*
+   * One figure per row below 576px. Two-up leaves ~123px a cell, and "10M+"
+   * at the 44px this band keeps (set in the 767px block further up, which
+   * wins over the 991px one) measures **152px** — it was overflowing its
+   * cell and being silently clipped. The page does not scroll sideways when
+   * that happens, so a page-level overflow check does not catch it; the
+   * figure just loses its last character.
+   */
+  .ls-why__metrics {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+}
+
+/* ---- Legal vertical ---- */
+@media (max-width: 767px) {
+  .ls-legal__layer {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 20px;
+  }
+}
+
+/*
+ * `.ls-grid--2` never had a responsive rule — it was added for IntelliTUTE's
+ * "Why" pairs, which collapse via their own `.ls-prod__whygrid` override, so
+ * the gap stayed hidden until the Legal page used the bare class. Two columns
+ * inside a 375px viewport leaves ~155px a cell, and a title like "Legal
+ * Professional Intelligence" overflowed it — and the page with it.
+ *
+ * `--3` and `--4` already collapse further up this file; this brings `--2`
+ * into line so the next thing to use it does not inherit the same bug.
+ */
+@media (max-width: 639px) {
+  .ls-grid--2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
