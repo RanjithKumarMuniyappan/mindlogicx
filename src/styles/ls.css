@@ -2127,11 +2127,21 @@ address {
  * the picture gone from this row there is nothing to centre against, and a
  * 2-line headline beside a 6-line column looked adrift.
  */
+/*
+ * Copy left, lockup right — the right column is **wider** (0.85 / 1.15).
+ *
+ * An equal split would give the landscape mark the same width as a column of
+ * body copy, which is what kept it small in the first place. Weighted this
+ * way it renders larger here than it did leading the section full-width.
+ *
+ * Centred vertically: the mark is a single object, so aligning it to the top
+ * of a six-line copy column left it stranded against white space.
+ */
 .ls-mg__head {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 32px 80px;
-  align-items: start;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 32px 64px;
+  align-items: center;
 }
 
 /*
@@ -4027,9 +4037,10 @@ address {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  /* Cyan on ink, 7.38:1 — purple would be 2.10:1 here. */
-  color: var(--accent-text-dark);
-  background: color-mix(in srgb, var(--brand-cyan) 14%, transparent);
+  /* White, 2026-10-16. It was cyan (7.38:1 on ink); white is 18.9:1, so the
+     change gains contrast rather than spending it. */
+  color: var(--white);
+  background: color-mix(in srgb, var(--brand-cyan) 18%, transparent);
 }
 
 .ls-why__glyph svg {
@@ -5776,14 +5787,19 @@ a.ls-footer__socialbtn:hover {
  */
 .ls-mg__lockup {
   display: block;
-  margin: 0 auto 48px;
-  text-align: center;
 }
 
 .ls-mg__lockup img {
   display: block;
   width: 100%;
-  max-width: 560px;
+  /*
+   * ⚠️ 620px is a ceiling, not a preference. The file is **486px wide**, so
+   * this is a ~28% upscale and on a 2× screen it is soft above roughly 243
+   * CSS px whatever this says. It is set here because the client asked for a
+   * larger image; a bigger export is the only way to make it sharp as well
+   * as large.
+   */
+  max-width: 620px;
   height: auto;
   margin-inline: auto;
 }
@@ -6274,4 +6290,147 @@ a.ls-footer__socialbtn:hover {
   color: var(--accent-text);
   background: var(--tint-purple-50);
   border-radius: 99px;
+}
+
+/*
+ * The Finance hero heading, after its eyebrow was removed (2026-10-16).
+ * "Simplifying Global Payments Through Intelligent Financial Technology" is
+ * 68 characters; at the inherited 56px it ran to four lines in a half-width
+ * column. Dropping to a fluid 34–40px and letting it use the full column
+ * brings it to two.
+ */
+.ls-fin__heroheading {
+  max-width: none;
+  /* Across the full measure rather than a half column, so it can carry a
+     larger size and still hold two lines. */
+  font-size: clamp(28px, 3.6vw, 48px);
+  margin-bottom: 40px;
+  text-wrap: balance;
+}
+
+/*
+ * "5 platforms. 1 governed learner journey." on one line (2026-10-16).
+ *
+ * At the inherited `.ls-h1` size it broke after "platforms." The string is 40
+ * characters, so a fluid 32–52px holds it on one line from about 900px up;
+ * below that it wraps, which is correct — no type size fits 40 characters on
+ * a phone.
+ */
+.ls-edu__title {
+  font-size: clamp(30px, 4.4vw, 52px);
+  text-wrap: nowrap;
+}
+
+/* The lead was capped at 54ch, which left it noticeably narrower than the
+   title above it. 72ch lets it fill the measure. */
+.ls-edu__lead {
+  max-width: 72ch;
+}
+
+@media (max-width: 900px) {
+  /* Below this the title cannot hold one line at any readable size. */
+  .ls-edu__title {
+    text-wrap: balance;
+  }
+}
+
+/* The AI-First Promise closer: a quote and the statement that answers it.
+   The statement was never rendered until 2026-10-16 — see `Highlight`. */
+.ls-callout__quote {
+  font-size: 20px;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--grey-500);
+  text-wrap: pretty;
+}
+
+.ls-callout__statement {
+  margin-top: 6px;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* The lockup is landscape now, not a square character. */
+.ls-aif__genie {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin-inline: auto;
+}
+
+/*
+ * `--outline`: a hairline instead of a tint fill (2026-10-16), for the
+ * "Why Mindlogicx" reasons and the "Our Philosophy" pillars on /about.
+ *
+ * It overrides `.ls-card`'s `--grey-50` fill rather than extending it, so
+ * the tint classes and the `wash()` rotation stay available for the card
+ * grids that still use them.
+ *
+ * The border is `--grey-200`, the same hairline the trust pillars and the
+ * tenets list use, so the three read as one family rather than three
+ * different card treatments.
+ */
+.ls-card--outline {
+  background: transparent;
+  border: 1px solid var(--grey-200);
+}
+
+/* On a white band a transparent card is invisible against the page, so the
+   hairline does all the work — which is the intent. On smoke it reads the
+   same way. No hover change: these are not interactive. */
+
+/* ---- Footer: right-aligned meta row + two-column Company list ---- */
+
+/*
+ * Socials and the countries strip, both pushed to the right edge of the
+ * container (2026-10-16). Stacked rather than side by side: the strip is a
+ * 6.88:1 image and sitting it beside five 40px buttons would squeeze it back
+ * to the small size it was moved out of the brand column to escape.
+ */
+.ls-footer__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.ls-footer__meta .ls-footer__social {
+  margin-top: 0;
+  justify-content: flex-end;
+}
+
+.ls-footer__meta .ls-footer__presence {
+  /*
+   * `width: 100%` on the base rule would stretch the strip across the whole
+   * row and undo the right alignment, so it shrink-wraps instead.
+   *
+   * ⚠️ `max-width` is capped against the container as well as the artwork.
+   * With `width: auto` alone the image rendered at its full 360px whatever
+   * the column was, and on a 375px screen — content box ~334px — that pushed
+   * every page on the site into horizontal scroll, because the footer is on
+   * all of them.
+   */
+  width: auto;
+  max-width: min(360px, 100%);
+}
+
+/*
+ * The Company column in two. Six links in one tall column left the Products
+ * column — which has two — looking stranded beside it.
+ *
+ * `grid-auto-flow: column` with two explicit rows fills down-then-across, so
+ * the reading order is 1-2-3 / 4-5-6 rather than 1-3-5 / 2-4-6.
+ */
+.ls-footer__links--two {
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
+  gap: 12px 32px;
+  justify-content: start;
 }

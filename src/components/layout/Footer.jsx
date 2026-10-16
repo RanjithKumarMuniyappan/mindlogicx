@@ -49,42 +49,6 @@ export default function Footer() {
             <p className="ls-footer__tagline">{company.strapline}</p>
             <p className="ls-footer__blurb">{footer.blurb}</p>
 
-            <ul className="ls-footer__social">
-              {company.social.map((item) => {
-                const Mark = SOCIAL_MARKS[item.id];
-                if (!Mark) return null;
-                return (
-                  <li key={item.id}>
-                    {item.href ? (
-                      <a
-                        className="ls-footer__socialbtn"
-                        href={item.href}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        aria-label={`${company.name} on ${item.label}`}
-                      >
-                        <Mark />
-                      </a>
-                    ) : (
-                      /*
-                       * No URL supplied. Rendered as a dimmed, inert mark
-                       * rather than an anchor — a social button that looks
-                       * live and goes nowhere is worse than one that visibly
-                       * is not ready. `aria-hidden` keeps it out of the
-                       * reading order entirely; there is nothing to announce.
-                       */
-                      <span
-                        className="ls-footer__socialbtn ls-footer__socialbtn--todo"
-                        aria-hidden="true"
-                        title={`${item.label} — link to be supplied`}
-                      >
-                        <Mark />
-                      </span>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
 
           </div>
 
@@ -100,7 +64,7 @@ export default function Footer() {
           */}
           <div>
             <h2 className="ls-footer__coltitle">Company</h2>
-            <nav className="ls-footer__links" aria-label="Company">
+            <nav className="ls-footer__links ls-footer__links--two" aria-label="Company">
               {footer.usefulLinks.map((link) => (
                 <Link to={link.link} key={link.title}>
                   {link.title}
@@ -143,13 +107,62 @@ export default function Footer() {
           a 6.88:1 strip: in that ~250px column the baked-in lettering came
           out about 7px tall. See `site.js`.
         */}
-        <img
-          className="ls-footer__presence"
-          src={company.presenceImage}
-          alt={`Mindlogicx operates in ${company.countries.join(', ')}`}
-          loading="lazy"
-          decoding="async"
-        />
+        {/*
+          Socials and the countries strip share one right-aligned row
+          (2026-10-16). The social list used to sit inside the brand column
+          and the strip on a full-width row of its own.
+
+          The strip stays out of the brand column for the original reason: it
+          is a 6.88:1 image with the country names baked in as pixels, and in
+          a ~250px column that lettering came out about 7px tall. Here it has
+          the full width of the row to itself.
+        */}
+        <div className="ls-footer__meta">
+          <ul className="ls-footer__social">
+            {company.social.map((item) => {
+              const Mark = SOCIAL_MARKS[item.id];
+              if (!Mark) return null;
+              return (
+                <li key={item.id}>
+                  {item.href ? (
+                    <a
+                      className="ls-footer__socialbtn"
+                      href={item.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      aria-label={`${company.name} on ${item.label}`}
+                    >
+                      <Mark />
+                    </a>
+                  ) : (
+                    /*
+                     * No URL supplied. Rendered as a dimmed, inert mark
+                     * rather than an anchor — a social button that looks
+                     * live and goes nowhere is worse than one that visibly
+                     * is not ready. `aria-hidden` keeps it out of the
+                     * reading order entirely; there is nothing to announce.
+                     */
+                    <span
+                      className="ls-footer__socialbtn ls-footer__socialbtn--todo"
+                      aria-hidden="true"
+                      title={`${item.label} — link to be supplied`}
+                    >
+                      <Mark />
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+
+          <img
+            className="ls-footer__presence"
+            src={company.presenceImage}
+            alt={`Mindlogicx operates in ${company.countries.join(', ')}`}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
 
         <div className="ls-footer__bottom">
           <span>{footer.copyright}</span>

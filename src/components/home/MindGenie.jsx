@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom';
 import { mindgenie, agents } from '../../content/site';
 import Reveal from '../common/Reveal';
-import { ContentIcon, ArrowRight } from '../common/icons';
+import { ContentIcon } from '../common/icons';
 
 /**
  * "How We Make It Intelligent" — the MindGENIE section.
@@ -61,21 +60,18 @@ export default function MindGenie() {
     <section className="ls-section ls-section--white ls-mg">
       <div className="ls-container">
         {/*
-          The lockup opens the section rather than sitting beside the copy.
+          Copy left, lockup right — back to a two-up head, but not the one
+          that was here before.
 
-          It is a landscape "Powered by MindGENIE" mark — character plus
-          wordmark — so a square slot in a right-hand column was the wrong
-          shape for it and kept it small. Leading with it lets it run to its
-          full native width, and "Powered by MindGENIE" reads as the section's
-          opening statement, which is what the artwork says.
+          The earlier version put a **square** slot on the right and capped it
+          at 500px, which is the wrong shape for a landscape mark and kept it
+          small. This gives the right column more width than the left (0.85 /
+          1.15) and lets the lockup fill it, so the artwork is larger here
+          than it was when it led the section full-width.
 
-          Decorative: the eyebrow, headline and definition below carry the
-          meaning, and the mark's own wordmark is repeated in the copy.
+          Decorative: the eyebrow, headline and definition carry the meaning,
+          and the mark's own wordmark is repeated in the copy.
         */}
-        <Reveal className="ls-mg__lockup" effect="fadeInUp">
-          <img src={mindgenie.coreImage} alt="" aria-hidden="true" />
-        </Reveal>
-
         <div className="ls-mg__head">
           <Reveal className="ls-mg__intro" effect="fadeInUp">
             <p className="ls-wwd__eyebrow">
@@ -84,19 +80,19 @@ export default function MindGenie() {
             </p>
 
             <h2 className="ls-h2 ls-mg__title">{mindgenie.headline}</h2>
-          </Reveal>
-
-          <Reveal className="ls-mg__intro" effect="fadeInUp" delay={120}>
             <p className="ls-lead ls-mg__body">{mindgenie.body}</p>
 
             {/* The definition, marked by a rule rather than quotation marks —
                 the same treatment the source gives it. */}
             <p className="ls-mg__definition">{mindgenie.definition}</p>
 
-            <Link className="ls-mg__cta" to={mindgenie.ctaLink}>
-              {mindgenie.ctaText}
-              <ArrowRight />
-            </Link>
+            {/* The "Discover MindGENIE" link was removed 2026-10-16 at the
+                client's request. `mindgenie.ctaText` and `ctaLink` are still
+                in `site.js`. This band now has no outbound route. */}
+          </Reveal>
+
+          <Reveal className="ls-mg__lockup" effect="fadeInRight">
+            <img src={mindgenie.coreImage} alt="" aria-hidden="true" />
           </Reveal>
         </div>
 

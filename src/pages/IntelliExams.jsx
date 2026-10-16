@@ -3,7 +3,6 @@ import PageHero from '../components/common/PageHero';
 import SectionIntro from '../components/common/SectionIntro';
 import FeatureLayout from '../components/common/FeatureLayout';
 import Reveal from '../components/common/Reveal';
-import Pill from '../components/common/Pill';
 
 /**
  * `/intelliexams` — built 2026-10-13 from
@@ -94,8 +93,6 @@ export default function IntelliExams() {
   const qp = s['qp-authoring-and-delivery'];
   const online = s['online-exam-online-assignment'];
   const clients = s['our-clients'];
-  const cta = s.cta;
-  const visit = s['floating-visit-website-button'];
 
   return (
     <>
@@ -234,29 +231,14 @@ export default function IntelliExams() {
         </div>
       </section>
 
-      <section className="ls-section ls-section--ink">
-        <div className="ls-container">
-          <Reveal className="ls-ke__close" effect="fadeInUp">
-            <h2 className="ls-h2 ls-ke__closeheading">{cta.heading}</h2>
-            <div className="ls-ke__ctas">
-              {/* Repointed from the source's `/appointment/`. */}
-              <Pill variant="light" to="/contact-us" arrow>
-                {cta.ctas[0].label}
-              </Pill>
+      {/*
+        The closing CTA band was removed 2026-10-16, along with every other
+        page's, at the client's request. Its content is intact in the content
+        module.
 
-              {/* The floating overlay's destination, given a real label. */}
-              <Pill
-                variant="ghost"
-                href={visit.link}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                {visit.tooltip}
-              </Pill>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+        ⚠️ **This page now has no outbound route.** It was the only link off
+        it; the section is a few lines to restore if that turns out to matter.
+      */}
     </>
   );
 }

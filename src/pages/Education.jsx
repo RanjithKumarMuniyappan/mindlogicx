@@ -89,10 +89,14 @@ function ProductBand({ product, index }) {
             <p className="ls-edu__prop">{product.proposition}</p>
             <p className="ls-body ls-edu__desc">{product.description}</p>
 
-            <Link className="ls-edu__link" to={product.link}>
-              Explore {product.name}
-              <ArrowUpRight size={14} />
-            </Link>
+            {/* `ctaHidden` suppresses the link for a product whose route
+                does not exist yet — see `site.js`. */}
+            {!product.ctaHidden && (
+              <Link className="ls-edu__link" to={product.link}>
+                Explore {product.name}
+                <ArrowUpRight size={14} />
+              </Link>
+            )}
           </Reveal>
 
           <Reveal

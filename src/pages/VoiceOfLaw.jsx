@@ -97,7 +97,6 @@ export default function VoiceOfLaw() {
   const ke = s['knowledge-engineering-and-ai'];
   const saas = s['global-saas-platform'];
   const future = s['accessible-legal-intelligence'];
-  const join = s['be-part-of-the-journey'];
 
   const ART = '/assets/images/pages/voice-of-law';
   const art = (src) => (
@@ -121,15 +120,16 @@ export default function VoiceOfLaw() {
               </p>
             ))}
 
-            {/* "Platform Under Development" is a regulatory statement, not
-                decoration. See the note at the top of this file. */}
-            <ul className="ls-legal__badges">
-              {legal.hero.badges.map((b) => (
-                <li className="ls-fin__status" key={b}>
-                  {b}
-                </li>
-              ))}
-            </ul>
+            {/*
+              ⚠️ The "Platform Under Development" and "Global SaaS Vision"
+              pills were removed 2026-10-16 at the client's request.
+
+              The first was a **regulatory statement**, not decoration. The
+              jurisdictional disclaimer in the Global SaaS band still carries
+              that work and is now the only such qualification on the page —
+              do not remove that one too. Both pills remain in
+              `legal.hero.badges`.
+            */}
 
             <div className="ls-ke__ctas">
               {/* The content module names these two differently — the in-page
@@ -265,10 +265,10 @@ export default function VoiceOfLaw() {
             ))}
           </ol>
 
-          <Reveal className="ls-kef__span ls-mt-md" effect="fadeInUp">
-            <span className="ls-kef__spanmark" aria-hidden="true" />
-            {ke.architecture.caption}
-          </Reveal>
+          {/* The "Conceptual architecture for the proposed Legal SaaS
+              platform." caption was removed 2026-10-16 — it captioned a
+              diagram the deck never included, so it read as a stray note.
+              Still `ke.architecture.caption` in the content module. */}
 
           <p className="ls-body ls-ke__para ls-mt-sm">{ke.closingStatement}</p>
         </div>
@@ -303,24 +303,13 @@ export default function VoiceOfLaw() {
         </div>
       </section>
 
-      <section className="ls-section ls-section--ink" id={join.id}>
-        <div className="ls-container">
-          <Reveal className="ls-ke__close" effect="fadeInUp">
-            <h2 className="ls-h2 ls-ke__closeheading">{join.heading}</h2>
-            {join.body.map((p) => (
-              <p className="ls-ke__closebody" key={p.slice(0, 40)}>
-                {p}
-              </p>
-            ))}
-            <div className="ls-ke__ctas">
-              <Pill variant="light" to={join.ctas[0].link ?? join.ctas[0].target} arrow>
-                {join.ctas[0].label}
-              </Pill>
-            </div>
-            <p className="ls-fin__disclaimer ls-fin__disclaimer--ink">{join.statusBadge}</p>
-          </Reveal>
-        </div>
-      </section>
+      {/*
+        "Be Part of Our Legal Technology Journey" was removed 2026-10-16 at
+        the client's request. It held the page's only "Connect With Us" route
+        and the "Legal Technology Platform – Under Development" badge.
+
+        The section is intact in the content module as `be-part-of-the-journey`.
+      */}
     </>
   );
 }

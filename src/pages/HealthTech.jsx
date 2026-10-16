@@ -81,7 +81,6 @@ export default function HealthTech() {
   const journey = s['care-journey'];
   const pros = s['for-professionals'];
   const future = s['future-of-care'];
-  const collab = s.collaborate;
   const img = ht.images;
 
   const art = (src) => (
@@ -231,31 +230,14 @@ export default function HealthTech() {
         </div>
       </section>
 
-      <section className="ls-section ls-section--ink" id={collab.id}>
-        <div className="ls-container">
-          <Reveal className="ls-ke__close" effect="fadeInUp">
-            <span className="ls-eyebrow ls-ke__closelabel">{collab.subheading}</span>
-            <h2 className="ls-h2 ls-ke__closeheading">{collab.heading}</h2>
-            {collab.body.map((p) => (
-              <p className="ls-ke__closebody" key={p.slice(0, 40)}>
-                {p}
-              </p>
-            ))}
-            <div className="ls-ke__ctas">
-              {collab.ctas.map((cta, i) => (
-                <Pill
-                  key={cta.label}
-                  variant={i === 0 ? 'light' : 'ghost'}
-                  to={cta.link}
-                  arrow={i === 0}
-                >
-                  {cta.label}
-                </Pill>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      {/*
+        The closing CTA band was removed 2026-10-16, along with every other
+        page's, at the client's request. Its content is intact in the content
+        module.
+
+        ⚠️ **This page now has no outbound route.** It was the only link off
+        it; the section is a few lines to restore if that turns out to matter.
+      */}
     </>
   );
 }

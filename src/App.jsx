@@ -84,7 +84,7 @@ export default function App() {
           <Route path="/voice-of-law" element={<VoiceOfLaw />} />
           <Route path="/health-tech" element={<HealthTech />} />
           <Route path="/media-tech" element={<MediaTech />} />
-          <Route path="/mxpay" element={<Finance />} />
+          <Route path="/finance" element={<Finance />} />
             {/* Remaining routes are stubbed until each page is built out on the
                 same pattern, so navigation never dead-ends during review. */}
             <Route path="*" element={<Placeholder />} />

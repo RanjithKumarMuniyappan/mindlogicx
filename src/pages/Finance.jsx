@@ -3,13 +3,12 @@ import PageHero from '../components/common/PageHero';
 import SectionIntro from '../components/common/SectionIntro';
 import FeatureLayout from '../components/common/FeatureLayout';
 import Reveal from '../components/common/Reveal';
-import Pill from '../components/common/Pill';
 
 /**
- * `/mxpay` — built 2026-10-16 from the client's Finance deck
+ * `/finance` — built 2026-10-16 from the client's Finance deck
  * (`MindlogicxWebsiteFinanceVertical.html`). Copy is **verbatim**.
  *
- * Reached from Technology → Finance, which already pointed at `/mxpay`. The
+ * Reached from Technology → Finance, which already pointed at `/finance`. The
  * deck suggests `/finance`; the existing route is kept so the menu keeps
  * working, and `site.js` already redirects `/finance/` here.
  *
@@ -106,7 +105,6 @@ export default function Finance() {
   const how = s['how-the-platform-is-envisioned-to-work'];
   const trust = s['technology-security-trust'];
   const vision = s['vision-for-the-future-of-finance'];
-  const closing = s['discover-whats-next'];
 
   return (
     <>
@@ -114,6 +112,19 @@ export default function Finance() {
 
       <section className="ls-section ls-section--white">
         <div className="ls-container">
+          {/*
+            The heading spans the full container, above the image, rather than
+            sitting in the left half of the two-up.
+
+            It is 68 characters: in a half-width column it ran to three lines
+            even at a reduced size. Across the whole measure it holds two.
+            The "FINANCE | FINANCIAL TECHNOLOGY" eyebrow was removed
+            2026-10-16; `fin.hero.eyebrow` is still in the content module.
+          */}
+          <Reveal effect="fadeInUp">
+            <h2 className="ls-h2 ls-fin__heroheading">{fin.hero.heading}</h2>
+          </Reveal>
+
           <FeatureLayout
             reverse
             media={
@@ -127,8 +138,6 @@ export default function Finance() {
               </span>
             }
           >
-            <span className="ls-eyebrow">{fin.hero.eyebrow}</span>
-            <h2 className="ls-h2">{fin.hero.heading}</h2>
             <p className="ls-lead">{fin.hero.strapline}</p>
             {fin.hero.body.map((p) => (
               <p className="ls-body" key={p.slice(0, 40)}>
@@ -136,15 +145,16 @@ export default function Finance() {
               </p>
             ))}
 
-            {/* The deck's own status badge. It is doing the same work as the
-                disclaimers further down — see the note at the top. */}
-            <span className="ls-fin__status">{fin.hero.statusBadge}</span>
+            {/*
+              ⚠️ Removed 2026-10-16 at the client's request: the "Platform
+              Under Development" badge and the "Explore Our Vision" CTA.
 
-            <div className="ls-ke__ctas">
-              <Pill variant="solid" href={fin.hero.ctas[0].link} arrow>
-                {fin.hero.ctas[0].label}
-              </Pill>
-            </div>
+              The badge was a **regulatory statement**, not decoration. The
+              licensed-partner disclaimer in Technology, Security & Trust
+              still carries that work — and with the closing band also
+              removed (see below) it is now the **only** qualification on the
+              page. Both the badge and the CTA remain in `fin.hero`.
+            */}
           </FeatureLayout>
         </div>
       </section>
@@ -220,14 +230,10 @@ export default function Finance() {
             ))}
           </div>
 
-          {/* The deck captions a diagram it does not include. The caption is
-              a statement in its own right, so it is rendered as one. */}
-          {how.diagram?.caption && (
-            <Reveal className="ls-kef__span ls-mt-md" effect="fadeInUp">
-              <span className="ls-kef__spanmark" aria-hidden="true" />
-              {how.diagram.caption}
-            </Reveal>
-          )}
+          {/* The deck's "Illustrative conceptual workflow…" caption was
+              removed 2026-10-16 — it captioned a diagram the deck never
+              included, so on the page it read as a stray note. It is still
+              `how.diagram.caption` in the content module. */}
         </div>
       </section>
 
@@ -272,28 +278,17 @@ export default function Finance() {
         </div>
       </section>
 
-      <section className="ls-section ls-section--ink" id={closing.id}>
-        <div className="ls-container">
-          <Reveal className="ls-ke__close" effect="fadeInUp">
-            <h2 className="ls-h2 ls-ke__closeheading">{closing.heading}</h2>
-            {closing.body.map((p) => (
-              <p className="ls-ke__closebody" key={p.slice(0, 40)}>
-                {p}
-              </p>
-            ))}
-            <div className="ls-ke__ctas">
-              <Pill variant="light" to={closing.ctas[0].link} arrow>
-                {closing.ctas[0].label}
-              </Pill>
-            </div>
+      {/*
+        "Discover What's Next in Financial Technology" was removed 2026-10-16
+        at the client's request. It held the page's only "Contact Us" route
+        and the **"Platform under development."** disclaimer.
 
-            {/* ⚠️ The second disclaimer. Both are deliberate. */}
-            <p className="ls-fin__disclaimer ls-fin__disclaimer--ink">
-              {closing.disclaimer}
-            </p>
-          </Reveal>
-        </div>
-      </section>
+        ⚠️ With the hero badge gone too, the Technology, Security & Trust
+        band's licensed-partner disclaimer is now the **only** qualification
+        left on the page. Do not remove that one as well without replacing it.
+
+        The section is intact in the content module as `discover-whats-next`.
+      */}
     </>
   );
 }

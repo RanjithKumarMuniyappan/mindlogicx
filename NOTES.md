@@ -2262,6 +2262,84 @@ build, matched by what they actually show. The citizen band has a picture
 only because one legacy photograph happens to show a citizen rather than a
 lawyer — a vertical built around citizen rights deserves artwork of its own.
 
+## The 2026-10-16 batch (21 changes)
+
+### `/mxpay` is now `/finance`
+
+16 references across `App.jsx`, `site.js`, `finance.js`, `Finance.jsx` and
+`KnowledgeEngineering.jsx`. Verified: the Technology menu points at
+`/finance`, the page renders, and **no `/mxpay` href survives anywhere in the
+DOM**. The KE route map's `/finance/ → /mxpay` entry is now a trailing-slash
+strip and is labelled as such.
+
+### ⚠️ Every page lost its closing CTA
+
+Items 9, 14 and 16 removed the closing band from **eight pages** — Legal,
+Finance, Knowledge Engineering, IntelliTUTE, IntelliWORK, IntelliEXAMS,
+HealthTech and MediaTech — plus the "Discover MindGENIE" link on the home
+page.
+
+**Most of those pages now have no outbound route at all.** Every section is
+intact in its content module, and each component carries a note saying so.
+
+### ⚠️ Regulatory statements removed with them
+
+Three of the removals took copy that was doing legal work, not decoration:
+
+- **Finance** lost the "Platform Under Development" pill *and* the closing
+  band's "Platform under development." disclaimer. The licensed-partner
+  sentence in Technology, Security & Trust is now the **only** qualification
+  on a payments page. Do not remove that one as well.
+- **Legal** lost the "Platform Under Development" / "Global SaaS Vision"
+  pills and the closing band's status badge. The jurisdictional disclaimer in
+  the Global SaaS band is the only one left — on a page about legal services,
+  which is regulated advertising in India.
+- **Knowledge Engineering** lost the caption stating that security,
+  governance and human oversight span the lifecycle. Nothing on the page says
+  it now; the five stages alone do not.
+
+### What else changed
+
+| # | change |
+|---|---|
+| 1 | Why Mindlogicx glyphs cyan → **white** (7.38:1 → 18.9:1 on ink, so contrast improved) |
+| 2 | MindGENIE lockup moved **right** in a weighted 0.85/1.15 split — larger there than it was leading the section full-width |
+| 3 | "**5** platforms. 1 governed learner journey." on one line; lead widened 54ch → 72ch |
+| 4 | IntelliMINDS removed from `educationPage.products` (6 → 5) |
+| 5 | "Explore IntelliOSM™" hidden via `ctaHidden` in the content layer — its route is a placeholder. **IntelliTHESIS is identical and still shows its link** |
+| 11 | Finance heading spans the full measure above the image: 3 lines → **2**, at 46px |
+| 17 | `.ls-card--outline` — hairline instead of tint fill, on 8 cards across /about |
+| 18 | AI-First MindGENIE band uses the landscape lockup |
+| 19 | Brand-essence band ("The Future is Orchestrated") removed |
+| 21 | Socials + flags right-aligned in one row; Company list in two columns |
+
+### Item 20 was a rendering bug, not missing content
+
+"This is how Mindlogicx builds — today." **was in the content module all
+along**. `Highlight` rendered `card.quote` but had no branch for
+`card.statement`, so the line was silently dropped. Both now render, with the
+quote italic and the statement in ink beneath it.
+
+### ⚠️ A regression I introduced and caught
+
+`.ls-footer__meta .ls-footer__presence { width: auto }` let the countries
+strip render at its full **360px** regardless of the column. On a 375px screen
+the content box is ~334px, so **every page on the site** gained horizontal
+scroll — the footer is on all of them. Capped with
+`max-width: min(360px, 100%)`.
+
+> Two measurement traps surfaced while chasing it:
+>
+> - `document.documentElement.scrollWidth` reads **378** on some pages at
+>   375px while `document.body.scrollWidth` reads 375 and no element exceeds
+>   the viewport. It is an artifact of the absolutely-positioned
+>   `.ls-visually-hidden` headings. The authoritative test is whether
+>   `window.scrollTo(400, 0)` actually moves `scrollX` — on all 20 routes it
+>   does not.
+> - A leaf-overflow sweep flags those same visually-hidden headings
+>   (`scrollWidth 150` in a `clientWidth 1` clipped box). That is what
+>   visually-hidden *is*; exclude them or the check cries wolf.
+
 ## The Careers form is a disclosure
 
 Hidden until "Apply Now", as in the original — but built as a real

@@ -2,7 +2,6 @@ import { whyChooseUs } from '../../content/about';
 import FeatureLayout from '../common/FeatureLayout';
 import { ArrowLink } from '../common/Pill';
 import Card from '../common/Card';
-import { wash } from '../common/washes';
 
 /**
  * Five reasons, the industries list, and the closing line.
@@ -54,7 +53,7 @@ export default function WhyChooseUs() {
               key={reason.title}
               title={reason.title}
               desc={reason.content}
-              tint={wash(i)}
+              className="ls-card--outline"
               delay={(i % 3) * 80}
             />
           ))}
