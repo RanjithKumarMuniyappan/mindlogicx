@@ -4,7 +4,6 @@ import PageHero from '../components/common/PageHero';
 import SectionIntro from '../components/common/SectionIntro';
 import FeatureLayout from '../components/common/FeatureLayout';
 import Reveal from '../components/common/Reveal';
-import Pill from '../components/common/Pill';
 import { ArrowUpRight } from '../components/common/icons';
 
 /**
@@ -31,7 +30,7 @@ import { ArrowUpRight } from '../components/common/icons';
  * | `/education/` | `/ed-tech` |
  * | `/healthcare/` | `/health-tech` |
  * | `/legal/` | `/voice-of-law` |
- * | `/finance/` | `/mxpay` |
+ * | `/finance/` | `/finance` (trailing slash only) |
  * | `/contact-us/` | `/contact-us` |
  *
  * ⚠️ `/contact-us` **does not exist yet** — it is still the next page to
@@ -72,7 +71,7 @@ const ROUTES = {
   '/education/': '/ed-tech',
   '/healthcare/': '/health-tech',
   '/legal/': '/voice-of-law',
-  '/finance/': '/mxpay',
+  '/finance/': '/finance',
   '/contact-us/': '/contact-us',
 };
 const route = (deckPath) => ROUTES[deckPath] ?? deckPath;
@@ -215,12 +214,15 @@ export default function KnowledgeEngineering() {
             ))}
           </ol>
 
-          {/* The spanning layer, drawn under all five rather than as a sixth
-              stage: the caption says it runs the whole lifecycle. */}
-          <Reveal className="ls-kef__span" effect="fadeInUp">
-            <span className="ls-kef__spanmark" aria-hidden="true" />
-            {framework.diagram.caption}
-          </Reveal>
+          {/* The spanning band carried the deck's figure caption
+              ("Mindlogicx Knowledge Engineering Framework. Security,
+              governance and human oversight span the lifecycle."). Removed
+              2026-10-16 at the client's request; still
+              `framework.diagram.caption` in the content module.
+
+              ⚠️ With it gone, nothing on the page states that security,
+              governance and human oversight span the lifecycle — the stages
+              alone do not say it. */}
 
           <p className="ls-body ls-ke__para ls-mt-md">{framework.supportingContent}</p>
         </div>
@@ -287,22 +289,14 @@ export default function KnowledgeEngineering() {
         </div>
       </section>
 
-      <section className="ls-section ls-section--ink">
-        <div className="ls-container">
-          <Reveal className="ls-ke__close ls-ke__close--single" effect="fadeInUp">
-            <span className="ls-eyebrow ls-ke__closelabel">{why.closingCta.label}</span>
-            <h2 className="ls-h2 ls-ke__closeheading">{why.closingCta.heading}</h2>
-            <p className="ls-ke__closebody">{why.closingCta.body}</p>
-            <div className="ls-ke__ctas">
-              {why.closingCta.ctas.map((cta) => (
-                <Pill key={cta.label} variant="light" to={route(cta.link)} arrow>
-                  {cta.label}
-                </Pill>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      {/*
+        The "Closing Call to Action" band was removed 2026-10-16, along with
+        every other page's closing CTA. It is intact in the content module as
+        `why.closingCta`.
+
+        ⚠️ This page now has **no outbound route at all** — the hero's two
+        CTAs were removed on 2026-10-15 and this was the last one.
+      */}
     </>
   );
 }

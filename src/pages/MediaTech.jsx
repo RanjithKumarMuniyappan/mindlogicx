@@ -2,7 +2,6 @@ import { mediaTechPage as mt } from '../content/pages/media-tech';
 import SectionIntro from '../components/common/SectionIntro';
 import FeatureLayout from '../components/common/FeatureLayout';
 import Reveal from '../components/common/Reveal';
-import Pill from '../components/common/Pill';
 
 /**
  * `/media-tech` — built 2026-10-15 from the 2025 frontend's `app/media_tech/`
@@ -108,8 +107,6 @@ export default function MediaTech() {
   const impact = s['mediax-impact-stories'];
   const power = s['ent-to-end-creative-production-powerhouse'];
   const modules = s['specialist-service-modules'];
-  const cta = s['cta-talk-to-our-creative-director'];
-  const micro = s['floating-microsite-link'];
 
   return (
     <>
@@ -232,29 +229,14 @@ export default function MediaTech() {
         </div>
       </section>
 
-      <section className="ls-section ls-section--ink">
-        <div className="ls-container">
-          <Reveal className="ls-ke__close" effect="fadeInUp">
-            <h2 className="ls-h2 ls-ke__closeheading">{cta.heading}</h2>
-            <div className="ls-ke__ctas">
-              {/* Repointed from the source's broken WhatsApp handler. */}
-              <Pill variant="light" to="/contact-us" arrow>
-                {cta.ctas[0].label}
-              </Pill>
+      {/*
+        The closing CTA band was removed 2026-10-16, along with every other
+        page's, at the client's request. Its content is intact in the content
+        module.
 
-              {/* The floating button's destination, given a real label. */}
-              <Pill
-                variant="ghost"
-                href={micro.ctas[0].url}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                {micro.ctas[0].accessibleName}
-              </Pill>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+        ⚠️ **This page now has no outbound route.** It was the only link off
+        it; the section is a few lines to restore if that turns out to matter.
+      */}
     </>
   );
 }

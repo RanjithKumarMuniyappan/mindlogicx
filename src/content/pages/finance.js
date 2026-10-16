@@ -216,9 +216,9 @@
  *    its four actors are only described in prose.
  * 8. **The route does not match the deck.** The deck's suggested URL is
  *    `/finance` and its navigation row says "Industries → Finance". This
- *    site already routes Finance at **`/mxpay`** (src/content/site.js lines
+ *    site already routes Finance at **`/finance`** (src/content/site.js lines
  *    549, 909, 1023, 1156) and KnowledgeEngineering.jsx already redirects
- *    `/finance/` → `/mxpay`. `/mxpay` is kept so the existing menu and
+ *    `/finance/` → `/finance`. `/finance` is kept so the existing menu and
  *    redirect keep working. Changing it means changing both.
  * 9. **Twelve unassigned hero images.** The deck drops twelve pictures in a
  *    single run at the end of section 1 with no captions and no ordering
@@ -248,8 +248,8 @@ export const financePage = {
      Vertical", which is a document title, not a page name — see typo note 1. */
   title: 'Finance',
 
-  /* See flag 8 — the deck asks for /finance; this site is already on /mxpay. */
-  route: '/mxpay',
+  /* See flag 8 — the deck asks for /finance; this site is already on /finance. */
+  route: '/finance',
 
   seo: {
     /* From the deck's "8. SEO & Website Metadata" table — metadata, never
@@ -274,7 +274,7 @@ export const financePage = {
     ],
     suggestedUrl: '/finance',
     suggestedUrlNote:
-      'Not adopted — this site already routes Finance at /mxpay and redirects /finance/ to it. See flag 8.',
+      'Not adopted — this site already routes Finance at /finance and redirects /finance/ to it. See flag 8.',
     suggestedNavigation: 'Industries → Finance',
   },
 

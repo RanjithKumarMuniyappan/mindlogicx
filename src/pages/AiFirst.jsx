@@ -44,7 +44,11 @@ import Reveal from '../components/common/Reveal';
  * both would put the same photograph on two sibling pages.
  */
 const ART = {
-  mindgenie: '/assets/images/mindgenie.webp',
+  /* The "Powered by MindGENIE" lockup (486×240, transparent), 2026-10-16 —
+     it was the square character. Landscape, so `.ls-aif__genie` widened with
+     it. Same ceiling as on the home page: the file is 486px wide, so beyond
+     ~486 CSS px it is upscaling. */
+  mindgenie: '/assets/images/mindgenie.png',
   labs: '/assets/images/hero_background/security-by-design.webp',
   why: '/assets/images/hero_background/built-for-trust.webp',
 };
@@ -83,7 +87,11 @@ function Highlight({ card }) {
       {card.title && <h3 className="ls-callout__title">{card.title}</h3>}
       {card.description && <p className="ls-callout__desc">{card.description}</p>}
       {card.text && <p className="ls-callout__desc">{card.text}</p>}
-      {card.quote && <p className="ls-callout__desc">{card.quote}</p>}
+      {card.quote && <p className="ls-callout__quote">{card.quote}</p>}
+      {/* `statement` was never rendered, so "This is how Mindlogicx builds —
+          today." silently vanished from The AI-First Promise. Added
+          2026-10-16. */}
+      {card.statement && <p className="ls-callout__statement">{card.statement}</p>}
       {card.highlight && <p className="ls-aif__highlight">{card.highlight}</p>}
     </Reveal>
   );
@@ -247,20 +255,11 @@ export default function AiFirst() {
 
       {/* Brand essence — the page's closing note. It has no heading because
           the source's wordmark block above it is commented out. */}
-      <section className="ls-section ls-section--smoke">
-        <div className="ls-container">
-          <Reveal className="ls-aif__essence" effect="fadeInUp">
-            <ul className="ls-tagrow">
-              {s['brand-essence'].descriptors.map((d) => (
-                <li className="ls-tagrow__tag" key={d.text}>
-                  {d.text}
-                </li>
-              ))}
-            </ul>
-            <p className="ls-aif__tagline">{s['brand-essence'].tagline}</p>
-          </Reveal>
-        </div>
-      </section>
+      {/*
+        The brand-essence band — four descriptors and the tagline "The Future
+        is Orchestrated" — was removed 2026-10-16 at the client's request. It
+        is intact in the content module as `brand-essence`.
+      */}
     </>
   );
 }

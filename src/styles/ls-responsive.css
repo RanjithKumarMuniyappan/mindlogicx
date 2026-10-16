@@ -1117,3 +1117,20 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ---- Footer meta row ---- */
+@media (max-width: 767px) {
+  /* Left-aligned on a phone: the columns above are left-aligned there, and a
+     right-aligned block under them reads as a mistake rather than a choice. */
+  .ls-footer__meta {
+    align-items: flex-start;
+    margin-top: 32px;
+  }
+
+  .ls-footer__meta .ls-footer__social { justify-content: flex-start; }
+
+  .ls-footer__links--two {
+    grid-auto-flow: row;
+    grid-template-rows: none;
+  }
+}

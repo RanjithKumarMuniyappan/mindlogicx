@@ -546,7 +546,7 @@ export const industries = {
       icon: 'FinTech',
       desc: '',
       image: '/assets/images/sectors/finance.webp',
-      link: '/mxpay',
+      link: '/finance',
     },
   ],
 };
@@ -696,7 +696,7 @@ export const educationPage = {
   eyebrow: 'Technology / Education',
   /* Numerals, not words — house rule from 2026-10-13: quantities are written
      as digits. Was "Six platforms. One governed learner journey." */
-  title: '6 platforms. 1 governed learner journey.',
+  title: '5 platforms. 1 governed learner journey.',
   lead: 'The Mindlogicx education portfolio covers assessment, marking, learning, workforce capability and research — each a proprietary platform, each running on the same governed knowledge layer.',
   products: [
     {
@@ -756,6 +756,11 @@ export const educationPage = {
       image: '/assets/images/products/intelliosm.webp',
       alt: 'A marker reviewing a scanned script on screen.',
       link: '/products/intelliosm',
+      /* ⚠️ The "Explore IntelliOSM™" link was hidden 2026-10-16 at the
+         client's request. `/products/intelliosm` renders `Placeholder`, so it
+         was a link to nowhere. **IntelliTHESIS is in exactly the same
+         position** and still shows its link — flagged, not changed. */
+      ctaHidden: true,
     },
     {
       slug: 'intelliwork',
@@ -792,19 +797,7 @@ export const educationPage = {
       image: '/assets/images/products/intellithesis.webp',
       alt: 'A researcher annotating a thesis draft.',
       link: '/products/intellithesis',
-    },
-    {
-      slug: 'intelliminds',
-      name: 'IntelliMINDS',
-      tagline: 'Cognitive Intelligence',
-      placeholder: true,
-      proposition: 'Placeholder — positioning copy for IntelliMINDS has not been approved yet.',
-      description:
-        'Placeholder. IntelliMINDS is part of the Mindlogicx education portfolio; its approved positioning, capabilities and outcomes are still being finalised and will replace this text.',
-      logo: null,
-      image: null,
-      alt: '',
-      link: '/products/intelliminds',
+      ctaHidden: true,
     },
   ],
 };
@@ -906,7 +899,7 @@ export const process = {
       img: '/assets/images/home-two/project-icon2.png',
       title: 'FinTech',
       content: 'KYC-secure onboarding, risk simulation and embedded payments in one stack.',
-      link: '/mxpay',
+      link: '/finance',
     },
     {
       img: '/assets/images/home-two/project-icon3.png',
@@ -966,7 +959,7 @@ export const blog = {
  *    placeholder if anyone has the URL.
  *
  * 3. **Sector links reuse the routes the footer already points at** —
- *    `/ed-tech`, `/health-tech`, `/voice-of-law`, `/mxpay` — so the two
+ *    `/ed-tech`, `/health-tech`, `/voice-of-law`, `/finance` — so the two
  *    menus cannot drift apart. Media is the exception: there has never been
  *    a MediaTech route, so `/media-tech` is new here.
  *
@@ -1020,7 +1013,7 @@ export const navigation = [
       { label: 'Healthcare', link: '/health-tech', icon: 'HealthTech' },
       { label: 'Media', link: '/media-tech', icon: 'Media' },
       { label: 'Legal', link: '/voice-of-law', icon: 'LegalTech' },
-      { label: 'Finance', link: '/mxpay', icon: 'FinTech' },
+      { label: 'Finance', link: '/finance', icon: 'FinTech' },
     ],
   },
   { label: 'AI First', link: '/ai-first' },
@@ -1153,7 +1146,7 @@ export const footer = {
   ],
   domains: [
     { title: 'EdTech', link: '/ed-tech' },
-    { title: 'FinTech', link: '/mxpay' },
+    { title: 'FinTech', link: '/finance' },
     { title: 'HealthTech', link: '/health-tech' },
     { title: 'LegalTech', link: '/voice-of-law' },
     { title: 'AI First', link: '/ai-first' },

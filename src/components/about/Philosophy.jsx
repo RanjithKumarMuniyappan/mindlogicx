@@ -1,7 +1,6 @@
 import { philosophy } from '../../content/about';
 import FeatureLayout from '../common/FeatureLayout';
 import Card from '../common/Card';
-import { wash } from '../common/washes';
 
 /**
  * The philosophy band: two paragraphs beside a picture, then the three things
@@ -38,7 +37,7 @@ export default function Philosophy() {
               key={pillar.title}
               title={pillar.title}
               desc={pillar.content}
-              tint={wash(i)}
+              className="ls-card--outline"
               delay={i * 80}
             />
           ))}

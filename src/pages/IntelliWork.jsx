@@ -73,7 +73,6 @@ export default function IntelliWork() {
   const eco = s.ecosystem;
   const use = s.usecases;
   const out = s.outcomes;
-  const closing = s['closing-cta'];
 
   /* The source writes these with a trailing slash; this site does not. */
   const route = (link) => link.replace(/\/+$/, '') || '/';
@@ -226,26 +225,14 @@ export default function IntelliWork() {
         </div>
       </section>
 
-      <section className="ls-section ls-section--ink">
-        <div className="ls-container">
-          <Reveal className="ls-ke__close" effect="fadeInUp">
-            <span className="ls-eyebrow ls-ke__closelabel">{closing.brandLine}</span>
-            <h2 className="ls-h2 ls-ke__closeheading">{closing.heading}</h2>
-            {closing.body.map((p) => (
-              <p className="ls-ke__closebody" key={p.slice(0, 40)}>
-                {p}
-              </p>
-            ))}
-            <div className="ls-ke__ctas">
-              {closing.ctas.map((cta) => (
-                <Pill key={cta.label} variant="light" to={route(cta.link)} arrow>
-                  {cta.label}
-                </Pill>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      {/*
+        The closing CTA band was removed 2026-10-16, along with every other
+        page's, at the client's request. Its content is intact in the content
+        module.
+
+        ⚠️ **This page now has no outbound route.** It was the only link off
+        it; the section is a few lines to restore if that turns out to matter.
+      */}
     </>
   );
 }

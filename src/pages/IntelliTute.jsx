@@ -3,7 +3,6 @@ import PageHero from '../components/common/PageHero';
 import SectionIntro from '../components/common/SectionIntro';
 import FeatureLayout from '../components/common/FeatureLayout';
 import Reveal from '../components/common/Reveal';
-import Pill from '../components/common/Pill';
 
 /**
  * `/intellitute` — built 2026-10-13 from https://mindlogicx.ae/intellitute/.
@@ -71,7 +70,6 @@ export default function IntelliTute() {
   const stakeholders = s.stakeholders;
   const ai = s['powered-by-intelligenie'];
   const caps = s['key-capabilities'];
-  const closing = s['closing-cta'];
 
   return (
     <>
@@ -253,24 +251,14 @@ export default function IntelliTute() {
         </div>
       </section>
 
-      <section className="ls-section ls-section--ink">
-        <div className="ls-container">
-          <Reveal className="ls-ke__close" effect="fadeInUp">
-            <h2 className="ls-h2 ls-ke__closeheading">{closing.heading}</h2>
-            {closing.body.map((p) => (
-              <p className="ls-ke__closebody" key={p.slice(0, 40)}>
-                {p}
-              </p>
-            ))}
-            <div className="ls-ke__ctas">
-              {/* ⚠️ Added — the source has no button here. See the top note. */}
-              <Pill variant="light" to="/contact-us" arrow>
-                Contact Us
-              </Pill>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      {/*
+        The closing CTA band was removed 2026-10-16, along with every other
+        page's, at the client's request. Its content is intact in the content
+        module.
+
+        ⚠️ **This page now has no outbound route.** It was the only link off
+        it; the section is a few lines to restore if that turns out to matter.
+      */}
     </>
   );
 }
