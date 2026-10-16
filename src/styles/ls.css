@@ -92,6 +92,15 @@
 
   /* --- Type --- */
   --font: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /*
+   * ⚠️ **Unused since 2026-10-16.** Every label that was set in Roboto Mono —
+   * stage titles, index marks, category chips, counters — was changed to the
+   * body face at the client's request ("change the font style to normal
+   * throughout the project"). The token is kept so the intent is legible if
+   * a monospaced run is ever wanted again, but nothing references it and
+   * **Roboto Mono is no longer loaded**, so using it would silently fall back
+   * to the system monospace.
+   */
   --font-mono: 'Roboto Mono', ui-monospace, 'SFMono-Regular', monospace;
 
   /* --- Geometry --- */
@@ -364,7 +373,7 @@ address {
 /* The mono index: 01, D/1, V/3. The pattern's signature. */
 .ls-index {
   display: block;
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -1510,13 +1519,20 @@ address {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
+  /* background: linear-gradient(
     to right,
     rgb(0 0 0 / 62%) 0%,
     rgb(0 0 0 / 60%) 35%,
     rgb(0 0 0 / 58%) 58%,
     rgb(0 0 0 / 0%) 80%
-  );
+  ); */
+  background:linear-gradient(
+    to right,
+    rgb(0 0 0 / 62%) 0%,
+    rgb(0 0 0 / 58%) 28%,
+    rgb(0 0 0 / 63%) 42%,
+    rgb(0 0 0 / 0%) 54%
+  )
 }
 
 .ls-heroslide__inner {
@@ -2229,7 +2245,7 @@ address {
 }
 
 .ls-mg__role {
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -2982,6 +2998,49 @@ address {
   line-height: 1.65;
   /* 8.08:1 on ink. */
   color: rgb(255 255 255 / 72%);
+}
+
+/*
+ * `--single`: the closing band on /knowledge-engineering only, where the
+ * client wants the heading and the sentence each on one line.
+ *
+ * It is a modifier rather than a change to the two rules above because
+ * `.ls-ke__closeheading` and `.ls-ke__closebody` also dress the closing bands
+ * on /intellitute, /intelliwork and /intelliexams, whose copy is longer and
+ * would overflow.
+ *
+ * What forced the wrap was the measure, not the type size: 20ch on the
+ * heading and 60ch on the body. Both are lifted here, and the heading drops
+ * from 56px to 36px — "Your Knowledge. Our Engineering. Intelligent
+ * Possibilities." is 58 characters, which needs roughly 28em, and 28em of
+ * 56px is 1568px against a 1152px container.
+ *
+ * `nowrap` only above 992px. Below that no type size puts 58 characters on a
+ * phone without shrinking it to nothing, so it wraps normally.
+ */
+.ls-ke__close--single .ls-ke__closeheading {
+  max-width: none;
+  font-size: clamp(22px, 3.1vw, 36px);
+}
+
+.ls-ke__close--single .ls-ke__closebody {
+  max-width: none;
+  /*
+   * Fluid, not fixed. The sentence is 131 characters; at a flat 17px it needs
+   * ~1050px and the container is only 875px at a 1000px viewport, so with
+   * `nowrap` it was overflowing and being clipped — the page did not scroll
+   * sideways, the end of the sentence simply disappeared. Scaling with the
+   * viewport keeps it on one line all the way down to the 992px breakpoint,
+   * below which it wraps normally anyway.
+   */
+  font-size: clamp(13px, 1.35vw, 17px);
+}
+
+@media (min-width: 992px) {
+  .ls-ke__close--single .ls-ke__closeheading,
+  .ls-ke__close--single .ls-ke__closebody {
+    white-space: nowrap;
+  }
 }
 
 /* ========================================================================
@@ -3871,223 +3930,158 @@ address {
    the foot of the band for a zigzag. See WhyMindlogicx.jsx.
    ======================================================================== */
 
+/*
+ * "Why Mindlogicx" — redesigned 2026-10-16. See the long note in
+ * `home/WhyMindlogicx.jsx` for the history and why the type no longer sits
+ * on a brand colour.
+ *
+ * Retired with that change: `.ls-why__rail` (a 335px vertical rule),
+ * `.ls-why__marker` (a ring-and-dot), `.ls-why__metric--low` (the zigzag),
+ * `.ls-why__bg` (the full-bleed photograph) and the band's own background —
+ * the tone now comes from `--smoke` on the section.
+ */
 .ls-why {
   position: relative;
-  overflow: hidden;
-  /* Behind the photograph, so a failed or slow image leaves white type on
-     near-black rather than on the page's white. */
-  background: var(--grey-50);
-}
-
-/*
- * No scrim. The source lays this picture in bare, which is safe because it is
- * genuinely dark — its brightest pixel is 0.024 relative luminance, holding
- * white type at 14.1:1 at the worst point in the frame. A lighter photograph
- * would need a scrim; see the sector cards for the pattern.
- */
-.ls-why__bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-}
-
-.ls-why > .ls-container {
-  position: relative;
-  z-index: 1;
 }
 
 .ls-why__head {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 32px 64px;
   align-items: end;
-  gap: 40px;
+}
+
+.ls-why .ls-eyebrow,
+.ls-why .ls-mg__rule {
+  color: var(--accent-text);
+}
+
+.ls-why .ls-mg__rule {
+  background: var(--accent-text);
 }
 
 .ls-why__title {
-  margin-top: 24px;
+  max-width: 18ch;
   color: var(--ink);
 }
 
 .ls-why__bodywrap {
-  justify-self: end;
+  padding-bottom: 6px;
 }
 
 .ls-why__body {
-  max-width: 24rem;
   text-align: right;
   color: var(--grey-500);
 }
 
-/* ---- the counters ------------------------------------------------------ */
+/*
+ * The figures live on a dark panel rather than on the band. That is what
+ * makes the section readable: cyan on ink is 7.38:1 and white on ink is
+ * 18.9:1, where on a purple→cyan gradient neither colour cleared AA across
+ * the whole ramp.
+ */
+.ls-why__panel {
+  margin-top: 56px;
+  padding: 48px;
+  background: var(--ink);
+  border-radius: 20px;
+}
 
 .ls-why__metrics {
-  margin-top: 112px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 64px 0;
+  gap: 40px 32px;
 }
 
-/*
- * Each item is its own positioning context: the rule and the ring marker are
- * absolute against *this*, not against the `dd` they are written inside, so
- * the figure's own box stays free to be laid out by the grid.
- *
- * `padding-left` clears the rule and its 60px glyph — the glyph is centred on
- * a line 30px in, so it spans 0–60px and nothing overflows the column.
- */
 .ls-why__metric {
-  position: relative;
-  display: grid;
-  grid-template-rows: auto auto;
-  align-content: center;
-  min-height: 335px;
-  padding-left: 67px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* The zigzag: even columns sit centred in the band, odd ones at its foot. */
-.ls-why__metric--low {
-  align-content: end;
-}
-
+/* `dd` carries the figure, `dt` the caption — the content model wants the
+   term first, so the order is swapped back here. */
 .ls-why__value {
-  grid-row: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  order: 1;
   margin: 0;
-  padding-left: 24px;
-  font-size: 68px;
-  font-weight: 300;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  color: var(--ink);
-}
-
-.ls-why__label {
-  grid-row: 2;
-  margin-top: 4px;
-  padding-left: 24px;
-  font-size: 22px;
+  font-size: 54px;
   font-weight: 400;
-  line-height: 1.25;
-  color: var(--ink);
-}
-
-/* Lining figures, so the number does not jitter as it counts. */
-.ls-counter {
-  font-variant-numeric: tabular-nums;
-}
-
-.ls-why__rail {
-  position: absolute;
-  left: 30px;
-  top: 0;
-  width: 1px;
-  background: var(--grey-200);
-}
-
-.ls-why__glyph {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  display: grid;
-  place-items: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  /* A purple-tinted dark disc, as the source has it, with a hairline ring —
-     the pattern has no elevation to lean on. */
-  background: var(--tint-purple-50);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 10%);
-  color: var(--accent-text);
-  transform: translate(-50%, -50%);
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
-}
-
-.ls-why__metric--low .ls-why__glyph {
-  top: 0;
-  transform: translate(-50%, -20px);
-}
-
-.ls-why__metric:hover .ls-why__glyph {
-  background: var(--brand-purple);
-  /* White, not ink — this one disc is solid purple on hover, so it is the
-     only place in the band that is still a dark surface. */
+  line-height: 1;
+  letter-spacing: -0.03em;
   color: var(--white);
 }
 
-.ls-why__glyph svg {
-  width: 24px;
-  height: 24px;
-}
-
-/* The ring-and-dot beside the figure, echoing the source's accent circle. */
-.ls-why__marker {
-  position: absolute;
-  left: 57px;
-  top: 0;
+.ls-why__glyph {
   display: grid;
   place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* Cyan on ink, 7.38:1 — purple would be 2.10:1 here. */
+  color: var(--accent-text-dark);
+  background: color-mix(in srgb, var(--brand-cyan) 14%, transparent);
+}
+
+.ls-why__glyph svg {
   width: 20px;
   height: 20px;
-  border: 1px solid var(--grey-300);
-  border-radius: 50%;
 }
 
-.ls-why__marker::before {
-  content: '';
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent-text);
+.ls-why__label {
+  order: 2;
+  font-size: 15px;
+  line-height: 1.45;
+  /* 12.6:1 on ink. */
+  color: rgb(255 255 255 / 70%);
+  text-wrap: pretty;
 }
 
-/* ---- the trust pillars ------------------------------------------------- */
+.ls-counter {
+  display: inline-block;
+}
 
 .ls-why__pillars {
-  margin-top: 80px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  list-style: none;
-  padding: 0;
+  gap: 20px;
+  margin-top: 24px;
 }
 
 .ls-why__pillars > li {
   display: flex;
-  height: 100%;
 }
 
 .ls-why__pillar {
   display: flex;
   flex-direction: column;
+  gap: 10px;
   width: 100%;
   padding: 28px;
   border: 1px solid var(--grey-200);
   border-radius: 16px;
   background: var(--white);
-  backdrop-filter: blur(6px);
 }
 
 .ls-why__pillartitle {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 400;
-  line-height: 1.25;
+  letter-spacing: -0.02em;
   color: var(--ink);
 }
 
 .ls-why__pillarbody {
-  margin-top: 12px;
   font-size: 15px;
   line-height: 1.6;
   color: var(--grey-500);
+  text-wrap: pretty;
 }
 
 .ls-why__cta {
-  margin-top: 56px;
+  margin-top: 40px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4514,14 +4508,27 @@ address {
   letter-spacing: -0.02em;
 }
 
+/*
+ * The body face, normal case — 2026-10-15, at the client's request. It was
+ * 12px mono, uppercase, +0.06em tracked, like the eyebrows and index labels
+ * elsewhere in the pattern.
+ *
+ * It reads better here for a reason beyond taste: these are job titles with
+ * real punctuation and parentheses — "Director & COO (Healthcare)",
+ * "Secretary - Food Committee" — and uppercasing them flattened the
+ * capitalisation that tells a reader where the proper nouns are.
+ *
+ * ⚠️ This also restyles the **Mindlogicxian Club governing board**, which
+ * uses the same `Person` component. That is wanted — they are job titles too
+ * — but it is a second place to look at after changing this.
+ */
 .ls-person__role {
-  margin-top: 4px;
-  font-family: var(--font-mono);
-  font-size: 12px;
+  margin-top: 6px;
+  font-size: 15px;
   font-weight: 400;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  line-height: 1.45;
   color: var(--grey-500);
+  text-wrap: pretty;
 }
 
 .ls-person__link {
@@ -5055,7 +5062,7 @@ a.ls-footer__socialbtn:hover {
 /* ---- Club activities ---- */
 
 .ls-club__cat {
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -5090,7 +5097,7 @@ a.ls-footer__socialbtn:hover {
 }
 
 .ls-gal__yearcount {
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -5146,7 +5153,7 @@ a.ls-footer__socialbtn:hover {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -5217,7 +5224,11 @@ a.ls-footer__socialbtn:hover {
 
 .ls-lb__count,
 .ls-lb__zoom {
-  font-family: var(--font-mono);
+  font-family: var(--font);
+  /* These two change while you look at them — "3 / 24" as you page and
+     "150%" as you zoom. Monospace used to stop the width jumping; tabular
+     figures do the same job now that the face is proportional. */
+  font-variant-numeric: tabular-nums;
   font-size: 12px;
   letter-spacing: 0.06em;
   color: rgb(255 255 255 / 72%);
@@ -5379,7 +5390,7 @@ a.ls-footer__socialbtn:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: 13px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -5409,7 +5420,7 @@ a.ls-footer__socialbtn:hover {
 }
 
 .ls-prod__pillarsub {
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -5471,7 +5482,7 @@ a.ls-footer__socialbtn:hover {
 }
 
 .ls-prod__barvalue {
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -5537,7 +5548,7 @@ a.ls-footer__socialbtn:hover {
 .ls-prod__cappillar {
   align-self: flex-start;
   padding: 4px 12px;
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -5615,7 +5626,7 @@ a.ls-footer__socialbtn:hover {
 }
 
 .ls-prod__balabel {
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -5733,7 +5744,7 @@ a.ls-footer__socialbtn:hover {
 .ls-mg__portrait {
   display: block;
   width: 100%;
-  max-width: 420px;
+  max-width: 500px;
   height: auto;
   margin-inline: auto;
   object-fit: contain;
@@ -5781,4 +5792,383 @@ a.ls-footer__socialbtn:hover {
   max-width: 380px;
   height: auto;
   margin-inline: auto;
+}
+
+/* ========================================================================
+   KNOWLEDGE ENGINEERING FRAMEWORK  (/knowledge-engineering)
+   ======================================================================== */
+
+/*
+ * Third design for this section, 2026-10-16.
+ *
+ *   1. `.ls-flow` — a vertical pipeline. Dropped because it is the same
+ *      primitive that carries IntelliTUTE's "How It Works" and IntelliWORK's
+ *      journey, so the page's one structural diagram looked like two other
+ *      pages' step lists.
+ *   2. `.ls-kef` v1 — full-width stacked bands, title left and chips right.
+ *      Read as a list of five rows rather than as a sequence.
+ *   3. **This**: five columns left to right, the direction the framework is
+ *      actually read in, with the governance layer spanning beneath all of
+ *      them.
+ *
+ * The connecting rail is one line drawn across the heads of the columns with
+ * a node per stage, rather than a border per card — so the eye follows a
+ * single path instead of counting five separate boxes.
+ *
+ * `.ls-flow` is untouched; the other two pages still use it.
+ */
+.ls-kef {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0 18px;
+}
+
+.ls-kef__stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  padding-top: 34px;
+}
+
+/*
+ * The rail. Drawn on the stage rather than on a wrapper so it inherits the
+ * grid cell's width exactly; the first and last are trimmed to half so the
+ * line starts and stops at the outer nodes instead of floating past them.
+ */
+.ls-kef__stage::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  left: -9px;
+  right: -9px;
+  height: 2px;
+  background: var(--grey-200);
+}
+
+.ls-kef > li:first-child .ls-kef__stage::before {
+  left: 50%;
+}
+
+.ls-kef > li:last-child .ls-kef__stage::before {
+  right: 50%;
+}
+
+/* The node. Its fill deepens across the five, which is how progression is
+   shown without numbering the stages (banned site-wide). */
+.ls-kef__stage::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: calc(50% - 8px);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 3px solid
+    color-mix(in srgb, var(--brand-purple) var(--kef-depth, 100%), var(--grey-200));
+}
+
+.ls-kef__title {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.ls-kef__items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ls-kef__item {
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: center;
+  color: var(--accent-text);
+  background: var(--tint-purple-50);
+  border-radius: 6px;
+  text-wrap: pretty;
+}
+
+/*
+ * The spanning layer. The deck's caption says security, governance and human
+ * oversight run the whole lifecycle, so it is drawn as one band under all
+ * five columns rather than as a sixth stage in the sequence.
+ */
+.ls-kef__span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 28px;
+  padding: 18px 28px;
+  font-size: 15px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--grey-500);
+  background: var(--white);
+  border-radius: var(--radius-card, 8px);
+  border: 1px dashed var(--grey-300);
+  text-wrap: pretty;
+}
+
+.ls-kef__spanmark {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-text);
+}
+
+/* ========================================================================
+   OUR STRENGTH  (home)
+   ======================================================================== */
+
+/*
+ * Three columns of one statement, divided by rules rather than separated into
+ * plates. See the note in `home/Strengths.jsx` for why this is not a card grid
+ * and not the hairline-row treatment `/about` uses for its principles.
+ */
+.ls-strength {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ls-strength > li + li .ls-strength__col {
+  /* On the inner edges only — a rule outside the first and last column would
+     box the group in, which is the plate look this replaced. */
+  border-left: 1px solid var(--grey-200);
+}
+
+.ls-strength__col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+  padding: 4px 40px;
+}
+
+.ls-strength > li:first-child .ls-strength__col {
+  padding-left: 0;
+}
+
+.ls-strength > li:last-child .ls-strength__col {
+  padding-right: 0;
+}
+
+.ls-strength__label {
+  font-family: var(--font);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.ls-strength__title {
+  margin-top: 14px;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.ls-strength__rule {
+  display: block;
+  width: 40px;
+  height: 2px;
+  margin-top: 20px;
+  border-radius: 2px;
+  background: var(--accent-text);
+}
+
+.ls-strength__desc {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--grey-500);
+  text-wrap: pretty;
+}
+
+/* The legal entity above an address block on /contact-us. */
+.ls-contact__entity {
+  margin-top: 10px;
+  font-size: 17px;
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/*
+ * Address lines carry the client's own line breaks, so they should not be
+ * re-wrapped by a narrow measure on top of that. The 34ch on
+ * `.ls-contact__line` is tuned for the e-mail rows; the longest supplied
+ * address line is 53 characters.
+ */
+.ls-contact__box .ls-contact__entity + .ls-contact__line,
+.ls-contact__entity ~ .ls-contact__line {
+  max-width: 46ch;
+  margin-top: 2px;
+}
+
+/* ---- Voice of Law (/voice-of-law) ---- */
+
+.ls-vol__logo {
+  width: 260px;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 4px;
+}
+
+.ls-vol__usp {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* ---- HealthTech (/health-tech) ---- */
+
+.ls-ht__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  height: 100%;
+  padding: 36px;
+  background: var(--grey-100);
+  border-radius: var(--radius-card, 8px);
+}
+
+/*
+ * The four wordmarks are different shapes — 527x123 for two of them, 865x256
+ * and 5636x2034 for the others. A fixed height with `contain` is what makes
+ * them sit on one optical baseline instead of each claiming a different
+ * amount of the card.
+ */
+.ls-ht__logo {
+  display: block;
+  height: 44px;
+}
+
+.ls-ht__logo img {
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.ls-ht__name {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.ls-ht__desc {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--grey-500);
+  text-wrap: pretty;
+}
+
+/* ---- MediaX (/media-tech) ---- */
+
+.ls-mx__logo {
+  width: 240px;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 4px;
+}
+
+/*
+ * A picture with a label under it, and nothing else — which is all the source
+ * gives these. No plate: a card frame around a bare label would imply there
+ * is more inside it than there is.
+ */
+.ls-mx__tile,
+.ls-mx__step {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+}
+
+.ls-mx__tile .ls-media,
+.ls-mx__step .ls-media {
+  transition: transform 0.3s ease;
+}
+
+.ls-mx__tile:hover .ls-media,
+.ls-mx__step:hover .ls-media {
+  transform: translateY(-4px);
+}
+
+.ls-mx__tiletitle {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* The four process steps are one word each, so they take the mono label
+   treatment rather than the tile headings' size. */
+.ls-mx__steptitle {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+/* ---- Finance (/mxpay) ---- */
+
+/* The deck's "Platform Under Development" badge. Deliberately prominent —
+   it is doing the same work as the two disclaimers further down the page. */
+.ls-fin__status {
+  align-self: flex-start;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--accent-strong-cyan);
+  background: color-mix(in srgb, var(--brand-cyan) 12%, white);
+  border: 1px solid color-mix(in srgb, var(--brand-cyan) 35%, transparent);
+  border-radius: 99px;
+}
+
+/*
+ * Regulatory disclaimers. Set smaller than body copy but **not** faint:
+ * grey-500 on white is 4.73:1, which clears AA. A legal qualifier that is
+ * hard to read is worse than one that is absent, because it looks like it is
+ * being hidden.
+ */
+.ls-fin__disclaimer {
+  display: block;
+  max-width: 90ch;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--grey-500);
+  text-wrap: pretty;
+}
+
+.ls-fin__disclaimer--ink {
+  margin-top: 28px;
+  /* 8.08:1 on the ink band. */
+  color: rgb(255 255 255 / 72%);
 }

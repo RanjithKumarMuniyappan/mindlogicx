@@ -1,21 +1,37 @@
 import { testimonials } from '../../content/site';
 import SectionIntro from '../common/SectionIntro';
-import Card from '../common/Card';
-import { wash } from '../common/washes';
+import Reveal from '../common/Reveal';
 
 /**
  * "What Sets Mindlogicx Apart" — three capability statements.
  *
- * Rendered as plain cards, *not* as the reference's testimonial cards. Nobody
- * is quoted here: the content module calls these `testimonials` because that
- * is the slot they filled on an older template, but there is no speaker, no
- * attribution and no company behind any of them. Putting them in quote marks
- * with a name underneath would mean inventing three customers.
+ * ## Redesigned 2026-10-15
  *
- * The mono index is each item's own label — STRATEGY, BRAND, TECHNOLOGY —
- * rather than a sequence number. `testimonials.items[].image` is skipped for
- * the same reason as the focus icons: those files are Zefxa template raster
- * art that was not carried over.
+ * This was a 3-up grid of tinted `Card`s. It is now three columns divided by
+ * vertical hairlines, with no plates and no tints: the mono label, the title,
+ * a short accent rule, then the paragraph.
+ *
+ * Why, given the home page already had enough card grids:
+ *
+ * - **Three tinted plates sat directly above "Why Mindlogicx", which is four
+ *   more plates.** Two plate grids back to back read as one long grid rather
+ *   than as two arguments.
+ * - **The tints implied a grouping that is not there.** Strategy, Brand and
+ *   Technology are three facets of one claim, not three categories.
+ * - Columns divided by rules say "three parts of one statement" in a way that
+ *   three separated cards do not.
+ *
+ * It is deliberately **not** the hairline-row treatment used by "Our
+ * Principles" on `/about`: that one is rows because it has nine items and
+ * long paragraphs; this has three and short ones, so it goes across.
+ *
+ * Still no icons. `testimonials.items[].image` points at Zefxa template raster
+ * art that was never carried over, and the three labels do the same job.
+ *
+ * The content module calls these `testimonials` because that is the slot they
+ * filled on an older template. Nobody is quoted here — there is no speaker, no
+ * attribution and no company behind any of them, so they are statements, not
+ * quotes.
  */
 export default function Strengths() {
   return (
@@ -23,19 +39,18 @@ export default function Strengths() {
       <div className="ls-container">
         <SectionIntro eyebrow={testimonials.subTitle} title={testimonials.title} />
 
-        <div className="ls-grid ls-grid--3">
+        <ul className="ls-strength ls-mt-md">
           {testimonials.items.map((item, i) => (
-            <Card
-              key={item.title}
-              index={item.subTitle}
-              icon={item.title}
-              title={item.title}
-              desc={item.desc}
-              tint={wash(i)}
-              delay={i * 80}
-            />
+            <li key={item.title}>
+              <Reveal className="ls-strength__col" effect="fadeInUp" delay={i * 80}>
+                <span className="ls-strength__label">{item.subTitle}</span>
+                <h3 className="ls-strength__title">{item.title}</h3>
+                <span className="ls-strength__rule" aria-hidden="true" />
+                <p className="ls-strength__desc">{item.desc}</p>
+              </Reveal>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

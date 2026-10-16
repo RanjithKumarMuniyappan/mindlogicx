@@ -1401,6 +1401,635 @@ source folders were removed too.
   left dangling references in live content. The platform cards now point at
   `products/<slug>.webp`, which already existed and actually match them.
 
+## 2026-10-15 changes
+
+### /about lost its title band — so its `h1` moved
+
+The client asked for the "About Us" title to go: the page opened with those
+words and then said "Who We Are?" immediately below, which was the same
+statement twice.
+
+**Deleting it alone would have left the page with no `h1` at all** — no
+document outline for a screen reader, and nothing for a search result or link
+preview to name the page with. `Intro`'s "Who We Are?" is the `h1` now. It was
+already the page's first heading and already set at 44px, so nothing moved
+visually. `banner.title` and `banner.bgImg` stay in `about.js`, unrendered.
+
+"About Us" now appears only as the header nav link, which is correct.
+
+### The closing CTA on /knowledge-engineering is one line each
+
+`--single` is a **modifier**, not a change to `.ls-ke__closeheading` /
+`.ls-ke__closebody` — those also dress the closing bands on `/intellitute`,
+`/intelliwork` and `/intelliexams`, whose copy is longer and would overflow.
+
+What forced the wrap was the measure, not the type size: `20ch` on the heading
+and `60ch` on the body. Both lifted; the heading drops 56px → `clamp(22px,
+3.1vw, 36px)` because the line is 58 characters, which needs ~28em, and 28em
+of 56px is 1568px against a 1152px container.
+
+⚠️ **The body had to become fluid too.** At a flat 17px the 131-character
+sentence needs ~1050px, and the container is 875px at a 1000px viewport — so
+with `nowrap` it overflowed and was **clipped**. The page did not scroll
+sideways; the end of the sentence simply vanished, which is the kind of thing
+a page-level overflow check does not catch. It is `clamp(13px, 1.35vw, 17px)`
+now, measured clean from 765px of container upward.
+
+`nowrap` applies only above 992px. Below that no type size puts 58 characters
+on a phone without shrinking it to nothing, so it wraps normally.
+
+### The framework section — three designs, and why
+
+1. **`.ls-flow`** — a vertical pipeline. Dropped because it is the same
+   primitive carrying IntelliTUTE's "How It Works" and IntelliWORK's journey,
+   so the page's one genuinely structural diagram looked like two other
+   pages' step lists.
+2. **`.ls-kef` v1** (2026-10-15) — full-width stacked bands, stage title left
+   and inputs right, with a left rail deepening down the stack. Read as a
+   list of five rows rather than as a sequence.
+3. **`.ls-kef` v2** (2026-10-16) — five columns left to right, the direction
+   the framework is actually read in, on **one connecting rail** with a node
+   per stage. The node fill deepens across the five, which is how progression
+   is shown without numbering them (banned site-wide).
+
+The rail is drawn on `.ls-kef__stage::before` rather than on a wrapper, so it
+inherits the grid cell's width exactly; the first and last are trimmed to 50%
+so the line starts and stops at the outer nodes instead of floating past them.
+
+The deck's caption — security, governance and human oversight span the whole
+lifecycle — is still one dashed band under all five columns rather than a
+sixth stage, because that is what "span" means.
+
+**Responsive, measured at three widths**: 5 columns at 1280px (210px each),
+3 + 2 at 900px (250px each), one column at 375px. At the narrowest the rail
+**turns vertical and moves to the left of each stage** — a horizontal rail
+across a single column would be a stub beside every heading and read as a
+rendering fault. Verified: no chip overflows its box and no page-level
+horizontal scroll at any of the three.
+
+`.ls-flow` is untouched; the other two pages still use it.
+
+### A latent bug in `Reveal`, found by using it
+
+`Reveal` set `style={delay ? {animationDelay} : undefined}` and then spread
+`{...rest}` **after** it. Any caller passing its own `style` therefore
+replaced the animation delay silently — no error, the stagger just vanished.
+The framework stack is the first component to pass both (`--kef-depth` per
+stage), which is how it surfaced.
+
+`style` is now destructured out of `rest` and merged, so both survive and an
+explicit `animationDelay` from a caller still wins. Verified: the five stages
+stagger 0 / 0.06 / 0.12 / 0.18 / 0.24s with their rail depths applied.
+
+### WHAT WE DO image
+
+`whatWeDo.image` is the client's `We_Engineer_Knowledge.jpg`, 156KB → 26KB
+WebP.
+
+⚠️ **It is only 410×311**, and the slot is ~300px tall at the full width of
+its column, so it is upscaled to fill — soft on a normal screen and softer on
+a retina one. Nothing in the build can add detail the file does not have; a
+larger original is the only fix.
+
+⚠️ `public/assets/images/newImages/` holds **17MB** of PNG/JPG, including
+duplicate copies of the hero and sector art already installed and converted on
+2026-10-14. Everything under `public/` ships. It is dead weight until removed.
+
+## Home page, 2026-10-15: Our Strength and the Why Mindlogicx wash
+
+### "Our Strength" is three columns, not three cards
+
+It was a 3-up grid of tinted `Card`s sitting **directly above "Why
+Mindlogicx", which is four more plates** — two plate grids back to back read
+as one long grid rather than as two separate arguments. The six-colour wash
+rotation also implied a grouping that is not there: Strategy, Brand and
+Technology are three facets of one claim, not three categories.
+
+Now three columns divided by vertical hairlines, no plates and no tints: mono
+label, title, short accent rule, paragraph.
+
+Deliberately **not** the hairline-row treatment `/about` uses for "Our
+Principles". That one is rows because it has nine items and long paragraphs;
+this has three and short ones, so it goes across. Below 991px the columns
+stack and the divider turns horizontal — at 2-up the odd one out sits alone on
+a second row with a rule down its left and nothing beside it, which reads as a
+mistake.
+
+### The Why Mindlogicx band is the client's gradient — and it fails AA
+
+`linear-gradient(320deg, #712d7b, #00aeef)`, specified by the client verbatim,
+with all band content in white (card content excluded, by request). It
+replaced, in order: a photograph, flat `--grey-50`, a pale two-brand wash, a
+tinted purple→cyan gradient, and solid cyan.
+
+**This is a documented client-directed exception, like the white "About Us"
+title. Do not silently "fix" it.**
+
+#### Why it fails
+
+White clears 4.5:1 across only the **purple ~59%** of the ramp — purple end
+8.89:1, midpoint 5.19:1, cyan end **2.53:1**. And 320° points up-left, which
+puts **cyan at the top left**, so the heading block sits at the worst end of
+the band.
+
+Measured in the browser against real glyph boxes, each at its actual position
+along the painted ramp:
+
+| element | size | contrast | at | needs | |
+|---|---|---|---|---|---|
+| eyebrow | 14px | **2.87:1** | 91% | 4.5 | ✗ |
+| title | 56px | **2.89:1** | 90% | 3 | ✗ |
+| metric label | 22px | **3.99:1** | 68% | 4.5 | ✗ |
+| body | 20px | **4.49:1** | 60% | 4.5 | ✗ (by 0.01) |
+| figures | 68px | 3.79:1 | 71% | 3 | ✓ |
+| CTA | 15px | 5.19:1 | 50% | 4.5 | ✓ |
+
+Card content is unaffected — the pillars are opaque white, their title ink at
+18.67:1 and their body grey-500 at 5.07:1.
+
+#### Remedies, if it is ever revisited
+
+In increasing order of departure from what was asked:
+
+1. **Flip the angle to 140deg.** Same two colours, same strength — it just
+   puts purple at the top left, under the heading, instead of cyan. The
+   headline would go from 2.89:1 to roughly 8:1. Cheapest fix by far.
+2. **Stop the cyan short** — e.g. `#712d7b 0%, #00aeef 140%` — so the painted
+   band never reaches full cyan.
+3. **Put the copy on a panel**, as the trust cards already are.
+4. Ink instead of white: the inverse problem — ink works on cyan (7.38:1) and
+   fails on purple (2.10:1).
+
+#### Two bugs introduced and caught while whitening the band
+
+Both came from a blanket `--ink` → `--white` replace across the block:
+
+- `.ls-why__pillartitle` went white **on an opaque white card** — invisible.
+  Card content is explicitly excluded from "all white"; it is ink again.
+- `.ls-why__glyph` ended up a **white icon on a white disc**, because the
+  translucent-plate value landed on `.ls-mg__rule` instead (the first
+  `background: var(--white)` in the block). The disc is now 20% white with a
+  white icon; the rule is solid white.
+
+Measured after the change — see the table above for Why Mindlogicx. Our Strength:
+label 8.3:1, title 17.44:1, copy 4.73:1. Home band rhythm re-checked: no two
+adjacent sections share a tone.
+
+## 2026-10-15, second pass
+
+### Leader designations are set in the body face
+
+`.ls-person__role` was 12px mono, uppercase, +0.06em tracked — the same
+treatment as the eyebrows and index labels. It is now 15px Roboto, normal
+case.
+
+Beyond the client's preference, it reads better here because these are job
+titles carrying real punctuation — "Director & COO (Healthcare)", "Secretary -
+Food Committee". Uppercasing them flattened the capitalisation that tells a
+reader which words are proper nouns.
+
+⚠️ **This also restyles the Mindlogicxian Club governing board**, which shares
+the `Person` component — wanted, since those are job titles too, but a second
+place to check after touching this rule.
+
+Sharmila Sathi Rao's designation is now "Director & COO (Healthcare)". That is
+the **second** relabel: it was "Director & COO (MasterHealthPro)" until
+2026-10-12 and "Director & COO (MHP with Healthcare)" until today. Both
+earlier forms are recorded in the comment above the entry in `about.js`.
+
+### The KE hero lost its two CTAs
+
+"Explore Our Capabilities" (an in-page anchor) and "Talk to Our Experts" are
+no longer rendered. `hero.ctas` still holds both in the content module with
+the deck's own link targets, so restoring them is putting the block back.
+
+The closing band's "Connect with Our Experts" is untouched — the page still
+has one route to contact.
+
+### Three About images replaced
+
+| section | file | note |
+|---|---|---|
+| Our Philosophy | `aboutus/philosophy-innovation.webp` | 1447×1087, **exactly 4:3** — fills its frame uncropped |
+| Why Mindlogicx | `aboutus/why-choose-us.webp` | 542×575 |
+| Our Commitment | `aboutus/dei.webp` | 542×575 |
+
+2.70MB → 0.21MB.
+
+⚠️ **The two 542×575 images are portrait going into a 4:3 frame**, so
+`object-fit: cover` crops about 29% of their height, centred. Checked before
+shipping: the faces sit in the upper-middle of both and survive the crop; what
+is lost is ceiling at the top and floor at the bottom.
+
+⚠️ They are also only **542px wide against a 522px slot** — fine at 1×, soft
+on a retina screen. The philosophy image has the resolution to spare; these
+two do not. A larger original is the only fix.
+
+The files they replaced — `aboutus/innovation-hub.webp`,
+`mlx/about/why-choose-us.webp`, `mlx/about/dei.webp` — were left in place;
+nothing asked for their removal.
+
+## Contact Us gained a second office (2026-10-15)
+
+`MINDLOGICX ASIA SDN. BHD`, Kuala Lumpur — verbatim, including the client's
+capitalisation (no full stop after BHD) and their own line breaks.
+
+### ⚠️ The "second" new address was already on the page
+
+The client supplied two addresses to add. The second —
+
+> Mindlogicx Infratec Limited, 10/1B, Graphite India Main Rd, KEB Colony,
+> Industrial Area, Whitefield, Bengaluru, Karnataka 560048.
+
+— is **the same street address that was already there** as Head Office. The
+only new information in it was the legal entity name. Rendering it as a second
+card would have printed one address twice on a contact page, so the entity
+name was added to the existing Head Office entry instead and the client was
+told. Flipping it into a separate card is a few lines if that is what was
+wanted.
+
+### Two structural fixes this forced
+
+- **The render keyed boxes on `box.type`.** That was unique while only one
+  address existed; a second `type: "address"` would have collided. Every box
+  now carries an `id` and the render keys on that.
+- **`.ls-contact__line` is capped at 34ch**, tuned for the e-mail rows. The
+  longest supplied address line is 53 characters, so address lines carrying
+  the client's own breaks would have been re-wrapped on top of them. Lines
+  that follow an entity name get 46ch. Checked at 1280px and at 375px: every
+  supplied line renders as exactly one line, and nothing overflows its box.
+
+## Legal and Healthcare pages (2026-10-15)
+
+`/voice-of-law` and `/health-tech`, from Technology → Legal and Technology →
+Healthcare. **Both menu items already pointed at these paths**; they were
+falling through to `Placeholder`, so adding the pages made the links work
+without touching the navigation.
+
+Source: `~/Documents/AntigravityProjects/mlx-website-2025-frontend` — **a
+different checkout** from the `OfficeProjects/Mindlogicx_India/...` one that
+ESG, Careers and IntelliEXAMS came from. Both were read from local source and
+cross-checked against that project's dev server on :3000; the two agreed, so
+no drift between the checkouts showed up on these routes.
+
+### Both source pages have no `h1` at all
+
+Voice of Law runs h2, h2, h2, h2, h3, h5, h3 — the page title is an `h2`,
+"Our USP" is an `h3` among `h2` siblings, and the `h5` is used purely for
+font size with no `h4` above it. HealthTech's served document contains exactly
+one `h2` (banner) and one `h3` (CTA). Both pages here are h1 → h2.
+
+### Voice of Law
+
+**Two images were swapped back.** In the source `vol_how_it_works.webp`
+renders in *Our Services* and `vol_our_service.webp` in *How It Works?* — and
+the hard-coded width/height on each `<Image>` matches the **other** file,
+which is what gives it away (3 of 4 `<Image>` calls declare the wrong
+dimensions). Each picture is with its own section here.
+
+**The only interactive control on the whole source page was a `<div onClick>`**
+calling `window.open(…, '_blank')` with no `rel="noopener"` — not keyboard
+reachable, invisible to crawlers. Its destination was a WhatsApp handoff to
++91-9071177765, the same number already on `/contact-us`, so the CTA points
+there and nothing is lost.
+
+⚠️ **Worth a Bar Council of India Rule 36 review.** "FREE Legal advise from
+the licensed lawyers" is an unqualified free-of-charge promise with no terms,
+and the SOS section promises immediate response to "accidents, threat to life
+and property" with no SLA, coverage area or hours. Carried verbatim.
+
+Six source typos preserved: "Every needs to be heard", "deserves es justice",
+"ourr heart", "FREE Legal **advise**", "a qualified legal professionals", and
+the bare fragment "Links to Resources". "VOL" is never expanded; the SOS copy
+cites a "mobile app" that is never named. The meta description describes a
+different product (case tracking, judiciary, digital courts).
+
+`components/LegalTech/LegalTechContent/` is **exported but imported by
+nothing** — dead code naming five products absent from the page and claiming
+SOC 2, ISO 27001, GDPR/HIPAA and "up to 60 percent" cycle-time cuts. Kept in
+the content module under `notRendered`; **none of it ships**.
+
+### HealthTech is a stub, and its product names were invisible
+
+Banner, four product cards, one CTA. That is the whole page — no heading over
+the cards, no intro, no stats, no team, no testimonials. Five components are
+imported and never used, which is why.
+
+**Each card's `<h3>` is commented out**, so "Mhpro Medics (MOA)", "Mhpro
+Academy", "Mhpro Clinic" and "ForHim.ForHer" never appeared as text — only as
+pixels inside logos that all carry `alt=""`. The live page is four unlabelled
+pictures and four paragraphs, with nothing for a screen reader, a crawler or a
+link preview. They are headings here; the strings are the source's own.
+
+**The cards are `<a>` elements with no `href`** — mouse-only. All four
+destinations (`/mhpro_medic/`, `/mhpro_academy/`, `/mhpro_clinic/`,
+`/forhimforher/`) are routes that do not exist here, so they render as plain
+cards.
+
+⚠️ **Card 3 describes the wrong product**: the "Mhpro Clinic" card opens "Our
+ForHim.ForHer clinic…", and the next card *is* ForHim.ForHer.
+
+⚠️ **Medical claims need review** — "accredited courses" names no accrediting
+body, "India's premier online learning platform" and "the world's first
+exclusive e-shop" are uncited superlatives, "scientifically formulated" is
+used of supplements and anti-ageing products, and telemedicine + e-pharmacy
+are licensed activities in India.
+
+The product is spelled four ways (Mhpro / MHPro / MasterHealthPro / MHP),
+"MOA" is never expanded, and ForHim.ForHer appears three ways.
+
+A fuller "Services Description and Working Process" block (~450 words, 3 items
++ 6 process steps) is commented out in the source and preserved under
+`notRendered` if it was meant to ship.
+
+### Assets
+
+| page | copied | PNG/WebP in → out |
+|---|---|---|
+| voice-of-law | 5 | 1.52 MB → 0.13 MB |
+| health-tech | 4 wordmarks | 73 KB → 46 KB |
+
+`FHS.webp` was **5636×2034** for a slot ~240px wide. The four wordmarks are
+different shapes, so `.ls-ht__logo` fixes a 44px height with `contain` to sit
+them on one optical baseline.
+
+## MediaX (`/media-tech`) and the footer socials — 2026-10-15
+
+With this, **four of the five Technology menu items have real pages**:
+Education, Healthcare, Media, Legal. Only **Finance (`/mxpay`)** still falls
+through to `Placeholder`.
+
+### ⚠️ The source page is titled "BSIM"
+
+That is the only above-the-fold heading on the live page, and the string
+appears **nowhere else** — not in the rest of the page, not in its SEO data,
+not anywhere in the MediaTech source tree. Almost certainly left over from
+another project.
+
+This page is titled **"MediaX"**, the product every section is actually about.
+"BSIM" is kept in the content module as `title` with `titleIsSuspect: true`.
+**The client should confirm what this page is called.**
+
+### Two whitespace artifacts corrected, one real typo kept
+
+The live body reads **"AI- driven"** and **"rollout— delivering"**. Those
+spaces are not authored — they are JSX line breaks collapsing into text nodes
+mid-word. The intended text ships here; `bodyIntendedText` in the content
+module holds it. Reproducing a rendering bug would read as this build's
+mistake.
+
+**"Ent-to-End Creative & Production Powerhouse" is left exactly as written.**
+That one is a genuine typo in the copy, not an artifact, so it is carried like
+every other verbatim string. The distinction is the whole point: fix what the
+renderer broke, keep what the author wrote.
+
+### What the source does not have, and was not invented
+
+- The six **"Impact Stories" are not stories** — each card renders a category
+  label and nothing else, under an intro promising "measurable business wins".
+  Their `title` fields never reach the DOM and are template filler that does
+  not match its own category ("Embedding Design Ops Across Teams" filed under
+  Live-Action & Virtual Production).
+- The **four process steps have no descriptions** — every one is commented-out
+  lorem ipsum, so they are bare one-word labels. They take the mono label
+  treatment here rather than a heading size that would imply missing copy.
+- **Cards 1 and 4 share one image**; "Localization & Accessibility" appears
+  twice (impact category and service module) with two different pictures.
+
+### Accessibility fixes carried over from the source
+
+- **No `h1` anywhere**, and section 2 jumps `h2` → `h4` while sections 3–4 use
+  `h3` for the same card role.
+- **Nothing is a dead link now.** All 7 service tiles and all 4 slider steps
+  are `href="#"`; all 6 impact cards point at `/portfolio/portfolio-details/`,
+  an unmigrated template demo route.
+- **The closing CTA was broken four ways**: a `<div onClick>` with no href,
+  role or tabIndex; routing an external `https://wa.me/…` through Next's
+  `router.push()`; dispatching an empty Calendly URL; and shipping an empty
+  `<p>`. It is a real link to `/contact-us`.
+- **12 images carried `alt="Mindlogicx"`** — the company name, not a
+  description. Decorative here, with the heading naming each one.
+
+Two files the extraction flagged as *probably blank placeholders* on size
+(`GreenScreenStudio.webp` 8.5 KB, `impact_stories/LocalizationAccessibility`
+29 KB) were **checked and are real photographs**. The green-screen one is
+green-dominant — its extrema cap at R192/G225/B96 — which is why it
+compresses so far. Neither was replaced.
+
+Images: 18 copied, **2.42 MB → 0.32 MB**.
+
+### Footer socials
+
+All five marks have URLs now; three (Facebook, X, YouTube) were `null` and
+rendering dimmed. They came from the 2025 frontend's `Layouts/Footer.tsx`.
+LinkedIn and Instagram were already here and **match that source exactly**,
+which confirms the right accounts.
+
+Reachability was checked, not assumed: Facebook, LinkedIn, Instagram and
+YouTube all 200.
+
+> ⚠️ **The X account could not be verified.** The source writes
+> `twitter.com/MindlogicxLtd`, which redirects to `x.com/MindlogicxLtd`; the
+> redirect target is used so the link does not take an extra hop. x.com blocks
+> automated requests, so whether that handle is live and still the company's
+> needs a human check.
+
+> Note for whoever edits that reference footer: it contains **three copies** of
+> the social block and two are commented out. All three carry identical URLs
+> today, so nothing turned on it — but editing the wrong copy would be silent.
+
+## MediaX title removed, HealthTech rebuilt — 2026-10-15
+
+### `/media-tech` lost its visible title, not its `h1`
+
+The `h1` is **kept, visually hidden**. On `/about` the same request was met by
+promoting an existing visible heading ("Who We Are?") — that was not possible
+here: the first band has no heading of its own (the source puts a logo image
+where one would go) and the next heading is "MediaX Impact Stories", which
+names a *section*, not the page.
+
+Deleting it outright would have left the page with no `h1` at all — no
+document outline for a screen reader, nothing for a search result or link
+preview. Verified: one `h1`, rendered 1×1 px, text "MediaX".
+
+### `/health-tech` was replaced wholesale
+
+The stub ported from the 2025 frontend — four MasterHealthPro /
+ForHim.ForHer cards, product names visible only as pixels inside logos — is
+**entirely gone**, from the client's own deck
+(`~/Downloads/HealthTech Solutions/HealthTechSolutions.html`).
+
+`content/pages/health-tech.js` still holds the old content unrendered, with
+everything that was flagged about it: the "Mhpro Clinic" card that described
+ForHim.ForHer, "accredited courses" with no accreditor, the four spellings of
+the product. The four old logo files remain in `public/`, now unused.
+
+New content is in `content/pages/health-tech-solutions.js`. Verified in the
+browser: no "Mhpro", "MasterHealthPro" or "ForHim" string survives.
+
+#### ⚠️ The hedging in this copy is load-bearing
+
+The deck closes with an instruction from its author:
+
+> "AI capabilities, regulatory certifications, prescription automation and
+> platform availability should not be advertised as established facts until
+> validated."
+
+and asks that the page position Mindlogicx as a HealthTech SaaS innovator,
+**not as a hospital, clinic or medical-treatment provider**.
+
+The copy is written to match — "is developing", "aims to", "is being
+designed", "envisioned", "proposed", "subject to medical validation and
+professional judgement", and plainly *"Our healthcare SaaS platform is
+currently under development."*
+
+**Every one of those qualifiers is doing legal work on a page about medical
+care.** Copy-editing them into the present tense would turn a description of
+an unbuilt platform into a claim about a live medical service. Five of them
+are asserted in the verification sweep so a future edit that flattens them
+shows up.
+
+#### ⚠️ The images may not be Mindlogicx's to use
+
+Their alt text in the deck names **other companies' products** — "Helios Med |
+AI Health Assistant" and "Tjänster – VIV-IQ" (Swedish) — which suggests they
+were lifted from third-party marketing sites. The pictures are generic
+clinical stock with nothing Mindlogicx-specific in them. **Licensing needs
+confirming before this is public.**
+
+None of that alt text is used; none of it describes the picture it was
+attached to. The images illustrate rather than inform, so they are decorative
+and the headings carry the meaning. Original alt is recorded per image in the
+content module. 320 KB → 201 KB.
+
+#### What was dropped from the deck, and why
+
+- **The deck's last two headed blocks are not on the page.** "Recommended
+  webpage presentation" and "SEO recommendations" are instructions to whoever
+  builds this, not words for the reader — the same call made for the
+  Knowledge Engineering deck's "Visual Design Direction". The layout advice
+  was followed where it agreed with this site's pattern; the title and
+  description went into `seo`. Asserted absent in the sweep.
+- **The section numbers** ("1." … "7.") and the care journey's "Step 1" …
+  "Step 5" labels, per the site-wide no-numbering rule from 2026-10-12. Both
+  kept in the content module. Asserted absent in the sweep.
+- **"Partner With Us"** as the hero's second CTA — removed site-wide on
+  2026-10-12. The phrase still appears once as section 7's *subheading*
+  ("Partner With Us in Digital Healthcare Innovation"), which is deck copy,
+  not a control; verified no element carrying it is a link or button.
+- **The two closing CTAs had labels but no destinations.** "Connect With Our
+  HealthTech Team" → `/contact-us`; "Explore Mindlogicx Solutions" →
+  `/knowledge-engineering`, the closest thing to a solutions overview here.
+  Both are this project's choices, not the deck's.
+
+⚠️ The deck suggests the URL `/healthcare-solutions/`. The route stays
+`/health-tech` because Technology → Healthcare points there.
+
+## Monospace removed site-wide (2026-10-16)
+
+Every label set in Roboto Mono moved to the body face at the client's request
+— 14 rules: stage titles, index marks, category chips, counters, bar values,
+breadcrumbs, pillar sub-labels, gallery meta, step labels.
+
+`.ls-eyebrow` was **already** the body face with uppercase + 2px tracking, so
+the pattern's signature labels were untouched and the page character holds.
+
+Two consequences worth knowing:
+
+- **`.ls-lb__count` and `.ls-lb__zoom` lost tabular alignment.** Those two
+  change while you watch them — "3 / 24" as you page, "150%" as you zoom —
+  and monospace was stopping the width jumping. They now carry
+  `font-variant-numeric: tabular-nums`, which does the same job in a
+  proportional face.
+- **Roboto Mono is no longer loaded.** Nothing referenced it afterwards, so it
+  was two unused weights on every page view. `--font-mono` is kept as a token
+  with a comment saying it is unused *and* unloaded — using it now would
+  silently fall back to the system monospace.
+
+Verified: **0 elements computing to a monospace family** across 10 routes.
+
+## Finance (`/mxpay`) — 2026-10-16
+
+All five Technology menu items now resolve to real pages. Built from the
+client's deck; route stays `/mxpay` because the menu points there and
+`site.js` already redirects `/finance/` to it, though the deck suggests
+`/finance`.
+
+### ⚠️ 16 of the deck's 21 images are not used
+
+**Every one of the 21 alt texts is a source-page title rather than a
+description** — PAYSTRAX, Cardstream, Citcon, Bemobi, QorePay, SWIFT,
+Worldline, Visa, Fidoo, Clearview Federal Credit Union, Grappler, buva.ai,
+WKO, IBN360. Seven are payment companies: **direct competitors in the exact
+vertical this page sells into.**
+
+Six carry another company's branding **inside the frame** and are withheld on
+those grounds — checked by eye, not taken on trust:
+
+| file | what is visible |
+|---|---|
+| `image21` | a complete **GRAPPLER.IO advertisement** — logo, brand colours, marketing copy, their "90.5%" statistic |
+| `image12` | **Clearview Federal Credit Union**, **Mastercard** and **Verifone** marks, all legible |
+| `image18` | **BEMOBI** logo on a Portuguese analytics dashboard |
+| `image9`  | an apparent **Worldline** product screenshot with real figures |
+| `image5`  | the **IMPS** mark |
+| `image3`  | a Czech **Fidoo** finance dashboard |
+
+Shipping those would present another company's advertising as Mindlogicx's
+own product, and a card-network logo on a payments page implies a
+relationship that does not exist. Trademark and reputational exposure, not a
+styling preference.
+
+**The five used carry no identifiable branding.** Licensing is still
+unconfirmed for all 21 — the deck records no source, licence or photographer
+— so they are placeholders until that is settled. All five are decorative;
+the deck's alt text describes someone else's product and is never reused.
+
+The five capability cards are **text only**: two of their images are in the
+withheld list, a third has an unidentified logo and a fourth has visible
+lorem ipsum. A grid where some cards have pictures and others do not reads as
+broken, so none do.
+
+### ⚠️ The hedging is load-bearing
+
+Section 5 is titled **"How the Platform Is Envisioned to Work"**. The deck
+runs ~18 qualifiers of that kind, plus two explicit disclaimers — settlement
+"through appropriately licensed or authorized financial partners", and
+"Platform under development". On a payments page those are the difference
+between describing an unbuilt product and claiming to already move other
+people's money. Seven are asserted in the sweep so a later edit that flattens
+them shows up.
+
+There is **no PCI DSS, ISO, RBI or PSD2 claim anywhere** in the deck, which
+is correct for a platform in development. Do not add a compliance badge row.
+
+The disclaimers are styled smaller than body copy but **not faint** —
+grey-500 on white is 4.73:1. A legal qualifier that is hard to read is worse
+than an absent one, because it looks like it is being hidden.
+
+### Author guidance kept off the page
+
+The deck's preamble (which says outright it "is designed for direct use by
+the UI/UX designer and website development team"), "8. SEO & Website
+Metadata" and "Recommendations for Website Implementation" are instructions
+to the builder, not words for the reader — same call as the HealthTech and
+Knowledge Engineering decks. All in `authorGuidance`. **Flywire**, named in
+the preamble as the model being followed, is a listed US competitor and never
+reaches the page. Asserted absent in the sweep.
+
+### Responsive
+
+Measured at real viewport widths, not by shrinking a container — media
+queries key off the viewport, so a container probe reports failures that do
+not exist and was discarded.
+
+| width | solutions | industries | feature | overflow |
+|---|---|---|---|---|
+| 1280 | 3-up | 4-up | 2-col | none |
+| 768 | 2-up | 2-up | 1-col | none |
+| 375 | 1-up | 1-up | 1-col | none |
+| 320 | 1-up | 1-up | 1-col | **zero leaf elements overflow** |
+
 ## The Careers form is a disclosure
 
 Hidden until "Apply Now", as in the original — but built as a real

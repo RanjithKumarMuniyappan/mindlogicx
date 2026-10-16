@@ -226,10 +226,11 @@ export const leadership = {
           img: '/assets/images/mlx/leaders/pradeep-kumar-kabade.webp',
         },
         {
-          // Relabelled by the client on 2026-10-12, from
-          // "Director & COO (MasterHealthPro)".
+          // Relabelled by the client twice: 2026-10-12 from
+          // "Director & COO (MasterHealthPro)", then 2026-10-15 from
+          // "Director & COO (MHP with Healthcare)".
           name: 'Sharmila Sathi Rao',
-          designation: 'Director & COO (MHP with Healthcare)',
+          designation: 'Director & COO (Healthcare)',
           img: '/assets/images/mlx/leaders/sharmila-sathi-rao.webp',
         },
       ],
@@ -392,7 +393,7 @@ export const philosophy = {
    * It is 4:3, which is what `.ls-media--4x3` wanted all along — the picture
    * it replaced was 0.94 and was being cropped to fit that frame.
    */
-  mainImg: '/assets/images/aboutus/innovation-hub.webp',
+  mainImg: '/assets/images/aboutus/philosophy-innovation.webp',
   subTitle: 'OUR PHILOSOPHY',
   title: 'Innovation at the intersection of everything we do',
   paragraphs: [
@@ -419,7 +420,7 @@ export const philosophy = {
 };
 
 export const whyChooseUs = {
-  mainImg: '/assets/images/mlx/about/why-choose-us.webp',
+  mainImg: '/assets/images/aboutus/why-choose-us.webp',
   subTitle: 'WHY MINDLOGICX',
   title: 'Why Choose Us?',
   reasons: [
@@ -453,7 +454,7 @@ export const whyChooseUs = {
 };
 
 export const dei = {
-  mainImg: '/assets/images/mlx/about/dei.webp',
+  mainImg: '/assets/images/aboutus/dei.webp',
   subTitle: 'OUR COMMITMENT',
   title: 'Diversity, Equity &amp; Inclusion',
   lead: 'As a global technology company we treat Diversity, Equity & Inclusion (DEI) not as a checklist, but as a strategic growth enabler such as:',

@@ -54,25 +54,42 @@ export const company = {
   address:
     '10/1B, Graphite India Main Rd, KEB Colony, Industrial Area, Whitefield, Bengaluru, Karnataka 560048',
   /*
-   * ⚠️ **Three of these five have no URL.**
+   * All five now have URLs — the missing three (Facebook, X, YouTube) came
+   * from the 2025 frontend's `components/Layouts/Footer.tsx` on 2026-10-15.
+   * LinkedIn and Instagram were already here and **match that source
+   * exactly**, which is a useful cross-check that the right accounts are
+   * being pointed at.
    *
-   * The comp shows Facebook, X, LinkedIn, Instagram and YouTube. Only the
-   * LinkedIn and Instagram addresses were ever supplied; the other three were
-   * **not invented** — guessing `facebook.com/mindlogicx` risks pointing the
-   * site's footer at a page the company does not control.
+   * Reachability checked, not assumed:
    *
-   * A `null` href renders the mark dimmed and non-interactive, the same way
-   * the Newsroom column handles a missing destination. Fill in the URL and it
-   * becomes a link with no other change.
+   *   facebook   200
+   *   linkedin   200
+   *   instagram  200
+   *   youtube    200
+   *   x          ⚠️ could not be verified — see below
    *
-   * Order is the comp's.
+   * ⚠️ **The X account is the one to confirm by hand.** The source writes it
+   * as `twitter.com/MindlogicxLtd`, which now redirects to
+   * `x.com/MindlogicxLtd`; the redirect target is used here so the link does
+   * not take an extra hop. x.com blocks automated requests, so whether that
+   * handle is still live and still the company's could not be established
+   * from here — the other four were.
+   *
+   * A `null` href still renders a mark dimmed and non-interactive, so
+   * emptying one degrades visibly rather than silently.
+   *
+   * Order is the comp's, which is also the source's.
    */
   social: [
-    { id: 'facebook', label: 'Facebook', href: null },
-    { id: 'x', label: 'X', href: null },
+    { id: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/Mindlogicxlimited/' },
+    { id: 'x', label: 'X', href: 'https://x.com/MindlogicxLtd' },
     { id: 'linkedin', label: 'LinkedIn', href: 'https://in.linkedin.com/company/mindlogicx' },
     { id: 'instagram', label: 'Instagram', href: 'https://www.instagram.com/mindlogicx/' },
-    { id: 'youtube', label: 'YouTube', href: null },
+    {
+      id: 'youtube',
+      label: 'YouTube',
+      href: 'https://www.youtube.com/channel/UCYeydK2EBcEFEDK0x8ueLaA',
+    },
   ],
 
   /*
@@ -433,7 +450,7 @@ export const whatWeDo = {
   lead: 'Institutions hold decades of knowledge — some written down, most of it not. Knowledge Engineering is the discipline of capturing both, and converting them into digital infrastructure the institution owns and governs.',
   quote:
     'Knowledge Engineering is the discipline of capturing implicit and explicit knowledge and converting it into digital infrastructure that is structured, governed and monetizable.',
-  image: '/assets/images/mlx/about/stand-1.webp',
+  image: '/assets/images/home/we-engineer-knowledge.webp',
   linkText: 'Discover Knowledge Engineering',
   link: '/knowledge-engineering',
   /** `icon` keys into the glyph set in `common/icons.jsx`. */
@@ -559,7 +576,7 @@ export const mindgenie = {
   ctaText: 'Discover MindGENIE',
   ctaLink: '/mindgenie',
   /** The hexagonal core of the orchestration diagram. Copied from the source. */
-  coreImage: '/assets/images/mindgenie.webp',
+  coreImage: '/assets/images/mindgenie.jpg',
 };
 
 /** The six agent classes, in the source's order. `glyph` keys into `icons.jsx`. */

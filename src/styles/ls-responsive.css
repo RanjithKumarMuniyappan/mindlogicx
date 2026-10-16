@@ -85,34 +85,18 @@
     font-size: 40px;
   }
 
-  /* The counters keep their rail here but everything around it tightens —
-     four columns inside a ~910px measure leaves about 160px per figure. */
-  .ls-why__metric {
-    min-height: 300px;
-    padding-left: 58px;
+  /* Four figures inside a ~910px measure leaves about 160px each, which is
+     not enough for a 54px number beside a 40px glyph. Two-up instead. */
+  .ls-why__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .ls-why__rail {
-    left: 26px;
-  }
-
-  .ls-why__glyph {
-    width: 52px;
-    height: 52px;
-  }
-
-  .ls-why__marker {
-    left: 48px;
+  .ls-why__panel {
+    padding: 40px;
   }
 
   .ls-why__value {
-    padding-left: 18px;
-    font-size: 54px;
-  }
-
-  .ls-why__label {
-    padding-left: 18px;
-    font-size: 19px;
+    font-size: 46px;
   }
 
   .ls-why__pillars {
@@ -426,24 +410,24 @@
     gap: 40px 32px;
   }
 
-  .ls-why__metric {
-    min-height: 0;
-    padding-left: 0;
-    align-content: start;
+  .ls-why__panel {
+    margin-top: 40px;
+    padding: 28px;
+    border-radius: 16px;
   }
 
-  .ls-why__rail,
-  .ls-why__marker {
-    display: none;
+  .ls-why__value {
+    font-size: 38px;
+    gap: 10px;
   }
 
-  .ls-why__value,
-  .ls-why__label {
-    padding-left: 0;
+  .ls-why__glyph {
+    width: 34px;
+    height: 34px;
   }
 
   .ls-why__pillars {
-    margin-top: 56px;
+    margin-top: 20px;
   }
 
   .ls-why__cta {
@@ -1015,4 +999,75 @@
     gap: 10px;
     padding: 22px 0;
   }
+}
+
+/* ---- Knowledge Engineering framework ---- */
+@media (max-width: 1100px) {
+  /* Five columns need ~200px each to hold a four-word stage title; below
+     that they go to a 3 + 2 grid, which keeps the left-to-right reading. */
+  .ls-kef { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 32px; }
+}
+
+@media (max-width: 700px) {
+  /*
+   * One column. The connecting rail turns vertical and moves to the left of
+   * each stage: a horizontal rail across a single column would be a stub
+   * beside every heading, which reads as a rendering fault.
+   */
+  .ls-kef { grid-template-columns: minmax(0, 1fr); row-gap: 28px; }
+
+  .ls-kef__stage { padding-top: 0; padding-left: 28px; }
+
+  .ls-kef__stage::before {
+    top: 6px;
+    bottom: -28px;
+    left: 7px;
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+
+  .ls-kef > li:first-child .ls-kef__stage::before { left: 7px; top: 6px; }
+  .ls-kef > li:last-child .ls-kef__stage::before { right: auto; bottom: auto; height: 0; }
+
+  .ls-kef__stage::after { top: 0; left: 0; }
+
+  .ls-kef__title { text-align: left; }
+  .ls-kef__item { text-align: left; }
+  .ls-kef__span { padding: 16px 20px; text-align: left; justify-content: flex-start; }
+}
+
+/* ---- Our Strength ---- */
+@media (max-width: 991px) {
+  /* One column: at 2-up the odd one out sits alone on a second row with a
+     rule down its left and nothing beside it, which reads as a mistake. */
+  .ls-strength { grid-template-columns: minmax(0, 1fr); }
+
+  .ls-strength > li + li .ls-strength__col {
+    /* The divider becomes horizontal once the columns stack. */
+    border-left: 0;
+    border-top: 1px solid var(--grey-200);
+    margin-top: 32px;
+    padding-top: 32px;
+  }
+
+  .ls-strength__col { padding-inline: 0; }
+}
+
+/* ---- HealthTech ---- */
+@media (max-width: 767px) {
+  .ls-ht__card { padding: 26px; }
+}
+
+/* ---- MediaX ---- */
+@media (max-width: 991px) {
+  .ls-mx__logo { width: 200px; }
+}
+
+/* ---- Finance ---- */
+@media (max-width: 991px) {
+  /* Four industry cards go two-up before they go one-up: at this width a
+     single column leaves the photographs wider than they are tall by a long
+     way, and the grid stops reading as a set. */
+  .ls-fin__status { font-size: 12px; }
 }

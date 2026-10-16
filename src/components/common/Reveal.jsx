@@ -16,6 +16,7 @@ export default function Reveal({
   effect = 'fadeInUp',
   delay = 0,
   className = '',
+  style,
   children,
   ...rest
 }) {
@@ -52,7 +53,15 @@ export default function Reveal({
     <Tag
       ref={ref}
       className={[className, 'wow', effect, shown ? 'animated' : ''].filter(Boolean).join(' ')}
-      style={delay ? { animationDelay: `${delay}ms` } : undefined}
+      /*
+       * Merged, not either-or. `style` used to be set from `delay` alone and
+       * then `{...rest}` was spread after it, so any caller passing its own
+       * `style` silently replaced the animation delay and the stagger
+       * vanished with no error. Pulling `style` out of `rest` and merging
+       * means both survive, and an explicit `animationDelay` from a caller
+       * still wins.
+       */
+      style={delay || style ? { ...(delay && { animationDelay: `${delay}ms` }), ...style } : undefined}
       {...rest}
     >
       {children}

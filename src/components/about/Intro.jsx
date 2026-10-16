@@ -55,8 +55,9 @@ export default function Intro() {
       <div className="ls-container">
         <div className="ls-intro2__top">
           <Reveal className="ls-intro2__brand" effect="fadeInUp">
-            {/* The lockup, not a heading: the page's h1 is above in
-                `PageHero`, and the comp opens this band with the mark. */}
+            {/* The lockup, not a heading: the comp opens this band with the
+                mark, and the page's h1 is "Who We Are?" in the column beside
+                it. */}
             <img
               className="ls-intro2__logo"
               src={company.logoColor}
@@ -68,10 +69,12 @@ export default function Intro() {
           </Reveal>
 
           <Reveal className="ls-intro2__who" effect="fadeInUp" delay={100}>
-            <h2 className="ls-intro2__title">
+            {/* The page's `h1` since 2026-10-15 — the "About Us" title band
+                above it was removed and this is the page's first heading. */}
+            <h1 className="ls-intro2__title">
               {firstWord}
               {rest && <span className="ls-intro2__title-accent"> {rest}</span>}
-            </h2>
+            </h1>
             <p className="ls-intro2__lead">{intro.whoWeAreLead}</p>
 
             <ul className="ls-intro2__pills">

@@ -49,7 +49,8 @@ import Pill from '../components/common/Pill';
  * - The validation messages contain typos as written: "charactors",
  *   "atleast", "alteast", and **"Massage is required"**. Carried verbatim
  *   like all other copy; say the word and they are a one-line fix each.
- * - Only **one** office has an address. The map implied four.
+ * - **Two** offices have addresses since 2026-10-15 (Bengaluru and Kuala
+ *   Lumpur). The source's map implied four.
  */
 export default function ContactUs() {
   const { form } = contactPage;
@@ -105,9 +106,17 @@ export default function ContactUs() {
           <div className="ls-contact">
             {/* ---- the details ---- */}
             <Reveal className="ls-contact__info" effect="fadeInUp">
+              {/* Keyed on `id`, not `type` — there is more than one address
+                  box since 2026-10-15, and `type` is no longer unique. */}
               {contactPage.infoBoxes.map((box) => (
-                <div className="ls-contact__box" key={box.type}>
+                <div className="ls-contact__box" key={box.id ?? box.type}>
                   {box.label && <h2 className="ls-contact__boxlabel">{box.label.trim()}</h2>}
+
+                  {/* The legal entity, where one is recorded. It heads the
+                      address rather than replacing the label: the Bengaluru
+                      box has both ("Head Office" / "Mindlogicx Infratec
+                      Limited"), the Kuala Lumpur box has only the name. */}
+                  {box.name && <p className="ls-contact__entity">{box.name}</p>}
 
                   {box.lines?.map((line) => (
                     <p className="ls-contact__line" key={line.slice(0, 30)}>

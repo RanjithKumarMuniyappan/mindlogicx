@@ -22,11 +22,11 @@ const SOCIAL_MARKS = { facebook: Facebook, x: X, linkedin: LinkedIn, instagram: 
  *
  * ## The social row and countries strip
  *
- * Five marks and six countries, from a supplied comp. **Three of the five
- * social marks have no URL and three-quarters of the flags do not exist yet**
- * — see the notes on `company.social` and `company.presence`. Both degrade
- * visibly rather than silently: a mark with no href is dimmed and
- * non-interactive, and a country with no flag shows its ISO code.
+ * Five marks and seven countries. **All five social marks have URLs since
+ * 2026-10-15** — the missing three came from the 2025 frontend's footer; see
+ * the note on `company.social`, including which one still needs confirming by
+ * hand. A mark with no href still degrades visibly: dimmed and
+ * non-interactive, rather than a link that goes nowhere.
  *
  * `footer.callout.title` is deliberately not rendered. It is word for word the
  * CTA band that used to sit above this footer, and printing it twice in 200px

@@ -7,51 +7,46 @@ import { ContentIcon, ArrowRight } from '../common/icons';
 /**
  * "Why Mindlogicx" — the credibility band.
  *
- * Reproduced from the Mindlogicx 2025 frontend
- * (`components/sections/Metrics.tsx`, which renders
- * `homeSections.credibility`), structure for structure:
+ * ## Redesigned 2026-10-16, and the background went with it
  *
- * - a two-up head — eyebrow and headline left, the body right-aligned beside it
- * - four counters, each riding a 335px vertical rule with a 60px circular
- *   glyph on it, alternate columns bottom-aligned for a zigzag rhythm
- * - a small ring-and-dot marker beside each figure
- * - four trust pillars in translucent cards
- * - the closing link
+ * This section has been reworked more than any other on the site. In order:
+ * a full-bleed photograph with white type; flat `--grey-50`; a pale
+ * two-brand wash; a tinted purple→cyan gradient; solid cyan; then the brand
+ * gradient at full strength.
  *
- * ## The photograph was removed on 2026-10-14
+ * **The full-strength gradient could not carry its own text.** Purple and
+ * cyan sit on opposite sides of the readable line — ink needs the light end,
+ * white needs the dark end — so with white copy, four of the six text styles
+ * measured below AA, the heading worst at 2.89:1 because 320° put cyan
+ * behind it.
  *
- * At the client's request this is now a plain `--smoke` band, like the rest of
- * the page. `why-mindlogicx.jpg` is no longer rendered; it is still in
- * `public/` and still `whyMindlogicx.image` in `site.js`.
+ * The fix is structural rather than another colour: **the type no longer sits
+ * on a brand colour at all.**
  *
- * **It was not just a background.** The whole band was built as white-on-dark:
- * the picture is genuinely dark (its *brightest* pixel is 0.024 relative
- * luminance, so white type held 14.1:1 at the worst point in the frame) and
- * `--ink` sat behind it as the fallback. Taking the picture away means every
- * one of those colours had to inverted — headings and figures to ink, body to
- * `--grey-500`, the counters' rail to `--grey-200`, the glyph discs from a
- * dark plate with cyan on them to a purple tint with purple on it, and the
- * trust pillars from 5%-white-on-ink to real white cards with a hairline.
+ * - The band is `--smoke`, like the rest of the page.
+ * - The four figures move into **one dark ink panel**, where cyan is the
+ *   colour that reads (7.38:1) and white labels are 18.9:1.
+ * - The trust pillars become white cards on the smoke.
  *
- * The one survivor is the glyph's **hover** state, which is solid purple and
- * therefore still a dark surface — its icon stays white.
+ * Everything clears AA with margin, and the ink panel gives the band the
+ * weight the gradient was reaching for without putting copy on a hue.
  *
- * The old note here warned that this band and MindGENIE above it were both
- * inverse and only the photograph separated them. That is resolved rather
- * than broken: MindGENIE is now `--white` and this is `--smoke`, so the two
- * alternate like every other pair on the page.
+ * ## What was dropped
  *
- * ## The line-and-glyph rail is desktop only
+ * The counters used to ride a **335px vertical rule** with a 60px glyph disc
+ * on it, alternate columns bottom-aligned for a zigzag, and a ring-and-dot
+ * marker beside each figure. All of that is gone: it was built for a
+ * full-bleed photograph, it reserved a block of dead height around two-line
+ * figures, and it was dropped entirely below 1024px anyway — so the desktop
+ * and mobile versions of this band were two different designs.
  *
- * Below 1024px the rail and its 335px band are dropped rather than scaled:
- * reserving that height around a two-line figure leaves a block of dead space,
- * which is the source's reasoning too. The counters keep their natural height
- * and go two-up, then one-up.
+ * The figures now sit in a plain 2×2 grid inside the panel, which is one
+ * design at every width. `LINE_HEIGHT`, `.ls-why__rail`, `.ls-why__glyph`,
+ * `.ls-why__marker` and `.ls-why__metric--low` are all retired with it.
+ *
+ * `whyMindlogicx.image` is still in `site.js` and still unrendered — the
+ * photograph came off on 2026-10-14.
  */
-
-/** The fixed height of the rule each counter rides, from the source. */
-const LINE_HEIGHT = 335;
-
 export default function WhyMindlogicx() {
   return (
     <section className="ls-section ls-section--smoke ls-why">
@@ -73,41 +68,30 @@ export default function WhyMindlogicx() {
         {/*
           A description list: the caption is the term, the figure its
           description. `dt` precedes `dd` because the content model requires
-          it; the grid rows below put the figure on top where the comp wants
-          it. Each item is wrapped in the single `div` that `dl` permits, so
-          the decorations live inside the `dd` rather than as extra children
-          of the wrapper — which would not be conforming.
+          it; the CSS puts the figure on top. Each item is wrapped in the
+          single `div` that `dl` permits.
         */}
-        <dl className="ls-why__metrics">
-          {metrics.map((m, i) => (
-            <Reveal
-              key={m.label}
-              as="div"
-              className={`ls-why__metric${i % 2 === 1 ? ' ls-why__metric--low' : ''}`}
-              effect="fadeInUp"
-              delay={i * 90}
-            >
-              <dt className="ls-why__label">{m.label}</dt>
-              <dd className="ls-why__value">
-                {/* The rule, with the glyph riding it — centred on the line
-                    for the first row, pinned near the top for the staggered
-                    one. Both are positioned against the item, not the `dd`. */}
-                <span
-                  className="ls-why__rail"
-                  aria-hidden="true"
-                  style={{ height: LINE_HEIGHT }}
-                >
-                  <span className="ls-why__glyph">
+        <Reveal className="ls-why__panel" effect="fadeInUp">
+          <dl className="ls-why__metrics">
+            {metrics.map((m, i) => (
+              <Reveal
+                key={m.label}
+                as="div"
+                className="ls-why__metric"
+                effect="fadeInUp"
+                delay={i * 90}
+              >
+                <dd className="ls-why__value">
+                  <span className="ls-why__glyph" aria-hidden="true">
                     <ContentIcon name={m.glyph} />
                   </span>
-                </span>
-                <span className="ls-why__marker" aria-hidden="true" />
-
-                <Counter value={m.value} suffix={m.suffix} />
-              </dd>
-            </Reveal>
-          ))}
-        </dl>
+                  <Counter value={m.value} suffix={m.suffix} />
+                </dd>
+                <dt className="ls-why__label">{m.label}</dt>
+              </Reveal>
+            ))}
+          </dl>
+        </Reveal>
 
         <ul className="ls-why__pillars">
           {trustPillars.map((p, i) => (
