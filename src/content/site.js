@@ -576,7 +576,7 @@ export const mindgenie = {
   ctaText: 'Discover MindGENIE',
   ctaLink: '/mindgenie',
   /** The hexagonal core of the orchestration diagram. Copied from the source. */
-  coreImage: '/assets/images/mindgenie.jpg',
+  coreImage: '/assets/images/mindgenie.png',
 };
 
 /** The six agent classes, in the source's order. `glyph` keys into `icons.jsx`. */

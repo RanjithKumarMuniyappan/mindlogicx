@@ -1515,6 +1515,75 @@ stack and the divider turns horizontal — at 2-up the odd one out sits alone on
 a second row with a rule down its left and nothing beside it, which reads as a
 mistake.
 
+### Why Mindlogicx — redesigned, and the gradient is gone (2026-10-16)
+
+This band has been reworked more than anything else on the site:
+
+1. full-bleed photograph, white type
+2. flat `--grey-50`
+3. a pale two-brand wash
+4. a tinted purple→cyan gradient
+5. solid cyan
+6. the brand gradient at full strength, white type — **four of six text
+   styles below AA**, the heading worst at 2.89:1 because 320° put cyan
+   behind it
+7. **this**
+
+The fix is structural, not another colour: **the type no longer sits on a
+brand colour at all.** The band is `--smoke`; the four figures moved into
+**one dark ink panel**, where cyan reads at 7.38:1 and white labels at
+18.9:1; the trust pillars became white cards.
+
+Measured after: all eight text styles pass, worst **4.73:1** (body copy on
+smoke — `--grey-500`, the same as everywhere else on the site).
+
+#### What was dropped with it
+
+The counters used to ride a **335px vertical rule** with a 60px glyph disc,
+alternate columns bottom-aligned for a zigzag, and a ring-and-dot marker per
+figure. All retired — `.ls-why__rail`, `.ls-why__marker`,
+`.ls-why__metric--low`, `.ls-why__bg` and `LINE_HEIGHT`.
+
+That decoration was built for a full-bleed photograph, reserved a block of
+dead height around two-line figures, and **was dropped entirely below 1024px
+anyway** — so the desktop and mobile versions of this band were two different
+designs. The figures now sit in a plain grid: 4-up, 2-up, 1-up, one design at
+every width.
+
+> ⚠️ **A clipped figure that no overflow check catches.** At 375px the
+> metrics were 2-up in ~123px cells while a rule in the **767px** block keeps
+> the figure at 44px (it wins over the 991px block's 38px — later wins at
+> equal specificity). "10M+" measures **152px**. It was overflowing its cell
+> and being silently clipped: the page does not scroll sideways when a grid
+> cell overflows, so a page-level check reports clean and the figure just
+> loses its last character. Caught by measuring `scrollWidth` on
+> `.ls-why__value` itself — a leaf-element sweep misses it too, because that
+> element has children.
+>
+> Fixed with a single column below 576px: 278px a figure instead of 123px.
+
+Responsive verified at 1280 / 768 / 375 / 320px — no element in the band
+overflows at any of them, and the home band rhythm still alternates with no
+two adjacent sections sharing a tone.
+
+### "Our Strength" is three columns, not three cards
+
+It was a 3-up grid of tinted `Card`s sitting **directly above "Why
+Mindlogicx", which is four more plates** — two plate grids back to back read
+as one long grid rather than as two separate arguments. The six-colour wash
+rotation also implied a grouping that is not there: Strategy, Brand and
+Technology are three facets of one claim, not three categories.
+
+Now three columns divided by vertical hairlines, no plates and no tints: mono
+label, title, short accent rule, paragraph.
+
+Deliberately **not** the hairline-row treatment `/about` uses for "Our
+Principles". That one is rows because it has nine items and long paragraphs;
+this has three and short ones, so it goes across. Below 991px the columns
+stack and the divider turns horizontal — at 2-up the odd one out sits alone on
+a second row with a rule down its left and nothing beside it, which reads as a
+mistake.
+
 ### The Why Mindlogicx band is the client's gradient — and it fails AA
 
 `linear-gradient(320deg, #712d7b, #00aeef)`, specified by the client verbatim,
@@ -2029,6 +2098,169 @@ not exist and was discarded.
 | 768 | 2-up | 2-up | 1-col | none |
 | 375 | 1-up | 1-up | 1-col | none |
 | 320 | 1-up | 1-up | 1-col | **zero leaf elements overflow** |
+
+## MindGENIE restructured around a landscape lockup (2026-10-16)
+
+The artwork for this section has changed shape three times: the
+agent-orchestration diagram, then a square 840×840 character, and now a
+**landscape "Powered by MindGENIE" lockup** — character plus wordmark,
+**486×240 with transparency**.
+
+The layout had not kept up. A wide mark was still being placed in a square
+right-hand column capped at 500px, which is why it looked small: the column
+constrained its *width*, and a landscape image needs width.
+
+It now **opens the section at full width**, with the copy running two-up
+beneath it. That also suits what the mark says — "Powered by MindGENIE" is an
+opening statement, not a side illustration.
+
+`.ls-mg__head` kept its two columns but became copy-only: headline left,
+supporting copy and the definition right, aligned to the **top** rather than
+centred. With the picture gone from that row there is nothing to centre
+against, and a 2-line headline beside a 6-line column looked adrift.
+
+> ⚠️ **560px is a ceiling, not a preference.** The file is 486px wide, so the
+> desktop size is already a ~15% upscale, and on a 2× screen it is soft above
+> roughly **243 CSS px** whatever the CSS says. It cannot be made meaningfully
+> larger without a bigger export — that is a property of the file. The one
+> width where it is genuinely sharp is the 320px mobile cap.
+
+No plate behind it: the artwork is transparent and sits on the band.
+
+Measured: 560×277 at 1280px (1.15× upscale), 320×158 at 375px (0.66×, sharp),
+head collapses to one column, no overflow at either width.
+`.ls-mg__portrait` and its mobile rule are retired; `.ls-mg__visual` is gone.
+
+## The sector cards were cropping 44% off every image (2026-10-16)
+
+The sector artwork is **410×461 portrait** (ratio 0.889). The card's image
+frame was `aspect-ratio: 16 / 10` — landscape, 1.6 — with `object-fit:
+cover`. Measured across all five cards in the browser: **44% of each picture
+was being discarded**, and because the subjects are composed portrait, what
+went was the top and bottom of each one.
+
+The frame is now `aspect-ratio: 410 / 461` — the artwork's own ratio — so
+nothing is cropped. Measured after: **0% on all five**. The image area grew
+from 323×202 to 323×363, and the cards from ~380px to 541px tall, which is
+the honest consequence of portrait source art in a full-column-width card.
+
+> ⚠️ **That ratio belongs to the files, not to the design.** Swap in
+> landscape artwork and it must change with it, or the new pictures get
+> pillarboxed instead of cropped.
+
+Checked at 375px too: 0% cropped, card 495px, no page overflow. The two
+elements that report as overflowing inside the band are Swiper's container
+and track — a carousel track is *meant* to be wider than its viewport, which
+is how it slides. Autoplay gating re-verified afterwards: still idle at the
+top of the page for 5s.
+
+## The sector carousel waits for the reader (2026-10-16)
+
+Autoplay used to start the moment the page loaded. On a home page this long
+that meant the carousel had usually rewound past all five cards before anyone
+scrolled far enough to see it — **the band sits 1935px down**, so the movement
+was spent on an empty screen.
+
+Swiper is still *configured* to autoplay, and that autoplay is **stopped
+immediately in `onSwiper`**; an `IntersectionObserver` on the section starts
+it when the band is genuinely in view, then disconnects.
+
+> Stopping at init rather than omitting the config is the load-bearing part:
+> `swiper.autoplay` only exists when the Autoplay module has something to
+> configure. Omit the config and there is nothing to `.start()` later.
+
+Threshold is **0.35** — about a third of the band on screen — so it begins
+when the cards are actually visible, not as the first pixel crosses the fold.
+
+**It never starts under `prefers-reduced-motion`.** A carousel that advances
+on its own is exactly what WCAG 2.2.2 covers; the prev/next controls still
+work, so nothing becomes unreachable.
+
+Verified: parked at the top of the page for **9 seconds** — nearly three
+3500ms cycles — the active slide stayed at index 0 and the track transform
+never changed. Scrolling down to 80% visibility, it advanced 0 → 1 → 2 on
+consecutive ticks.
+
+## Why Mindlogicx lost its closing link (2026-10-16)
+
+Removed at the client's request. `whyMindlogicx.ctaText` and `ctaLink` are
+still in `site.js`, unrendered. `Link` and `ArrowRight` were dropped from the
+component's imports with it — the band now contains **no links at all**,
+which is worth knowing before anyone wonders where the section's outbound
+route went.
+
+## Legal (`/voice-of-law`) rebuilt from the client's deck — 2026-10-16
+
+The page ported from the 2025 frontend is **entirely replaced**. Verified in
+the browser: no "FREE Legal", "VOL platform", "vetted network", "pan India" or
+"Immediate resolution" string survives. `voice-of-law.js` still holds the old
+content, unrendered.
+
+### The new deck resolves most of what was flagged
+
+| old problem | now |
+|---|---|
+| no `h1` anywhere | real `h1` |
+| "FREE Legal **advise**" — free-of-charge promise + typo | gone; no free-advice promise anywhere |
+| SOS: "Immediate resolution … threat to life and property" | "Location-aware **guidance** to relevant emergency contacts … **subject to regional availability**" |
+| "carefully vetted network", "pan India" | gone |
+| "VOL" never expanded | gone |
+| six grammar/spelling errors | the new deck has none |
+| orphan block claiming SOC 2, ISO 27001, GDPR, "60 percent" | not carried over |
+
+The SOS rewrite is the single biggest improvement: guidance *toward* help,
+hedged by availability, instead of a promise of intervention.
+
+### ⚠️ A disclaimer the deck asks for does not exist
+
+The deck's own notes require that *"Citizen-facing services should
+distinguish general legal information from professional legal advice."*
+**No sentence doing that was written.** The only statement of its kind is on
+the professional side ("…legal interpretation, advice, and decisions remain
+under qualified human oversight"), which does not cover citizens.
+
+It was **not drafted** — inventing regulated disclaimer wording would be worse
+than leaving the gap visible. `legal.requiredDisclaimer` records it. The
+client must supply the text, and the page needs a **Bar Council of India Rule
+36** review regardless.
+
+### ⚠️ Harvey must not reach the page
+
+The deck names **Harvey** as a functional benchmark and says in the same
+breath that *"It should not be mentioned on the public webpage."* It lives in
+`authorGuidance` only. Asserted absent in the sweep.
+
+### ⚠️ Two naming mismatches
+
+The deck suggests the slug `/legal`; the route stays `/voice-of-law` because
+Technology → Legal points there. More awkwardly, **"Voice of Law" appears
+nowhere in the deck** — it says the platform name "has not been finalised" —
+so the route and the menu label name a product the page never mentions.
+
+### A design-system gap this page exposed
+
+`.ls-grid--2` had **no responsive rule at all**. It was added for IntelliTUTE's
+"Why" pairs, which collapse via their own `.ls-prod__whygrid` override, so the
+gap stayed hidden until this page used the bare class. At 375px two columns
+leave ~155px a cell and "Legal Professional Intelligence" overflowed it —
+taking the page's horizontal scroll with it.
+
+`--3` and `--4` already collapsed; `--2` now does too, so the next component
+to use it does not inherit the same bug. Re-checked IntelliTUTE afterwards:
+unaffected.
+
+> Also worth recording: the content module names the hero's two CTAs
+> **differently** — the in-page anchor is `target`, the route is `link`.
+> Assuming `link` threw `Cannot read properties of undefined (reading
+> 'startsWith')` and the error boundary swallowed the whole page. The
+> component reads both now.
+
+### Images
+
+**The deck references none.** The three on the page are reused from the old
+build, matched by what they actually show. The citizen band has a picture
+only because one legacy photograph happens to show a citizen rather than a
+lawyer — a vertical built around citizen rights deserves artwork of its own.
 
 ## The Careers form is a disclosure
 

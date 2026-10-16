@@ -25,12 +25,22 @@ import { ContentIcon, ArrowRight } from '../common/icons';
  * The git history has the ink version if it is ever wanted back; flipping the
  * tone alone would leave the type unreadable.
  *
- * ## The visual
+ * ## The visual — restructured 2026-10-16
  *
- * The agent-orchestration diagram (`AgentOrchestration.jsx`) was replaced with
- * the MindGENIE character at the client's request. **The component is still in
- * the tree and still imported by nothing else** — restoring it is swapping the
- * `<img>` back for `<AgentOrchestration />`.
+ * The artwork changed shape. It began as the agent-orchestration diagram
+ * (`AgentOrchestration.jsx`, still in the tree, imported by nothing), became
+ * the square MindGENIE character, and is now a **landscape "Powered by
+ * MindGENIE" lockup** — character plus wordmark, 486×240 with transparency.
+ *
+ * A wide mark in a square right-hand column is the wrong shape for it and
+ * kept it small, so it now **opens the section at full width** and the copy
+ * runs two-up beneath it. That also suits what the mark says: "Powered by
+ * MindGENIE" is an opening statement, not a side illustration.
+ *
+ * ⚠️ **The file is only 486px wide.** It is displayed at up to 560px, which
+ * is already a slight upscale, and on a 2× screen it is effectively soft
+ * above ~243 CSS px. It cannot be made meaningfully bigger without a larger
+ * export — that is a property of the file, not of this layout.
  *
  * ## What changed in the port, and why
  *
@@ -50,6 +60,22 @@ export default function MindGenie() {
   return (
     <section className="ls-section ls-section--white ls-mg">
       <div className="ls-container">
+        {/*
+          The lockup opens the section rather than sitting beside the copy.
+
+          It is a landscape "Powered by MindGENIE" mark — character plus
+          wordmark — so a square slot in a right-hand column was the wrong
+          shape for it and kept it small. Leading with it lets it run to its
+          full native width, and "Powered by MindGENIE" reads as the section's
+          opening statement, which is what the artwork says.
+
+          Decorative: the eyebrow, headline and definition below carry the
+          meaning, and the mark's own wordmark is repeated in the copy.
+        */}
+        <Reveal className="ls-mg__lockup" effect="fadeInUp">
+          <img src={mindgenie.coreImage} alt="" aria-hidden="true" />
+        </Reveal>
+
         <div className="ls-mg__head">
           <Reveal className="ls-mg__intro" effect="fadeInUp">
             <p className="ls-wwd__eyebrow">
@@ -58,6 +84,9 @@ export default function MindGenie() {
             </p>
 
             <h2 className="ls-h2 ls-mg__title">{mindgenie.headline}</h2>
+          </Reveal>
+
+          <Reveal className="ls-mg__intro" effect="fadeInUp" delay={120}>
             <p className="ls-lead ls-mg__body">{mindgenie.body}</p>
 
             {/* The definition, marked by a rule rather than quotation marks —
@@ -68,20 +97,6 @@ export default function MindGenie() {
               {mindgenie.ctaText}
               <ArrowRight />
             </Link>
-          </Reveal>
-
-          <Reveal className="ls-mg__visual" effect="fadeInRight">
-            {/* The MindGENIE character, in place of the agent-orchestration
-                diagram that was here. Decorative: the headline, the definition
-                and the six agent cards below carry the meaning, and the
-                picture restates none of it. */}
-            <img
-              className="ls-mg__portrait"
-              src={mindgenie.coreImage}
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-            />
           </Reveal>
         </div>
 

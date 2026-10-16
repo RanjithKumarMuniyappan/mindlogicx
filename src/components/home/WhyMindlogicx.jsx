@@ -1,8 +1,7 @@
-import { Link } from 'react-router-dom';
 import { whyMindlogicx, metrics, trustPillars } from '../../content/site';
 import Reveal from '../common/Reveal';
 import Counter from '../common/Counter';
-import { ContentIcon, ArrowRight } from '../common/icons';
+import { ContentIcon } from '../common/icons';
 
 /**
  * "Why Mindlogicx" — the credibility band.
@@ -104,12 +103,8 @@ export default function WhyMindlogicx() {
           ))}
         </ul>
 
-        <Reveal className="ls-why__cta" effect="fadeInUp">
-          <Link className="ls-mg__cta" to={whyMindlogicx.ctaLink}>
-            {whyMindlogicx.ctaText}
-            <ArrowRight />
-          </Link>
-        </Reveal>
+        {/* The closing link was removed 2026-10-16 at the client's request.
+            `whyMindlogicx.ctaText` and `ctaLink` are still in `site.js`. */}
       </div>
     </section>
   );

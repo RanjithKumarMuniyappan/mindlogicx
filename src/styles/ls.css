@@ -2121,11 +2121,17 @@ address {
    the site. See MindGenie.jsx.
    ======================================================================== */
 
+/*
+ * Copy only now — the visual moved above it (see `.ls-mg__lockup`). Headline
+ * left, supporting copy right, aligned to the top rather than centred: with
+ * the picture gone from this row there is nothing to centre against, and a
+ * 2-line headline beside a 6-line column looked adrift.
+ */
 .ls-mg__head {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 80px;
-  align-items: center;
+  gap: 32px 80px;
+  align-items: start;
 }
 
 /*
@@ -4271,7 +4277,24 @@ address {
   position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  /*
+   * The artwork's own ratio, not a chosen one.
+   *
+   * The sector images are **410×461 portrait** (0.889) and this frame was
+   * `16 / 10` landscape (1.6) with `object-fit: cover` — so **44% of every
+   * picture was cropped away**, measured in the browser across all five.
+   * They are composed portrait, so what went was the top and bottom of each
+   * subject.
+   *
+   * `410 / 461` makes the frame exactly the artwork, so nothing is cropped
+   * and the full image is visible. It makes the cards taller, which is the
+   * consequence of honouring portrait source art in a card that is as wide
+   * as the column allows.
+   *
+   * ⚠️ **This ratio belongs to the files.** Swap in landscape artwork and
+   * this must change with it, or the new pictures get pillarboxed instead.
+   */
+  aspect-ratio: 410 / 461;
   overflow: hidden;
   /* Tighter than the card's own radius, so the frame reads as a frame rather
      than as two rounded rectangles of the same curve. */
@@ -5741,13 +5764,28 @@ a.ls-footer__socialbtn:hover {
  * old slot cropped a 1:1 SVG that was drawn to fill it, and cropping a
  * character cuts off a head or a hand.
  */
-.ls-mg__portrait {
+/*
+ * The "Powered by MindGENIE" lockup, leading the section.
+ *
+ * ⚠️ **560px is a deliberate ceiling, not a preference.** The file is
+ * 486×240, so this is already a ~15% upscale; on a 2× screen it is soft
+ * above roughly 243 CSS px whatever this value says. Raising it further only
+ * makes the softness more obvious — a larger export is the only real fix.
+ *
+ * No plate behind it: the artwork is transparent and sits on the band.
+ */
+.ls-mg__lockup {
+  display: block;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.ls-mg__lockup img {
   display: block;
   width: 100%;
-  max-width: 500px;
+  max-width: 560px;
   height: auto;
   margin-inline: auto;
-  object-fit: contain;
 }
 
 /* ========================================================================
@@ -6171,4 +6209,69 @@ a.ls-footer__socialbtn:hover {
   margin-top: 28px;
   /* 8.08:1 on the ink band. */
   color: rgb(255 255 255 / 72%);
+}
+
+/* ---- Legal vertical (/voice-of-law) ---- */
+
+.ls-legal__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/*
+ * The conceptual architecture: four layers read top to bottom, the rail
+ * deepening down the stack. Deliberately a different shape from the
+ * Knowledge Engineering framework's horizontal stages (`.ls-kef`) — this one
+ * is a funnel, sources through a processing layer into two audiences, not a
+ * sequence of equal steps.
+ */
+.ls-legal__layers {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ls-legal__layer {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr);
+  gap: 16px 40px;
+  align-items: center;
+  padding: 24px 28px;
+  background: var(--grey-100);
+  border-radius: var(--radius-card, 8px);
+  border-left: 4px solid
+    color-mix(in srgb, var(--brand-purple) var(--layer-depth, 100%), transparent);
+}
+
+.ls-section--smoke .ls-legal__layer {
+  background: var(--white);
+}
+
+.ls-legal__layertitle {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/*
+ * The deck writes these as one middle-dot separated string. They are a real
+ * list here, so a screen reader announces four or five items rather than one
+ * run-on line, and they wrap per item instead of mid-phrase.
+ */
+.ls-legal__nodes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ls-legal__nodes li {
+  padding: 7px 14px;
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--accent-text);
+  background: var(--tint-purple-50);
+  border-radius: 99px;
 }

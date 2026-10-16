@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y, Autoplay, Navigation } from 'swiper/modules';
@@ -14,6 +15,26 @@ import 'swiper/css/navigation';
  * A heading block with a call to action on its right, then five photographic
  * cards. Three show at a time; the rest advance one at a time, right to left,
  * with prev/next controls.
+ *
+ * ## Autoplay waits for the reader (2026-10-16)
+ *
+ * It used to start the moment the page loaded, so on a long home page the
+ * carousel had usually rewound to the first card again before anyone scrolled
+ * far enough to see it — the movement was spent on an empty screen.
+ *
+ * Swiper is now told to autoplay, and that autoplay is **stopped immediately
+ * on init**; an `IntersectionObserver` starts it when the section is actually
+ * in view, then disconnects. Stopping at init rather than omitting the config
+ * matters: `swiper.autoplay` only exists when the Autoplay module has
+ * something to configure, so omitting it would leave nothing to start later.
+ *
+ * The threshold is 0.35 — about a third of the band on screen — so it begins
+ * when the cards are genuinely visible rather than as the first pixel crosses
+ * the fold.
+ *
+ * **It never starts under `prefers-reduced-motion`.** A carousel that
+ * advances on its own is exactly what WCAG 2.2.2 is about; the prev/next
+ * controls still work, so nothing is unreachable.
  *
  * ## On Swiper
  *
@@ -70,8 +91,32 @@ import 'swiper/css/navigation';
  *   a real `<button>` — focusable and announced — but does nothing yet.
  */
 export default function Industries() {
+  const swiperRef = useRef(null);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return undefined;
+
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || typeof IntersectionObserver === 'undefined') return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          swiperRef.current?.autoplay?.start();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="ls-section ls-section--white ls-ind">
+    <section className="ls-section ls-section--white ls-ind" ref={sectionRef}>
       <div className="ls-container">
         {/*
           Heading, then the lead on its own full-width row — both set on a
@@ -92,6 +137,12 @@ export default function Industries() {
         <Swiper
           className="ls-ind__swiper"
           modules={[Autoplay, Navigation, A11y]}
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+            /* Configured above, but held until the reader arrives — see the
+               note at the top of this file. */
+            swiper.autoplay?.stop();
+          }}
           spaceBetween={24}
           slidesPerView={1.15}
           /*
