@@ -4818,6 +4818,9 @@ a.ls-footer__socialbtn:hover {
   color: var(--footer-text);
 }
 
+/* ⚠️ Unused since 2026-10-16 — the "Company" and "Products" headings were
+   removed from the footer. The rule is kept because the columns still exist
+   and may want labelling again; nothing references it today. */
 .ls-footer__coltitle {
   font-size: 14px;
   font-weight: 500;
@@ -6392,17 +6395,19 @@ a.ls-footer__socialbtn:hover {
  * 6.88:1 image and sitting it beside five 40px buttons would squeeze it back
  * to the small size it was moved out of the brand column to escape.
  */
+/*
+ * The countries strip, right-aligned. The socials moved back into the brand
+ * column on 2026-10-16, so this row holds one image.
+ *
+ * No top spacing (item 4): the columns above end on their own link spacing
+ * and the strip is mostly whitespace at its top edge, so anything here
+ * doubled the gap.
+ */
 .ls-footer__meta {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 24px;
-  margin-top: 48px;
-}
-
-.ls-footer__meta .ls-footer__social {
-  margin-top: 0;
   justify-content: flex-end;
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .ls-footer__meta .ls-footer__presence {
@@ -6433,4 +6438,36 @@ a.ls-footer__socialbtn:hover {
   grid-auto-flow: column;
   gap: 12px 32px;
   justify-content: start;
+}
+
+/* In the brand column, under the blurb (2026-10-16). It was briefly in the
+   right-aligned meta row; the flags strip has that row to itself now. */
+.ls-footer__brand .ls-footer__social {
+  margin-top: 24px;
+  justify-content: flex-start;
+}
+
+/*
+ * `--wide`: a section intro and its prose at the full container measure.
+ *
+ * `.ls-intro` caps at 760px and `.ls-ke__prose` at 72ch — both deliberate for
+ * a reading column, but they left a handful of bands visibly narrower than
+ * the grids and feature rows around them. Applied per section rather than
+ * raised globally, because the cap is right for most of them.
+ *
+ * ⚠️ The usual caveat: at 1152px this puts roughly 150 characters on a line,
+ * well past the 60–80 that is comfortable. It suits a short lead and a couple
+ * of sentences, not long-form prose.
+ */
+.ls-intro--wide,
+.ls-ke__prose--wide {
+  max-width: none;
+}
+
+/* "Our Commitment" on /ai-first: the heading ran to four lines at the
+   inherited size. Fluid 28–44px holds it to two on a desktop. */
+.ls-aif__commitheading--tight {
+  font-size: clamp(24px, 3.2vw, 44px);
+  max-width: none;
+  text-wrap: balance;
 }

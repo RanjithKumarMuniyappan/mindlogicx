@@ -221,8 +221,12 @@ export default function Finance() {
 
       <section className="ls-section ls-section--white" id={how.id}>
         <div className="ls-container">
-          <SectionIntro eyebrow={how.subheading} title={how.heading} />
-          <div className="ls-ke__prose">
+          <SectionIntro
+            eyebrow={how.subheading}
+            title={how.heading}
+            className="ls-intro--wide"
+          />
+          <div className="ls-ke__prose ls-ke__prose--wide">
             {how.body.map((p) => (
               <p className="ls-body ls-ke__para" key={p.slice(0, 40)}>
                 {p}
@@ -267,8 +271,14 @@ export default function Finance() {
 
       <section className="ls-section ls-section--white" id={vision.id}>
         <div className="ls-container">
-          <SectionIntro eyebrow={vision.subheading} title={vision.heading} />
-          <div className="ls-ke__prose">
+          {/* Full container width — see the note on the Legal page's
+              equivalent band. */}
+          <SectionIntro
+            eyebrow={vision.subheading}
+            title={vision.heading}
+            className="ls-intro--wide"
+          />
+          <div className="ls-ke__prose ls-ke__prose--wide">
             {vision.body.map((p) => (
               <p className="ls-body ls-ke__para" key={p.slice(0, 40)}>
                 {p}

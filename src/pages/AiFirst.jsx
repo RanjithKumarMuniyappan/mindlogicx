@@ -130,7 +130,12 @@ export default function AiFirst() {
       {/* MindGENIE */}
       <section className="ls-section ls-section--white">
         <div className="ls-container">
+          {/* `reverse` puts the media second on desktop — copy left, lockup
+              right (2026-10-16). It still leads on mobile, where the layout
+              is one column and separating copy from its own picture by the
+              height of the copy would read worse. */}
           <FeatureLayout
+            reverse
             media={
               <img className="ls-aif__genie" src={ART.mindgenie} alt="" aria-hidden="true" loading="lazy" />
             }
@@ -238,7 +243,9 @@ export default function AiFirst() {
         <div className="ls-container">
           <Reveal effect="fadeInUp">
             <span className="ls-eyebrow ls-aif__commitlabel">{s['why-ai-first'].commitment.label}</span>
-            <h2 className="ls-h2 ls-aif__commitheading">{s['why-ai-first'].commitment.heading}</h2>
+            <h2 className="ls-h2 ls-aif__commitheading ls-aif__commitheading--tight">
+              {s['why-ai-first'].commitment.heading}
+            </h2>
             <blockquote className="ls-bigquote ls-mt-md">{s['why-ai-first'].commitment.quote}</blockquote>
           </Reveal>
         </div>

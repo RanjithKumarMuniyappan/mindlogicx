@@ -3,7 +3,6 @@ import PageHero from '../components/common/PageHero';
 import SectionIntro from '../components/common/SectionIntro';
 import FeatureLayout from '../components/common/FeatureLayout';
 import Reveal from '../components/common/Reveal';
-import Pill from '../components/common/Pill';
 
 /**
  * `/health-tech` — **rebuilt 2026-10-15** from the client's own deck
@@ -103,12 +102,9 @@ export default function HealthTech() {
                 {p}
               </p>
             ))}
-            <div className="ls-ke__ctas">
-              {/* Only the first — "Partner With Us" was removed site-wide. */}
-              <Pill variant="solid" href={ht.hero.ctas[0].target} arrow>
-                {ht.hero.ctas[0].label}
-              </Pill>
-            </div>
+            {/* The "Explore Our Healthcare Vision" CTA was removed 2026-10-16
+                at the client's request. It scrolled to the vision band, which
+                is still the next section down. `ht.hero.ctas` keeps it. */}
           </FeatureLayout>
         </div>
       </section>

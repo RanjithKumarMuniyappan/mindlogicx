@@ -3,7 +3,6 @@ import PageHero from '../components/common/PageHero';
 import SectionIntro from '../components/common/SectionIntro';
 import FeatureLayout from '../components/common/FeatureLayout';
 import Reveal from '../components/common/Reveal';
-import Pill from '../components/common/Pill';
 
 /**
  * `/voice-of-law` — **rebuilt 2026-10-16** from the client's Legal deck
@@ -131,23 +130,10 @@ export default function VoiceOfLaw() {
               `legal.hero.badges`.
             */}
 
-            <div className="ls-ke__ctas">
-              {/* The content module names these two differently — the in-page
-                  anchor is `target`, the route is `link` — so read both.
-                  Assuming `link` threw on the first CTA. */}
-              {legal.hero.ctas.map((cta, i) => {
-                const href = cta.target ?? cta.link ?? '';
-                return href.startsWith('#') ? (
-                  <Pill key={cta.label} variant="solid" href={href} arrow>
-                    {cta.label}
-                  </Pill>
-                ) : (
-                  <Pill key={cta.label} variant={i === 0 ? 'solid' : 'ghost'} to={href}>
-                    {cta.label}
-                  </Pill>
-                );
-              })}
-            </div>
+            {/* The "Explore Our Legal Vision" and "Contact Us" CTAs were
+                removed 2026-10-16 at the client's request. With the closing
+                band also gone, **this page now has no outbound route at
+                all**. Both are still in `legal.hero.ctas`. */}
           </FeatureLayout>
         </div>
       </section>
@@ -292,8 +278,16 @@ export default function VoiceOfLaw() {
 
       <section className="ls-section ls-section--white" id={future.id}>
         <div className="ls-container">
-          <SectionIntro eyebrow={future.subheading} title={future.heading} />
-          <div className="ls-ke__prose">
+          {/* Full container width for both the title and the copy
+              (2026-10-16): `.ls-intro` caps at 760px and `.ls-ke__prose` at
+              72ch, which left this band noticeably narrower than the
+              sections around it. */}
+          <SectionIntro
+            eyebrow={future.subheading}
+            title={future.heading}
+            className="ls-intro--wide"
+          />
+          <div className="ls-ke__prose ls-ke__prose--wide">
             {future.body.map((p) => (
               <p className="ls-body ls-ke__para" key={p.slice(0, 40)}>
                 {p}
