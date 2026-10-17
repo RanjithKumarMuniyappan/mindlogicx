@@ -24,6 +24,8 @@ import VoiceOfLaw from './pages/VoiceOfLaw';
 import HealthTech from './pages/HealthTech';
 import MediaTech from './pages/MediaTech';
 import Finance from './pages/Finance';
+import IntelliOsm from './pages/IntelliOsm';
+import Partner from './pages/Partner';
 import Placeholder from './pages/Placeholder';
 
 /** Routed navigation should land at the top of the next page, not mid-scroll. */
@@ -85,6 +87,15 @@ export default function App() {
           <Route path="/health-tech" element={<HealthTech />} />
           <Route path="/media-tech" element={<MediaTech />} />
           <Route path="/finance" element={<Finance />} />
+          {/* Built 2026-10-17 from the client's decks. `/intelliosm` is the
+              slug its deck asks for, and is now what the IntelliOSM card on
+              `/ed-tech` links to — the card's old `/products/intelliosm`
+              target fell through to `Placeholder`, which is why its CTA was
+              hidden. `/partner` was already the header's Partner menu
+              destination and had been landing on `Placeholder` since the nav
+              was built. */}
+          <Route path="/intelliosm" element={<IntelliOsm />} />
+          <Route path="/partner" element={<Partner />} />
             {/* Remaining routes are stubbed until each page is built out on the
                 same pattern, so navigation never dead-ends during review. */}
             <Route path="*" element={<Placeholder />} />

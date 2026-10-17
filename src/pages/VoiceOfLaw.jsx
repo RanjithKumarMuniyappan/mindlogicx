@@ -285,9 +285,8 @@ export default function VoiceOfLaw() {
           <SectionIntro
             eyebrow={future.subheading}
             title={future.heading}
-            className="ls-intro--wide"
           />
-          <div className="ls-ke__prose ls-ke__prose--wide">
+          <div className="ls-ke__prose">
             {future.body.map((p) => (
               <p className="ls-body ls-ke__para" key={p.slice(0, 40)}>
                 {p}

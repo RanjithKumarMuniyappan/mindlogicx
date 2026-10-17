@@ -2392,6 +2392,230 @@ images, no error boundaries, and **no page can actually scroll sideways**
 (`scrollTo(400,0)` leaves `scrollX` at 0). Footer flags fit at 334px on a
 phone with the strip left-aligned there.
 
+## IntelliOSM (`/intelliosm`) — 2026-10-17
+
+Built from `IntelliOSM_Webpage_Content_v1.2.docx`, section by section. Copy is
+verbatim; `src/content/pages/intelliosm.js` carries the provenance and
+everything held back.
+
+**Reached from `/ed-tech`.** The IntelliOSM card's "Explore IntelliOSM™" link
+was hidden on 2026-10-16 because `/products/intelliosm` fell through to
+`Placeholder`. The card now points at `/intelliosm` and `ctaHidden` is gone.
+⚠️ **IntelliTHESIS is still in the old position** — `/products/intellithesis`
+has no route, so its CTA stays hidden. Its deck says "Planned for 2027", so
+there may be nothing to link to yet.
+
+### The workflow diagram is built, not pasted
+
+The deck's one embedded image is a 1512×1444 flowchart in blue and green:
+small text, off-palette, unreadable on a phone, invisible to a screen reader.
+It is **not shipped**. The deck asks for the opposite anyway — *"Implement as
+a responsive process diagram. Show three preparation scenarios in parallel on
+desktop and stacked on mobile. Distinguish AI marking visually from evaluator
+approval."* — so `.ls-osm__flow` is live markup built from `stages` +
+`scenarios`.
+
+Measured: 3 × 408px at 1440, one column below 768px, and the table scrolls
+inside its own box (334 visible / 520 content) rather than taking the page
+with it.
+
+⚠️ **The three scenario names came off the flowchart, not the prose.** The
+body text only says the platform "supports multiple evaluation-readiness
+scenarios"; Scenario A, B and C appear nowhere else in the document. Recorded
+with that provenance in the content module.
+
+### ⚠️ Colour is never the only distinction
+
+Cyan marks the AI stages and purple the evaluator's, in three places: the hero
+drawing, the workflow diagram and the accountability chain. **Every tinted
+node also prints "AI-assisted" or "Human-controlled" as text.** A difference
+carried by hue alone fails WCAG 1.4.1 and disappears in greyscale. If a node
+loses its tag the diagram stops meeting the criterion — the tint is decoration
+on top of the words, not a substitute for them.
+
+### ⚠️ Do not tighten the hedging, and do not add a price
+
+The deck's handoff line: *"MVP feature availability requires Product
+Engineering sign-off."* Everything reads as design intent — "designed for",
+"supports", "can choose" — and the device list says *"Designed for supported
+Windows, macOS, Linux, iOS, Android tablet, and iPad environments"* rather
+than promising they work. On a page selling an unreleased product those words
+are the difference between a roadmap and a warranty.
+
+**No price, credit quantity or entitlement appears anywhere**, because the
+deck forbids publishing them before commercial finalisation. Nothing invents a
+figure to fill the gap.
+
+### ⚠️ This page has a closing CTA band and the others do not
+
+Every closing CTA band was removed on 2026-10-16 at the client's request. This
+deck carries one as a numbered section of its own and the page was asked for
+section by section, so it is built — and it is now **the only one on the
+site**. Flagged rather than silently kept or silently dropped.
+
+Both its destinations are this project's: the deck contains no hyperlink at
+all, only labels. When a demo-booking flow exists, this is the place to change.
+
+## Partner With Us (`/partner`) — 2026-10-17
+
+Built from `Mindlogicx_Partner_Webpage_Content_v2.1.docx`. The header's Partner
+menu item has pointed at `/partner` since the nav was built and had been
+landing on `Placeholder` ever since.
+
+### ⚠️ The commercial hedging is load-bearing
+
+The deck never promises a result. It says **"opportunities"** throughout, and
+qualifies with "applicable", "where applicable", "subject to product
+availability", "under development". Its own guideline table demands language
+"free from unsupported claims", and it excludes "commission percentages,
+transfer pricing" and partner designations from the public page.
+
+**There is no margin, commission rate, partner tier, revenue figure or
+customer count on this page.** The sentence doing the most work sits under the
+partnership journey: *"Partnership scope, commercial terms, and enablement
+arrangements are established through mutual agreement."* It reads like
+boilerplate. It is the only statement saying none of this is an offer.
+
+### Three things for the client to settle
+
+- **The deck asks for `/partners`.** The route is `/partner`, because the
+  header already points there. `seo.url` records the request.
+- **IntelliTUTE is absent from the portfolio table.** The deck lists four
+  products; IntelliTUTE, which has a live page here and appears in the
+  Education line-up, is not one of them. Nothing was invented to fill the gap.
+- **"Partner With Us" CTAs were removed site-wide on 2026-10-12**, when
+  `/partner` did not exist. It does now, so the page is reachable only from
+  the header. `cta.btnText` / `cta.btnLink` in `site.js` still hold that call
+  to action, unrendered.
+
+## Client photographs replaced both drawings (2026-10-17, same day)
+
+Both hero slots now use supplied photography — `/assets/images/intelliosm/
+intro.webp` and `/assets/images/partner/intro.webp`, both 1447×1087, which is
+the `.ls-media--4x3` frame exactly, so neither is cropped. The IntelliOSM
+hero's two CTAs ("Explore IntelliOSM" and "Request a Demo") came off in the
+same change.
+
+⚠️ **The screen in the IntelliOSM photograph is not IntelliOSM.** It is set
+dressing in stock photography and it carries legible rubric scores — "4/5",
+"3/5", "Overall 4/5". On a page about a product whose MVP is not signed off,
+a screen that reads as a real marking view is exactly the claim the rest of
+the page is written to avoid. At render width the labels are small enough to
+read as an office rather than a screenshot, and it was supplied deliberately,
+so it is used as given. Same call as the Dubai skyline on `/intelliwork`.
+
+⚠️ **The closing band still has its own "Request a Demo".** The removal
+request named the hero's pair; stripping the closing band too would leave this
+page with no outbound route at all, which is the state `/voice-of-law` is
+already in. Not assumed either way.
+
+⚠️ **No licence came with either file** — no source, no photographer. Same
+caveat as the Finance and HealthTech imagery.
+
+`MarkingArt.jsx` is kept, unimported, with both frames (`.ls-osm__artframe`,
+`.ls-ptr__artframe`) still in `ls.css`. Restoring either drawing is two lines.
+The argument for why they existed is below and still applies if a photograph
+has to come off.
+
+## Why the artwork was drawn in the first place (2026-10-17)
+
+`src/components/common/MarkingArt.jsx` — two inline SVGs, `MarkingArt` and
+`PartnerArt`.
+
+**IntelliOSM asks for "a product interface with answer script, recommended
+marks, evaluator comments and approval controls" and for "product-centric
+interface visuals".** A photorealistic mockup would be a lie: the MVP is
+targeted for 15 November 2026 and the deck says feature availability is not
+signed off, so any screen drawn here would depict controls and numbers nobody
+has approved, on a page a visitor reads as describing a real product. The
+drawing is obviously a diagram — flat line art, no legible text, no number
+that means anything — carrying the *shape* of the request without claiming to
+show software. Same decision `TintPanel.jsx` and `ProductMockup.jsx` record.
+
+**Partner asks for "a premium, globally relevant image of technology business
+collaboration and commercial growth" and supplies none** — `word/media/` in
+that file is empty. Nothing in the legacy library fits, a stock handshake says
+nothing, and an upward revenue curve would be a performance claim nobody has
+made. The drawing states the structure instead: one purple OEM core, cyan
+partner nodes around it. It asserts no number and needs no licence.
+
+If the client wants photography in either slot, it needs to arrive with a
+licence.
+
+## `.ls-prod__capdesc` failed AA on every non-smoke band (2026-10-17)
+
+Found while measuring `/intelliosm`, and never specific to it.
+
+`.ls-prod__cap` is `--grey-100` (#e8e8ed) by default and white inside a smoke
+band. `--grey-500` reads 5.07:1 on white but **4.15:1 on #e8e8ed** — under the
+4.5 floor for 15px text. Every `.ls-prod__cap` outside a smoke band had it,
+across Finance, HealthTech, Legal, IntelliEXAMS, IntelliTUTE and IntelliWORK.
+
+Fixed by making `--grey-700` the default (8.36:1 on the grey card) and
+restoring `--grey-500` only under `.ls-section--smoke`, where the card is
+white and it already passed — so nothing changes where nothing was wrong.
+
+⚠️ **Five sibling styles still fail the same way and were left alone**, being
+on pages this request did not touch: `.ls-prod__pillardesc` (/health-tech),
+`.ls-prod__balabel` and `.ls-prod__batext` (/intelliwork),
+`.ls-prod__barlabel` and `.ls-prod__metriclabel` (/intellitute) — all 4.15:1,
+all the same one-line fix. **`.ls-prod__cappillar` on /intellitute is 2.33:1**
+and is a different bug: cyan text on a cyan chip on the grey card. That one
+needs a design decision, not a ramp step.
+
+**Measurement note:** `color-mix()` computes to `color(srgb r g b)` with
+components in **0..1, not 0..255**. A probe that assumes 8-bit reports wildly
+wrong ratios — this cost a false failure once before.
+
+## Section intros span the container (2026-10-17)
+
+By request: "use container full width to title and description where is
+possible… throughout the project."
+
+Audited rather than guessed. At a 1267px container, a sweep of all 22 routes
+found **46 `.ls-intro` blocks capped at 760px across 15 routes**, plus five
+`.ls-ke__prose` at 72ch — every section title and lead sitting visibly
+narrower than the cards and grids directly beneath it. Eleven sections had
+already been widened one at a time with an `.ls-intro--wide` modifier.
+
+Fixed at the primitive instead of the call site:
+
+| rule | was | now |
+|---|---|---|
+| `.ls-intro` | `760px` | none |
+| `.ls-ke__lede`, `.ls-ke__prose` | `72ch` | none |
+| `.ls-edu__lead` | `72ch` | none |
+| `.ls-fin__disclaimer` | `90ch` | none |
+
+`.ls-intro--wide` / `.ls-ke__prose--wide` are **retired** — now no-ops, kept
+only so stale markup does not look broken. Every call site was removed from
+the JSX in the same change. Do not add them to new markup.
+
+### What was deliberately left narrow, and why
+
+The same sweep found sixteen other capped blocks. **None of them is a
+container-level title or description**, which is why they stayed:
+
+- **Column content inside a two-up grid** — widening these would break the
+  layout, not improve it: `.ls-wwd__lead`, `.ls-mg__body`,
+  `.ls-mg__definition`, `.ls-mg__principlebody`, `.ls-why__title`,
+  `.ls-why__body`, `.ls-intro2__statement`, `.ls-intro2__lead`,
+  `.ls-edu__desc`, `.ls-pillar__desc`, `.ls-contact__line`,
+  `.ls-careers__jointitle`.
+- **Deliberately centred** — `.ls-intro--center` (4 instances),
+  `.ls-osm__closebody`, `.ls-ptr__growbody`. Centred text has no fixed left
+  edge for the eye to return to, so a centred paragraph at 1267px is markedly
+  harder to read than a flush-left one, and the band stops reading as centred
+  at all.
+
+### ⚠️ The measure trade-off was accepted knowingly
+
+A lead paragraph at the full container runs about **150 characters a line**,
+well past the 60–80 that reads comfortably. That suits the short leads this
+site actually uses. **If a section ever carries long-form prose, give it its
+own narrower class — do not put the global cap back**, or every other section
+re-narrows with it.
+
 ## The Careers form is a disclosure
 
 Hidden until "Apply Now", as in the original — but built as a real
@@ -3253,6 +3477,8 @@ there.
   the "Value Innovation for a Future-Ready World" band directly below carries
   it — and restoring a corporate slide at the front of the carousel is a
   content decision someone may want back.
-- Only `/` and `/about` are built. Every other nav route renders `Placeholder`.
-- `IntelliWORK`, `IntelliOSM` and `IntelliTHESIS` still have no descriptive
-  content anywhere — their cards carry the logo tagline only.
+- **Stale as of 2026-10-17** — these two lines described the first build and
+  were never updated. Twenty-three routes are now built; `Placeholder` catches
+  what is left. `IntelliWORK` and `IntelliOSM` both have full pages.
+  **`IntelliTHESIS` is the one still true**: it has no page, its `/products/`
+  link has no route, and its card on `/ed-tech` therefore keeps `ctaHidden`.

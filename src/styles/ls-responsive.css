@@ -1132,3 +1132,84 @@
     grid-template-rows: none;
   }
 }
+
+/* ========================================================================
+   INTELLIOSM  (/intelliosm, 2026-10-17)
+   ======================================================================== */
+
+/* The accountability chain: four across is too many below a laptop. */
+@media (max-width: 1023px) {
+  .ls-osm__chain {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/*
+ * The deck's one explicit responsive instruction: "Show three preparation
+ * scenarios in parallel on desktop and stacked on mobile."
+ *
+ * 768px is where three cards stop fitting — at 767px each would be ~230px,
+ * and "Model answer available" wraps to three lines inside it.
+ */
+@media (max-width: 767px) {
+  .ls-osm__scenarios {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .ls-osm__chain {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ls-osm__artframe {
+    padding: 20px;
+  }
+
+  .ls-osm__node {
+    padding: 20px;
+  }
+
+  .ls-osm__workspace,
+  .ls-osm__credits {
+    padding: 28px 24px;
+  }
+
+  /* 72px of vertical padding and 56px of horizontal is a desktop proportion;
+     at 375px it leaves the heading about 263px to live in. */
+  .ls-osm__close {
+    padding: 48px 24px;
+  }
+
+  /* Stacked, full-width, so neither pill is a 200px target in a 327px row. */
+  .ls-osm__closectas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ========================================================================
+   PARTNER WITH US  (/partner, 2026-10-17)
+   ======================================================================== */
+
+@media (max-width: 767px) {
+  .ls-ptr__products {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .ls-ptr__artframe {
+    padding: 20px;
+  }
+
+  .ls-ptr__close,
+  .ls-ptr__product {
+    padding: 28px 24px;
+  }
+
+  /* 56px of side padding leaves a 375px viewport about 215px of heading. */
+  .ls-ptr__grow {
+    padding: 48px 24px;
+  }
+}

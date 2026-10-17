@@ -224,9 +224,8 @@ export default function Finance() {
           <SectionIntro
             eyebrow={how.subheading}
             title={how.heading}
-            className="ls-intro--wide"
           />
-          <div className="ls-ke__prose ls-ke__prose--wide">
+          <div className="ls-ke__prose">
             {how.body.map((p) => (
               <p className="ls-body ls-ke__para" key={p.slice(0, 40)}>
                 {p}
@@ -276,9 +275,8 @@ export default function Finance() {
           <SectionIntro
             eyebrow={vision.subheading}
             title={vision.heading}
-            className="ls-intro--wide"
           />
-          <div className="ls-ke__prose ls-ke__prose--wide">
+          <div className="ls-ke__prose">
             {vision.body.map((p) => (
               <p className="ls-body ls-ke__para" key={p.slice(0, 40)}>
                 {p}
