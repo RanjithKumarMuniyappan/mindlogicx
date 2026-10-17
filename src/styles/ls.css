@@ -423,11 +423,30 @@ address {
    SECTION INTRO  (eyebrow -> heading -> lead)
    ======================================================================== */
 
+/*
+ * The section opener spans the whole container (2026-10-17, by request).
+ *
+ * It used to cap at 760px, which at a 1267px container left every section
+ * title and lead visibly narrower than the cards, grids and feature rows
+ * beneath them — 46 of them across 15 routes. A handful had been widened
+ * one at a time with an `.ls-intro--wide` modifier; this makes that the
+ * default and retires the modifier.
+ *
+ * ⚠️ The trade-off is real and was accepted knowingly: a lead paragraph at
+ * the full measure runs about 150 characters a line, well past the 60–80
+ * that reads comfortably. It suits the short leads this site actually uses.
+ * **If a section ever carries long-form prose, give it its own narrower
+ * class rather than putting the global cap back** — that would re-narrow
+ * every other section with it.
+ *
+ * `--center` keeps a cap on purpose. Centred text has no fixed left edge for
+ * the eye to return to, so a centred paragraph at 1267px is markedly harder
+ * to read than a flush-left one, and the band stops looking centred at all.
+ */
 .ls-intro {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 760px;
 }
 
 .ls-intro--center {
@@ -2851,9 +2870,12 @@ address {
    KnowledgeEngineering.jsx.
    ======================================================================== */
 
+/* Full container width from 2026-10-17, for the same reason as `.ls-intro`
+   above: a 72ch cap left these bands narrower than everything around them.
+   The `--wide` modifier that used to do this per-section is retired. */
 .ls-ke__lede,
 .ls-ke__prose {
-  max-width: 72ch;
+  max-width: none;
 }
 
 .ls-ke__sub {
@@ -3693,6 +3715,9 @@ address {
 
 .ls-edu__lead {
   margin-top: 24px;
+  /* ⚠️ Overridden further down this file (search `.ls-edu__lead`), which
+     releases the cap entirely as of 2026-10-17. Kept so the cascade is
+     visible rather than silently dead. */
   max-width: 54ch;
 }
 
@@ -5601,10 +5626,29 @@ a.ls-footer__socialbtn:hover {
   letter-spacing: -0.02em;
 }
 
+/*
+ * ⚠️ Two colours, because this card has two backgrounds.
+ *
+ * `.ls-prod__cap` is `--grey-100` (#e8e8ed) by default and white inside a
+ * smoke band. `--grey-500` reads 5.07:1 on white but only **4.15:1 on
+ * #e8e8ed** — under the 4.5 AA floor for text at this size and weight.
+ *
+ * Found 2026-10-17 while measuring /intelliosm, and it was never specific to
+ * that page: every `.ls-prod__cap` outside a smoke band had it, across
+ * Finance, HealthTech, Legal, IntelliEXAMS, IntelliTUTE and IntelliWORK.
+ *
+ * So the darker ramp step becomes the default, and `--grey-500` is restored
+ * only where the card is white — which is where it already passed, and where
+ * nothing therefore changes.
+ */
 .ls-prod__capdesc {
   font-size: 15px;
   line-height: 1.55;
-  color: var(--grey-500);
+  color: var(--grey-700); /* 8.36:1 on the #e8e8ed card */
+}
+
+.ls-section--smoke .ls-prod__capdesc {
+  color: var(--grey-500); /* 5.07:1 on the white card */
 }
 
 /* ---- stakeholder cards ---- */
@@ -6217,7 +6261,8 @@ a.ls-footer__socialbtn:hover {
  */
 .ls-fin__disclaimer {
   display: block;
-  max-width: 90ch;
+  /* Full container width from 2026-10-17, with `.ls-intro`. */
+  max-width: none;
   font-size: 15px;
   line-height: 1.6;
   color: var(--grey-500);
@@ -6326,8 +6371,9 @@ a.ls-footer__socialbtn:hover {
 
 /* The lead was capped at 54ch, which left it noticeably narrower than the
    title above it. 72ch lets it fill the measure. */
+/* Full container width from 2026-10-17, with `.ls-intro`. */
 .ls-edu__lead {
-  max-width: 72ch;
+  max-width: none;
 }
 
 @media (max-width: 900px) {
@@ -6448,16 +6494,13 @@ a.ls-footer__socialbtn:hover {
 }
 
 /*
- * `--wide`: a section intro and its prose at the full container measure.
+ * ⚠️ RETIRED 2026-10-17 — this is now a no-op, kept only so an older copy of
+ * a page that still carries the class does not look broken.
  *
- * `.ls-intro` caps at 760px and `.ls-ke__prose` at 72ch — both deliberate for
- * a reading column, but they left a handful of bands visibly narrower than
- * the grids and feature rows around them. Applied per section rather than
- * raised globally, because the cap is right for most of them.
- *
- * ⚠️ The usual caveat: at 1152px this puts roughly 150 characters on a line,
- * well past the 60–80 that is comfortable. It suits a short lead and a couple
- * of sentences, not long-form prose.
+ * It existed to widen individual sections while `.ls-intro` capped at 760px
+ * and `.ls-ke__prose` at 72ch. Both now span the full container by default,
+ * so the modifier has nothing left to do. **Do not add it to new markup**;
+ * every call site was removed from the JSX in the same change.
  */
 .ls-intro--wide,
 .ls-ke__prose--wide {
@@ -6470,4 +6513,606 @@ a.ls-footer__socialbtn:hover {
   font-size: clamp(24px, 3.2vw, 44px);
   max-width: none;
   text-wrap: balance;
+}
+
+/* ========================================================================
+   INTELLIOSM  (/intelliosm, 2026-10-17)
+   ========================================================================
+
+   Two primitives carry this page: the evaluation-workflow diagram and the
+   workspace comparison table. Everything else reuses `.ls-prod__*`.
+
+   ## The two-colour grammar
+
+   The deck asks to "distinguish AI marking visually from evaluator approval".
+   Across the whole page that is ONE pairing, used in three places (the hero
+   drawing, the workflow diagram, the accountability chain):
+
+       cyan   — a stage MindGENIE performs
+       purple — a stage a person decides
+
+   ⚠️ Colour is never the only carrier. Every tinted node also prints
+   "AI-assisted" or "Human-controlled" as text, because a distinction made by
+   hue alone fails WCAG 1.4.1 and vanishes in greyscale or on a monochrome
+   printout. If a node ever loses its tag, the diagram stops meeting the
+   success criterion — the tint is decoration on top of the words, not a
+   replacement for them.
+   ======================================================================== */
+
+/* ---- Hero artwork ---- */
+
+/* ⚠️ UNUSED since 2026-10-17: the client supplied a photograph for this slot
+   and the hero now uses the standard `.ls-media--4x3` frame. Kept because
+   `MarkingArt.jsx` is kept — see the note at the top of that file. The same
+   applies to `.ls-ptr__artframe` on the Partner page. */
+
+/* The drawing sits on the same tint the cards use, with the frame supplying
+   the aspect ratio so the SVG never dictates the row height. */
+.ls-osm__artframe {
+  display: block;
+  padding: 32px;
+  border-radius: var(--radius-media);
+  background: var(--wash-cyan);
+}
+
+.ls-osm__art,
+.ls-ptr__art {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* `currentColor` is every neutral shape in both drawings. Purple holds
+     against either tint at roughly 8:1; cyan line art on a cyan wash would be
+     2.34:1. Same reasoning as `ProductMockup`. */
+  color: var(--brand-purple);
+}
+
+/* ---- Shared section furniture ---- */
+
+/* A second-level heading inside a band that already has a `SectionIntro`. */
+.ls-osm__subhead {
+  margin: 56px 0 28px;
+  font-size: clamp(22px, 2.4vw, 30px);
+  text-wrap: balance;
+}
+
+/* The glyph above a capability card's title. */
+.ls-osm__capicon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: var(--wash-cyan);
+  color: var(--accent-text);
+}
+
+.ls-osm__capicon svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ========================================================================
+   The evaluation-workflow diagram
+   ======================================================================== */
+
+.ls-osm__flow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ls-osm__stage {
+  display: block;
+}
+
+/*
+ * The connector between two stages: a hairline with a chevron at its foot.
+ *
+ * Rendered as its own element rather than a `::before` on the stage, because
+ * the fork needs two of them in positions a single pseudo-element cannot
+ * reach — one above the scenario row, one below it.
+ */
+.ls-osm__link {
+  display: block;
+  width: 2px;
+  height: 34px;
+  margin: 0 auto;
+  background: var(--grey-200);
+}
+
+.ls-osm__link::after {
+  content: '';
+  display: block;
+  width: 9px;
+  height: 9px;
+  margin-left: -4px;
+  border-right: 2px solid var(--grey-200);
+  border-bottom: 2px solid var(--grey-200);
+  transform: translateY(28px) rotate(45deg);
+}
+
+/* Above the three scenarios the line is a fan-out, so it gets no arrowhead —
+   the arrow would point at the gap between two cards. */
+.ls-osm__link--fan::after {
+  display: none;
+}
+
+.ls-osm__node {
+  padding: 22px 28px;
+  border: 1px solid var(--grey-200);
+  border-radius: var(--radius-card);
+  background: var(--grey-50);
+  text-align: center;
+}
+
+/* Cyan: MindGENIE acts. */
+.ls-osm__node[data-tone='ai'] {
+  border-color: color-mix(in srgb, var(--brand-cyan) 45%, white);
+  background: var(--wash-cyan);
+}
+
+/* Purple: a person decides. */
+.ls-osm__node[data-tone='human'] {
+  border-color: var(--tint-purple-200);
+  background: var(--tint-purple-50);
+}
+
+/* The worded half of the distinction — see the banner at the top. */
+.ls-osm__tag {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 4px 12px;
+  border-radius: 40px;
+  background: var(--white);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.ls-osm__nodetitle {
+  font-size: clamp(17px, 1.7vw, 20px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.ls-osm__nodedesc {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--grey-500);
+  max-width: 68ch;
+  margin-inline: auto;
+}
+
+/* ---- The three-scenario fork ---- */
+
+.ls-osm__forklead {
+  margin: 0 0 20px;
+  text-align: center;
+  font-size: 14px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--grey-500);
+}
+
+.ls-osm__scenarios {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ls-osm__scenarios > li {
+  display: flex;
+}
+
+.ls-osm__scenario {
+  flex: 1;
+  padding: 22px 24px;
+  border: 1px dashed var(--grey-200);
+  border-radius: var(--radius-card);
+  background: var(--white);
+  text-align: center;
+}
+
+.ls-osm__scenarioname {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.ls-osm__scenariostate {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--grey-500);
+}
+
+.ls-osm__scenarioaction {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--accent-text);
+}
+
+/* ========================================================================
+   The accountability chain (Human-Centred Intelligence)
+   ======================================================================== */
+
+/*
+ * The same nodes as the workflow, laid out across instead of down. Four
+ * equal columns so the tags line up; `align-items: stretch` via the grid
+ * keeps the boxes level when one description runs longer.
+ */
+.ls-osm__chain {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ls-osm__chain > li,
+.ls-osm__chain > li > * {
+  display: flex;
+  height: 100%;
+}
+
+.ls-osm__chain .ls-osm__node {
+  flex: 1;
+}
+
+/* ========================================================================
+   Workspaces, the comparison table and the credit model
+   ======================================================================== */
+
+.ls-osm__workspace {
+  height: 100%;
+  padding: 40px;
+  border-radius: var(--radius-card);
+  background: var(--white);
+}
+
+.ls-osm__workspace--cyan {
+  background: var(--wash-cyan);
+}
+
+.ls-osm__workspace--purple {
+  background: var(--tint-purple-50);
+}
+
+.ls-osm__workspacetitle {
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.ls-osm__workspacedesc {
+  margin-top: 14px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--grey-700);
+}
+
+/*
+ * The table scrolls inside this box; the page never does.
+ *
+ * `min-width` on the table is what forces the box to scroll rather than
+ * letting three columns crush to 100px each at phone width. 520px keeps
+ * "Subscription Management / Organisation-level" on one line.
+ */
+.ls-osm__tablewrap {
+  overflow-x: auto;
+  border-radius: var(--radius-card);
+  background: var(--white);
+}
+
+.ls-osm__table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.ls-osm__table th,
+.ls-osm__table td {
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 1px solid var(--grey-100);
+}
+
+.ls-osm__table thead th {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  border-bottom: 1px solid var(--grey-200);
+}
+
+.ls-osm__table tbody th {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.ls-osm__table tbody td {
+  color: var(--grey-500);
+}
+
+.ls-osm__table tbody tr:last-child th,
+.ls-osm__table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.ls-osm__credits {
+  padding: 40px;
+  border-radius: var(--radius-card);
+  background: var(--white);
+}
+
+.ls-section--white .ls-osm__credits {
+  background: var(--grey-50);
+}
+
+.ls-osm__creditstitle {
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.ls-osm__creditsbody {
+  margin-top: 14px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--grey-700);
+}
+
+/* ========================================================================
+   Closing call to action
+   ========================================================================
+   ⚠️ The only closing CTA band left on the site — every other one was
+   removed on 2026-10-16. This deck carries one as a section of its own.
+   ======================================================================== */
+
+.ls-osm__close {
+  padding: 72px 56px;
+  border-radius: var(--radius-card);
+  background: var(--wash-cyan);
+  text-align: center;
+}
+
+.ls-osm__closeheading {
+  margin-top: 14px;
+  text-wrap: balance;
+}
+
+.ls-osm__closebody {
+  max-width: 76ch;
+  margin: 20px auto 0;
+}
+
+.ls-osm__closestatement {
+  margin-top: 24px;
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--accent-text);
+}
+
+.ls-osm__closectas {
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.ls-osm__signoff {
+  margin-top: 32px;
+  font-size: 14px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--grey-500);
+}
+
+/* ========================================================================
+   PARTNER WITH US  (/partner, 2026-10-17)
+   ========================================================================
+   Mostly reuses `.ls-prod__cap`, `.ls-flow` and `.ls-fin__disclaimer`. The
+   three primitives here are the hero drawing's frame, the portfolio card
+   (which has a head, a body, a highlighted opportunity line and an optional
+   link) and the closing band.
+   ======================================================================== */
+
+/* ⚠️ UNUSED since 2026-10-17 — see `.ls-osm__artframe` above.
+
+   The partner drawing sat on the purple wash rather than the cyan one the
+   IntelliOSM artwork used: this page is about the OEM core, and purple is the
+   colour that holds on this site. */
+.ls-ptr__artframe {
+  display: block;
+  padding: 32px;
+  border-radius: var(--radius-media);
+  background: var(--tint-purple-50);
+}
+
+/* ---- The closing block on sections 2–4 ---- */
+
+.ls-ptr__close {
+  margin-top: 56px;
+  padding: 40px;
+  border-radius: var(--radius-card);
+  background: var(--white);
+}
+
+.ls-section--white .ls-ptr__close {
+  background: var(--grey-50);
+}
+
+.ls-ptr__closetitle {
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.ls-ptr__closebody {
+  margin-top: 14px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--grey-700);
+}
+
+/* ---- The portfolio ---- */
+
+.ls-ptr__products {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ls-ptr__products > li {
+  display: flex;
+}
+
+.ls-ptr__product {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 40px;
+  border-radius: var(--radius-card);
+  background: var(--white);
+}
+
+.ls-ptr__producthead {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--grey-100);
+}
+
+.ls-ptr__productname {
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.ls-ptr__productdesc {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+/* "Planned for 2027". A status, not a feature — kept visually distinct from
+   the descriptor above it so the two are not read as one line. */
+.ls-ptr__productstatus {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 12px;
+  border-radius: 40px;
+  background: var(--grey-50);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.6px;
+  color: var(--grey-700);
+}
+
+.ls-ptr__productbody {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--grey-700);
+}
+
+/*
+ * The "Partner Opportunity:" half of the deck's table cell.
+ *
+ * The deck prints the label inline, in bold, inside the paragraph. Here it is
+ * its own element on its own line: at card width the inline version put a
+ * bold run and the sentence it introduces on the same line only about half
+ * the time, which read as an accident.
+ */
+.ls-ptr__opportunity {
+  margin-top: auto;
+  padding-top: 20px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--grey-700);
+}
+
+.ls-ptr__opportunitylabel {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.ls-ptr__productlink {
+  margin-top: 20px;
+}
+
+/* The one CTA that sits mid-page, under the portfolio. */
+.ls-ptr__sectioncta {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+/* ---- Let's grow together ---- */
+
+.ls-ptr__grow {
+  padding: 72px 56px;
+  border-radius: var(--radius-card);
+  background: var(--white);
+  text-align: center;
+}
+
+.ls-ptr__growheading {
+  margin-top: 14px;
+  text-wrap: balance;
+}
+
+.ls-ptr__growbody {
+  max-width: 78ch;
+  margin: 18px auto 0;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--grey-500);
+}
+
+.ls-ptr__growstatement {
+  margin-top: 32px;
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--accent-text);
+  text-wrap: balance;
+}
+
+.ls-ptr__growsub {
+  margin-top: 40px;
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.ls-ptr__growcta {
+  margin-top: 32px;
 }

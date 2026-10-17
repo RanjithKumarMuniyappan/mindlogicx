@@ -246,7 +246,9 @@ export const products = [
     img: '/assets/images/products/intelliosm.webp',
     logo: '/logos/products/intelliosm-colour.webp',
     logoWhite: '/logos/products/intelliosm-white.webp',
-    link: '/products/intelliosm',
+    /* Repointed 2026-10-17: `/intelliosm` is a real page now, and is the slug
+       its own content deck asks for. */
+    link: '/intelliosm',
   },
   {
     slug: 'intellitute',
@@ -755,12 +757,21 @@ export const educationPage = {
       logo: '/logos/products/intelliosm-colour.webp',
       image: '/assets/images/products/intelliosm.webp',
       alt: 'A marker reviewing a scanned script on screen.',
-      link: '/products/intelliosm',
-      /* ⚠️ The "Explore IntelliOSM™" link was hidden 2026-10-16 at the
-         client's request. `/products/intelliosm` renders `Placeholder`, so it
-         was a link to nowhere. **IntelliTHESIS is in exactly the same
-         position** and still shows its link — flagged, not changed. */
-      ctaHidden: true,
+      /*
+       * Repointed and un-hidden 2026-10-17 at the client's request.
+       *
+       * The "Explore IntelliOSM™" link was hidden on 2026-10-16 because
+       * `/products/intelliosm` fell through to `Placeholder` — it was a link
+       * to nowhere. `/intelliosm` is now a real page built from the client's
+       * own deck, so the reason for hiding it is gone and `ctaHidden` is
+       * removed with it.
+       *
+       * ⚠️ **IntelliTHESIS is still in the old position**: its link points at
+       * `/products/intellithesis`, which has no route, so its CTA remains
+       * hidden. Its own deck describes it as "Planned for 2027", so there may
+       * be nothing to link to yet — flagged, not changed.
+       */
+      link: '/intelliosm',
     },
     {
       slug: 'intelliwork',
