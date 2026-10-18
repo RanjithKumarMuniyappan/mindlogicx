@@ -4736,6 +4736,9 @@ address {
   color: var(--white);
 }
 
+/* ⚠️ Orphaned 2026-10-17 — the blurb was removed from the footer by request.
+   `footer.blurb` is still in `site.js`, so restoring it is one line in
+   `Footer.jsx` and this rule is kept ready for it. */
 .ls-footer__blurb {
   margin-top: 12px;
   font-size: 16px;
@@ -4914,8 +4917,8 @@ a.ls-footer__socialbtn:hover {
 }
 
 .ls-footer__bottom {
-  margin-top: 56px;
-  padding-top: 28px;
+  margin-top: 0px;
+  padding-top: 10px;
   border-top: 1px solid var(--footer-rule);
   display: flex;
   flex-wrap: wrap;
@@ -6488,8 +6491,12 @@ a.ls-footer__socialbtn:hover {
 
 /* In the brand column, under the blurb (2026-10-16). It was briefly in the
    right-aligned meta row; the flags strip has that row to itself now. */
+/* The social row follows the strapline directly from 2026-10-17 — the blurb
+   that used to sit between them was removed. 24px was the gap under a
+   paragraph; against a single short strapline it reads as a gap that lost
+   something, so it tightens to 20px. */
 .ls-footer__brand .ls-footer__social {
-  margin-top: 24px;
+  margin-top: 20px;
   justify-content: flex-start;
 }
 
@@ -6883,46 +6890,73 @@ a.ls-footer__socialbtn:hover {
    ========================================================================
    ⚠️ The only closing CTA band left on the site — every other one was
    removed on 2026-10-16. This deck carries one as a section of its own.
+
+   Redesigned 2026-10-17: it was a centred card on a cyan wash with the body
+   capped at 76ch. It is now a full-container two-up on the ink band.
+
+   **Why ink and not a third tint.** Cyan and purple are spoken for on this
+   page: they are the AI/human distinction the workflow diagram, the
+   accountability chain and the hero all depend on. Using either as decoration
+   in the closing band would blunt the one piece of visual grammar the page
+   has. Ink is outside that system, and it closes a long run of white and
+   smoke bands with a change of weight rather than a change of hue.
    ======================================================================== */
 
 .ls-osm__close {
-  padding: 72px 56px;
-  border-radius: var(--radius-card);
-  background: var(--wash-cyan);
-  text-align: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: start;
 }
 
 .ls-osm__closeheading {
-  margin-top: 14px;
+  margin-top: 16px;
   text-wrap: balance;
 }
 
+/* The cap is gone — the column is the measure now. */
 .ls-osm__closebody {
-  max-width: 76ch;
-  margin: 20px auto 0;
+  max-width: none;
 }
 
 .ls-osm__closestatement {
-  margin-top: 24px;
+  margin-top: 28px;
   font-size: clamp(20px, 2.2vw, 26px);
   font-weight: 500;
   letter-spacing: -0.02em;
-  color: var(--accent-text);
+  /* The cyan end of the ramp: 7.38:1 on ink. `--accent-text` is the purple,
+     which is 2.6:1 here and unreadable. */
+  color: var(--accent-text-dark);
+  text-wrap: pretty;
 }
 
 .ls-osm__closectas {
-  justify-content: center;
-  margin-top: 32px;
+  margin-top: 36px;
 }
 
+/* `--ghost` is built for light bands: dark type behind a grey hairline. On
+   ink both invert. */
+.ls-section--ink .ls-pill--ghost {
+  color: var(--white);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 32%);
+}
+
+.ls-section--ink .ls-pill--ghost:hover {
+  background: rgb(255 255 255 / 10%);
+}
+
+/* The product sign-off, on its own rule under the full width. */
 .ls-osm__signoff {
-  margin-top: 32px;
+  display: block;
+  margin-top: 56px;
+  padding-top: 28px;
+  border-top: 1px solid rgb(255 255 255 / 16%);
   font-size: 14px;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  color: var(--grey-500);
+  /* 8.08:1 on ink. */
+  color: rgb(255 255 255 / 72%);
 }
-
 /* ========================================================================
    PARTNER WITH US  (/partner, 2026-10-17)
    ========================================================================
@@ -7115,4 +7149,120 @@ a.ls-footer__socialbtn:hover {
 
 .ls-ptr__growcta {
   margin-top: 32px;
+}
+
+/* ========================================================================
+   INTELLIEXAMS — the two editions  (/intelliexams, 2026-10-17)
+   ========================================================================
+   Prime and NG, side by side above "Question Paper Authoring & Delivery".
+
+   Transcribed from a supplied screenshot whose panels were dark with an
+   amber accent. **That was deliberately not followed** — this site has a
+   two-colour palette and light cards, and introducing a third hue for one
+   section would read as a page from somewhere else. Cyan marks Prime, purple
+   NG, which is the same pairing the rest of the site uses.
+   ======================================================================== */
+
+.ls-iex__edition {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 40px;
+  border-radius: var(--radius-card);
+  background: var(--white);
+  /* A hairline in the edition's own colour: it carries the cyan/purple
+     distinction at card level without tinting the whole panel, which would
+     drag the body copy's contrast down with it. */
+  border-top: 3px solid var(--grey-200);
+}
+
+.ls-iex__edition--cyan {
+  border-top-color: var(--accent-fill);
+}
+
+.ls-iex__edition--purple {
+  border-top-color: var(--brand-purple);
+}
+
+.ls-iex__editionicon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 24px;
+  border-radius: var(--radius-card);
+  color: var(--accent-text);
+}
+
+.ls-iex__edition--cyan .ls-iex__editionicon {
+  background: var(--wash-cyan);
+}
+
+.ls-iex__edition--purple .ls-iex__editionicon {
+  background: var(--tint-purple-50);
+}
+
+.ls-iex__editionicon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.ls-iex__editionname {
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/*
+ * "Prime" / "NG".
+ *
+ * ⚠️ Purple on white for BOTH, not the edition's own colour. The screenshot
+ * sets the suffix in each card's accent, but cyan type on white is 2.34:1 —
+ * this is the product name, the largest promise on the card, and it would be
+ * the least readable thing in the section. Purple is 8.59:1 and the edition
+ * is already marked by the rule above the card and the glyph chip.
+ */
+.ls-iex__editionsuffix {
+  color: var(--accent-text);
+}
+
+.ls-iex__editionstrap {
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--grey-700);
+}
+
+.ls-iex__editionpoints {
+  margin-top: 28px;
+  padding: 24px 0 0;
+  border-top: 1px solid var(--grey-100);
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* A small marker rather than a disc, drawn with a pseudo-element so the list
+   semantics stay intact for assistive tech. */
+.ls-iex__editionpoints li {
+  position: relative;
+  padding-left: 26px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--grey-700);
+}
+
+.ls-iex__editionpoints li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.52em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.45;
 }

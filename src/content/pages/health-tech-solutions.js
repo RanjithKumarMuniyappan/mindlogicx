@@ -80,7 +80,11 @@
  */
 
 export const healthTechSolutionsPage = {
-  title: 'HealthTech Solutions',
+  /* Changed from "HealthTech Solutions" 2026-10-17 at the client's request.
+     This is the page `h1` only — `seo.title` below still carries the deck's
+     "HealthTech Solutions & Healthcare SaaS Platform | Mindlogicx", and the
+     Technology menu reaches this page under the label "Healthcare". */
+  title: 'Healthcare Solutions',
   route: '/health-tech',
 
   seo: {
