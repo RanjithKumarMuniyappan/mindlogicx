@@ -467,7 +467,6 @@ export const intelliosmPage = {
     ],
     statement: 'Make Every Mark More Intelligent.',
     ctas: [
-      { label: 'Experience Intelligent Marking', target: '/contact-us', kind: 'primary' },
       { label: 'Request a Demo', target: '/contact-us', kind: 'secondary' },
     ],
     signoff: 'IntelliOSM — AI-Native Digital Marking.',

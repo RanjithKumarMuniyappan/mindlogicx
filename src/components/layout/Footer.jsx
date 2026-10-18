@@ -47,7 +47,14 @@ export default function Footer() {
                 `tagline` is still the descriptor behind the document title
                 and the logo's alt text — see the note on both in site.js. */}
             <p className="ls-footer__tagline">{company.strapline}</p>
-            <p className="ls-footer__blurb">{footer.blurb}</p>
+
+            {/* The blurb — "Mindlogicx is a global knowledge engineering
+                company building AI-first platforms across EdTech, FinTech,
+                HealthTech and LegalTech." — was removed 2026-10-17 at the
+                client's request. It is still `footer.blurb` in `site.js`.
+
+                The social row now follows the strapline directly; its
+                `margin-top` in `ls.css` was retuned to suit that. */}
 
             <ul className="ls-footer__social">
               {company.social.map((item) => {

@@ -1037,6 +1037,8 @@ export const footer = {
     title: 'Empowering Innovation Across Industries.',
     number: company.phone,
   },
+  /* ⚠️ NOT RENDERED since 2026-10-17 — removed from the footer at the
+     client's request. Kept here in case it is wanted elsewhere. */
   blurb:
     'Mindlogicx is a global knowledge engineering company building AI-first platforms across EdTech, FinTech, HealthTech and LegalTech.',
   newsletter:
@@ -1047,7 +1049,11 @@ export const footer = {
    */
   usefulLinks: [
     { title: 'Global Compliance', link: '/global-compliance' },
-    { title: 'Newsroom', link: '/news-room' },
+    /* ⚠️ "Newsroom" was removed from this list 2026-10-17 at the client's
+       request. **`/news-room` is now unreachable from anywhere on the site** —
+       it is not in the header navigation either. The page and its content
+       (`footer.newsroom`, `newsroomPage`) are untouched, so restoring the link
+       is one line. */
     { title: 'Careers', link: '/careers' },
     { title: 'Privacy Policy', link: '/privacy-policy' },
     { title: 'Terms & Conditions', link: '/terms-and-conditions' },

@@ -3,6 +3,7 @@ import PageHero from '../components/common/PageHero';
 import SectionIntro from '../components/common/SectionIntro';
 import FeatureLayout from '../components/common/FeatureLayout';
 import Reveal from '../components/common/Reveal';
+import { ContentIcon } from '../components/common/icons';
 
 /**
  * `/intelliexams` — built 2026-10-13 from
@@ -90,6 +91,7 @@ export default function IntelliExams() {
   const feature = s.feature;
   const osm = s['on-screen-marking'];
   const facts = s['fun-facts'];
+  const editions = s['two-editions'];
   const qp = s['qp-authoring-and-delivery'];
   const online = s['online-exam-online-assignment'];
   const clients = s['our-clients'];
@@ -170,6 +172,57 @@ export default function IntelliExams() {
                     {stat.number} {stat.unit}
                   </span>
                   <p className="ls-iex__factlabel">{stat.label}</p>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ── The two editions ──
+          Added 2026-10-17, above "Question Paper Authoring & Delivery" as
+          asked. ⚠️ Transcribed from a supplied screenshot, not from the live
+          site — see the note in the content module, which also records the
+          four buttons that were deliberately left out.
+
+          `--smoke`, not `--white`: the statistics band above is solid cyan
+          and the QP band below is white, so smoke keeps the alternation
+          going and satisfies the "light colour" direction. The screenshot's
+          dark panels and amber accent were not followed, on instruction. */}
+      <section className="ls-section ls-section--smoke" id={editions.id}>
+        <div className="ls-container">
+          <SectionIntro
+            eyebrow={editions.subheading}
+            title={editions.heading}
+            lead={editions.lead}
+            center
+          />
+
+          <ul className="ls-grid ls-grid--2 ls-mt-md">
+            {editions.editions.map((ed, i) => (
+              <li key={ed.edition}>
+                <Reveal
+                  className={`ls-iex__edition ls-iex__edition--${ed.tone}`}
+                  effect="fadeInUp"
+                  delay={i * 90}
+                >
+                  <span className="ls-iex__editionicon" aria-hidden="true">
+                    <ContentIcon name={ed.glyph} />
+                  </span>
+
+                  {/* The edition name is part of the product name, not a
+                      separate heading — one `h3`, with the suffix coloured
+                      inside it the way the screenshot sets it. */}
+                  <h3 className="ls-iex__editionname">
+                    {ed.name} <span className="ls-iex__editionsuffix">{ed.edition}</span>
+                  </h3>
+                  <p className="ls-iex__editionstrap">{ed.strapline}</p>
+
+                  <ul className="ls-iex__editionpoints">
+                    {ed.points.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
                 </Reveal>
               </li>
             ))}

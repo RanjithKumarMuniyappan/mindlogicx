@@ -2616,6 +2616,372 @@ site actually uses. **If a section ever carries long-form prose, give it its
 own narrower class — do not put the global cap back**, or every other section
 re-narrows with it.
 
+## The 2026-10-17 batch (5 changes)
+
+1. **Knowledge Engineering framework heading** — "From Domain Knowledge to
+   Business Intelligence" → **"From Domain Knowledge to Intelligence"**. One
+   of the few places this page departs from its source deck's wording.
+
+2. **Footer: the blurb and the Newsroom link both removed.**
+   - `footer.blurb` is still in `site.js`; `.ls-footer__blurb` is still in
+     `ls.css`, marked orphaned. The social row now follows the strapline
+     directly and its top margin tightened 24px → 20px, because 24px was the
+     gap under a paragraph and read as a gap that had lost something.
+   - ⚠️ **`/news-room` is now unreachable from anywhere on the site.** It is
+     not in the header navigation, the footer link was its only route in, and
+     the `blog` module in `site.js` (three posts all pointing at it) is not
+     rendered on any page. Verified by sweeping every route for an `href`
+     containing "news": zero hits. The page and its content are untouched, so
+     restoring the link is one line in `footer.usefulLinks`.
+
+3. **IntelliOSM's closing band redesigned**, full container width. It was a
+   centred card on a cyan wash with the copy capped at 76ch; it is now a
+   two-up on the **ink** band — heading left, argument and actions right,
+   sign-off on its own rule beneath.
+
+   **Why ink and not a third tint.** Cyan and purple are spoken for on that
+   page: they are the AI/human distinction the workflow diagram, the
+   accountability chain and the hero all depend on. Decorating the closing
+   band with either would blunt the only visual grammar the page has.
+
+   Two things the change forced:
+   - `--flush-bottom`, because the footer is the same `--ink` to the byte.
+     Without it the band's 112px bottom padding and the footer's 72px top
+     padding stacked into **184px of dead space with no visible boundary**.
+   - The pills had to change variant. `solid` is ink-on-white and `tint` is a
+     pale cyan wash with dark-purple type — **2.0:1** on ink. `light` plus a
+     new `.ls-section--ink .ls-pill--ghost` override is the readable pair.
+     Everything in the band measures 7.38:1 or better.
+
+4. **IntelliEXAMS gained a "two editions" section**, above "Question Paper
+   Authoring & Delivery". See the dedicated note below.
+
+5. **`/health-tech` page title** — "HealthTech Solutions" → **"Healthcare
+   Solutions"**. The `h1` only; `seo.title` still carries the deck's
+   "HealthTech Solutions & Healthcare SaaS Platform | Mindlogicx".
+
+## IntelliEXAMS Prime / NG (2026-10-17)
+
+⚠️ **This section's provenance differs from the rest of that page.**
+Everything else on `/intelliexams` was extracted from the live
+`mindlogicx.com/intelliexam/`. This one was **transcribed from a design
+screenshot supplied in chat** — the wording is what was legible in the image,
+and there is no source document to check it against.
+
+It is the same product split as **`/new_intelliexams`** on the live site, the
+page already flagged as duplicate content against `/intelliexam`. Putting the
+two editions here makes that overlap larger. **Which route is canonical is
+still the client's decision, and it matters more now than it did.**
+
+**What was deliberately not followed:**
+- **The four buttons** ("Explore IntelliEXAMS Prime", "Learn more", "Explore
+  IntelliEXAMS NG", "Request Demo") were excluded on instruction. Just as
+  well — none of them has a destination on this site. They are recorded in
+  `ctasNotRendered`.
+- **The screenshot's dark panels and amber accent.** On instruction, the
+  section uses this site's light card pattern and its two-colour palette.
+  Amber would have been a third hue for one section.
+
+**One deviation decided here, not asked for:** the screenshot sets each
+edition suffix ("Prime", "NG") in its own card accent. Cyan type on white is
+**2.34:1** — and this is the product name, the largest promise on the card.
+Both suffixes are purple (8.59:1) instead; the edition is already marked by
+the coloured rule above the card and by the glyph chip.
+
+## ⚠️ Contrast-probe artefacts — two kinds, both seen on 2026-10-17
+
+A sweep reported `1.00:1` (i.e. foreground identical to background) on the
+home hero and the AI-First dark cards. **Both were false.** A naive
+background walker produces them two different ways:
+
+1. **The background is a sibling, not an ancestor.** `.ls-heroslide__bg`
+   holds the hero backdrop; walking up from the heading finds
+   `.ls-heroslider`'s white and stops.
+2. **The background is translucent.** `.ls-aif__darkcard` is
+   `rgba(255,255,255,0.05)` over an `--ink` section. Treating that as an
+   opaque white background gives white-on-white; **compositing it properly
+   gives 30,30,35 and a real ratio of 16.63:1.**
+
+So a probe must composite alpha on *backgrounds*, not only on text, and must
+not assume the nearest painted ancestor is the whole story. Together with the
+`color-mix()` 0..1-vs-0..255 trap recorded elsewhere, that is three distinct
+ways this measurement has been wrong.
+
+## Hero slides, mobile and tablet — FINAL: the hero IS the photograph (2026-10-17)
+
+**Read this first. Everything below it is superseded**, kept only because the
+measurement traps recorded there still apply.
+
+By request: "image should be visible full width of the image accordingly hero
+section height will be reduced and adjust the content size accordingly."
+
+Below 992px the whole frame is visible at full width, uncropped, and the slide
+is **exactly as tall as that frame**. The copy sits on it, bottom-left, under a
+bottom-up scrim. Desktop is untouched — verified at 1440px: still full-screen,
+`object-fit: cover` at `100% 50%`, left-to-right scrim, 55px heading, copy
+vertically centred, `aspect-ratio: auto`.
+
+Measured: **375px → 211px hero, image 375×211, 0px ink below. 820px → 453px
+hero, image 805×453, 0px ink below.** Every slide, both widths.
+
+### `aspect-ratio`, not `calc(100vw / 1.777)`
+
+The first attempt sized the slide with `min-height: calc(100vw / 1.777)`.
+**`100vw` includes the scrollbar; the image does not.** At 820px that made the
+slide 461px against a 453px picture and left an 8px sliver of ink under it.
+`aspect-ratio: 1672 / 941` resolves against the element's own width, so the
+two always agree. Content taller than the ratio still wins, so a long heading
+grows the slide rather than clipping.
+
+### The type is fluid because the frame is
+
+The hero height is a function of viewport width, so the copy has to track `vw`
+too or it stops fitting between breakpoints. Everything is `clamp`: heading
+`clamp(19px, 5vw, 38px)`, body `clamp(13px, 3.2vw, 19px)`, CTA
+`clamp(12px, 3.1vw, 15px)`, the controls strip, the arrows, the dots, and the
+scrim's own feather.
+
+The budget at 375px, where it is tightest:
+
+```
+frame                      211px
+− controls strip            56px
+= room for copy            155px
+  eyebrow 10px              14px
+  heading 19px × 2 lines    43px
+  button                    33px
+  gaps                      20px
+= copy                     110px   — 45px spare
+```
+
+All five headings hold two lines at 375px. Three-line headings still fit
+(131px); a four-line one would not, and the slide would grow onto ink rather
+than clip.
+
+### ⚠️ The specificity trap, fixed properly this time
+
+The heading carries both `.ls-h1` and `.ls-heroslide__heading`; the paragraph
+both `.ls-lead` and `.ls-heroslide__text`. Same specificity, so **the later
+rule in the file wins** — and `.ls-h1` is restated at 767.98px and 479.98px,
+below the hero's block. A single-class hero rule is therefore silently
+overridden on every phone.
+
+That was previously patched by restating the hero sizes in each of those
+blocks, which **drifted out of step twice in one day**, each time quietly
+undoing a heading change below 480px. The rules are now doubled —
+`.ls-heroslide .ls-heroslide__heading`, (0,2,0) — which beats `.ls-h1`
+wherever it appears, and both restatements are deleted.
+
+### ⚠️ Six revisions: what to check before touching this
+
+White band at top → opaque black band at top → copy overlaid bottom-left →
+picture band with copy beneath → desktop arrangement with cover crop → the
+hero is the photograph. **Every revision left a stale override in the
+≤767.98px block** for the next one to hunt down: `min-height: calc(100vw /
+1.777 + 96px)`, `padding-bottom: 88px`, and flat heading sizes of 34, 30, 26
+and 32px in turn. The hero now has **no rules at all** below 992px — if one
+appears there, it is almost certainly wrong.
+
+Two more one-line bugs from this round, both caught by measuring rather than
+looking: `padding-left: 0` on the copy put the text flush against the screen
+edge, and the contrast probe was still modelling `cover` (`Math.max`) against
+a `contain` fit (`Math.min`), which samples entirely the wrong pixels. **A
+probe must read the live `object-fit` and the live gradient stops**, not
+assume them; the current one parses both off `getComputedStyle`.
+
+## Superseded: the desktop arrangement with a cover crop (2026-10-17)
+
+**Read this first; the two sections below it are superseded.** The hero went
+through five designs in one day and the earlier notes are kept only because
+their measurement traps still apply.
+
+By request: "similar view as desktop and laptop in mobile and tablet view, so
+do the content and button changes accordingly."
+
+Below 992px the hero is now the desktop arrangement — **full-screen height,
+photograph filling the frame, copy over it**. Two departures, both forced by
+the narrow viewport:
+
+1. **The crop is centred, not right-anchored.** Desktop uses
+   `object-position: right center` because each frame's left third is empty
+   and the copy goes there. At 375px the cover scale is 0.803, so the image
+   renders 1343px wide in a 375px window and right-anchoring showed **only the
+   rightmost 28%** — one person and a slab of background. Centring puts the
+   middle of the scene on screen. It is still a crop; at this aspect ratio
+   every option is.
+2. **The scrim runs bottom-up, not left-to-right**, anchored to the copy. The
+   desktop wash hides in that same empty left third, which a centred crop at
+   phone width does not have.
+
+Copy is bottom-left rather than desktop's vertical centre: on a tall narrow
+screen, centred copy floats in the middle of the subject instead of sitting
+under it.
+
+### Sizes
+
+| | desktop | ≤991.98px | ≤767.98px | ≤479.98px |
+|---|---|---|---|---|
+| heading | 55px | 36px | 32px | 30px |
+| body | 25px | 19px | 18px | 17px |
+| CTA | inherited | 15px, 13×24 | — | — |
+
+### Measured, and the probe had to be fixed too
+
+0 contrast failures at 375px and 820px, worst margin 1.11× the floor, at
+56% → 64% black.
+
+⚠️ **The canvas probe must model the same `object-fit` the CSS uses.** It was
+written for `contain` during the picture-band revision; left unchanged against
+a `cover` crop it samples the wrong pixels entirely and its numbers are
+meaningless. `cover` is `Math.max(cw/nw, ch/nh)` with the overflow centred;
+`contain` is `Math.min`. Check which one is live before trusting a result.
+
+### ⚠️ Five revisions, and the lesson
+
+White band at top → 100% opaque black band at top → copy overlaid bottom-left
+→ picture band with copy beneath → desktop arrangement. **Every revision left
+a structural override in the ≤767.98px block that the next one had to hunt
+down**, and twice a stale comment survived two redesigns and actively
+misdescribed the code.
+
+The phone block now holds **type sizes only**. Two overrides removed on the
+last pass are named in it so they are not reintroduced by habit:
+`min-height: calc(100vw / 1.777 + 96px)` (sized the slide to the picture and
+collapsed the hero) and `padding-bottom: 88px` (no longer matched the 104px
+the controls strip needs).
+
+Also: `.ls-heroslide__heading` is restated in the ≤479.98px block for a
+specificity reason, and it drifted out of step with the 768px block **twice**
+in one day — each time silently undoing a heading change on every phone under
+480px. Change one, change both.
+
+## Superseded: the picture band with copy beneath (2026-10-17)
+
+By request: "background images should be visible full width in mobile and
+tablet, so adjust the font, button and other sizes accordingly."
+
+**This superseded the bottom-left-overlay design from earlier the same day**
+(recorded below, since its measurement notes still explain the traps). Below
+992px the hero is now a **full-width photograph at its own aspect ratio with
+the copy in a band beneath it**. Desktop is untouched — verified at 1440px:
+still a full-screen flex row, `object-fit: cover`, left-to-right scrim,
+55px heading, copy vertically centred, no bridge element.
+
+### How much of the picture was actually missing
+
+`object-fit: cover` on a full-screen box: at 375×756 against a 1672×941
+source the cover scale is 0.803, so the image rendered **1343px wide inside a
+375px window**. A visitor saw the rightmost **28%** — and since every frame is
+a wide scene with its subject on the right, what survived was one person and a
+slab of background.
+
+### Why the copy had to move below rather than stay on top
+
+Showing the whole frame *and* keeping copy over it is not possible at this
+width. At 375px a 1.777 image is **211px tall**; the eyebrow, a two-line
+heading and the button need more than that between them. Stacking is the only
+arrangement where the photograph is complete and the words are readable.
+
+`aspect-ratio: 1672 / 941` is declared on the image — matching the source
+files exactly — so the band reserves its height before the image decodes.
+Without it every slide jumps as it loads.
+
+### The gradient survived as a bridge, and stopped being load-bearing
+
+The copy band is solid `--ink` and `__inner::before` fades from transparent
+into that same ink across the bottom 64px of the picture, so the two bands
+read as one object rather than meeting on a hard line.
+
+⚠️ **It is no longer doing contrast work.** White on `--ink` is 18.9:1, so
+unlike the overlay it replaced, **nothing here needs re-measuring when the
+photography changes.** That is a real simplification: the previous design
+needed a canvas probe over every frame's glyph boxes.
+
+### Sizes came down with the layout
+
+Type was set for copy laid over a full-screen photograph, where it had a whole
+frame to fill. In a band of its own it does not: 40px put every heading on
+three lines and pushed the button below the controls strip.
+
+| | was | now |
+|---|---|---|
+| heading, ≤991.98px | 40px | 34px |
+| heading, ≤767.98px | 34px | 30px |
+| body | 20px / 18px | 18px / 17px |
+| CTA | inherited | 15px, 12×22 padding |
+
+The copy band's 104px foot reserves the dots-and-arrows strip. At 92px the
+button cleared the controls by only 22px on three-line slides, which read as
+a near-collision; it is a consistent 34px now.
+
+⚠️ **Measure clearance on the active slide only.** The idle slides are
+`position: absolute; inset: 0` against a slider sized by whichever slide *is*
+active, so their button positions are meaningless — a sweep across all five
+reported a 10px worst case that does not exist on any slide a visitor can see.
+
+### ⚠️ This hero has been four designs in one day
+
+Copy on a solid white band at the top → copy on a 100% opaque black band at
+the top → copy overlaid bottom-left on a light veil → picture band plus copy
+band. **Each time a stale comment outlived the rules it described**, twice
+describing a layout two revisions old. The phone block now holds type sizes
+only; everything structural is in the 991.98px block. If a structural rule
+reappears below 768px, check it is not already set above.
+
+## Superseded: the bottom-left overlay (2026-10-17, earlier)
+
+By request: copy to the bottom left, the black overlay only as far up as the
+top of the copy, and lighter. **Below 992px only — desktop is untouched**
+(verified: the left-to-right scrim is still live at 1440px, the copy still
+vertically centred, the inner veil absent).
+
+### The veil moved off the slide and onto the copy
+
+The desktop scrim works because every frame's left third is deliberately
+empty, so a horizontal wash hides in dead space. At these widths the artwork
+is cropped in and there is no empty third — the copy sits over the picture. A
+frame-height veil would darken the whole photograph, the opposite of what was
+asked.
+
+So it is a `::before` on `.ls-heroslide__inner`: it starts where the copy
+starts, so the picture above is untouched whatever height the copy happens to
+be on a given slide. `100vw` with a centring transform escapes the
+container's padding so the veil is full-bleed while the text stays on the
+grid; `.ls-heroslider`'s `overflow: hidden` clips it, so no page scrolls
+sideways.
+
+⚠️ **The feather sits above the copy, not on it** (`top: -72px`). A first
+attempt started the fade at exactly `top: 0` — literally "till content top" —
+which put the first line of every heading on bare photograph at **1.0–1.3:1**.
+
+### The stops are measured, and one slide forced them up
+
+Each frame was drawn to a canvas at its rendered size with the same `cover`
+crop the browser applies, the brightest pixel under every glyph box found,
+and white composited over it at the gradient's alpha for that row.
+
+At **46%**, four slides passed and one did not: the eyebrow on "AI-Native"
+measured **4.01:1** against a 4.5 floor. The eyebrow is the first element in
+the box, so it sits at the lightest point of the veil, over a frame that is
+bright exactly there. At **52% → 60%** every row passes, worst case 4.65:1
+(a 40px heading on tablet, floor 3:1) and 4.86:1 for that eyebrow.
+
+Still far lighter than what it replaced: the phone band was **100% opaque
+black** through the whole copy.
+
+⚠️ Re-measure if the copy moves, the type scale changes or the photography is
+replaced — and measure the **glyph boxes, not the column box**. The column is
+mostly empty; averaging it reports failures that are not there and hides the
+ones that are.
+
+### What was deleted
+
+The ≤767.98px block used to hold a different hero altogether: copy at the
+**top** on a 100% opaque black band, photograph pushed below the "Learn More"
+pill. Its comment described an even earlier version with a solid *white*
+band — stale twice over. Only genuinely phone-specific rules remain there now
+(stacked slides, `height: auto`, `object-position`, type sizes).
+
 ## The Careers form is a disclosure
 
 Hidden until "Apply Now", as in the original — but built as a real

@@ -240,34 +240,224 @@
     aspect-ratio: 16 / 9;
   }
 
-  /* The copy claims more of the frame as the artwork is cropped in, and the
-     scrim reaches further right to keep its background a known quantity.
-     The value is set by "Build High-Performing Teams." — the longest second
-     line of the five, and the one that decides whether the headings hold the
-     two lines the comp draws. It came down from 30% when the heading at this
-     band went 38px → 40px; column width and heading size are a pair here. */
-  .ls-heroslide__inner {
-    padding-right: 20%;
+  /* ================================================================
+     HERO SLIDES — mobile and tablet (2026-10-17, by request)
+     ================================================================
+
+     **The hero is the photograph.** The whole frame is visible at full
+     width, uncropped, and the slide is exactly as tall as that frame —
+     `100vw ÷ (1672/941)`. The copy sits on it, bottom-left, under a
+     bottom-up scrim.
+
+     That makes the hero short: **211px at 375px**, 461px at 820px. The
+     type is sized in `vw` for exactly that reason — it has to scale with
+     the frame, because the frame scales with the viewport. Fixed pixel
+     sizes were what kept overflowing the picture and pushing the copy
+     onto ink below it.
+
+     ## The budget at 375px, where it is tightest
+
+       frame                       211px
+       − controls strip             56px   (reserved by `padding-bottom`)
+       = room for copy             155px
+
+       eyebrow  10px                14px
+       heading  19px × 2 lines      43px
+       button                       33px
+       gaps                         20px
+       = copy                      110px   — 45px spare
+
+     Three-line headings fit too (131px). If a future slide's heading
+     runs to four lines at phone width it will not, and the slide will
+     grow downward onto ink rather than clip — see `object-position`
+     below, which is what makes that degrade gracefully.
+
+     ## Why `contain` and not `cover`
+
+     `cover` is what was cropping the frame: at 375px it rendered the
+     image 1343px wide in a 375px window, showing **28% of the picture**.
+     `contain` fits the whole frame. `top center` parks it against the
+     top of the slide, so if the copy ever does exceed the budget above,
+     the surplus appears as ink *below* the picture instead of scaling
+     or cropping it.
+     ================================================================ */
+
+  .ls-heroslider {
+    /* The hero is the picture's height, not a screenful. */
+    height: auto;
+    min-height: 0;
+    /* Shows below the frame if the copy ever outgrows it, and during the
+       crossfade. Previously white, which flashed against the scrim. */
+    background: var(--ink);
   }
 
-  /* Dark since 2026-10-14, like the desktop scrim — see the long note on
-     `.ls-heroslide::after` in ls.css for why it is not simply absent. */
+  .ls-heroslide {
+    position: relative;
+    align-items: flex-end;
+    /*
+     * Exactly the height the photograph occupies at full width.
+     *
+     * ⚠️ `aspect-ratio`, **not** `min-height: calc(100vw / 1.777)`.
+     * `100vw` includes the scrollbar; the image does not. At 820px that
+     * made the slide 461px tall against a 453px picture and left an 8px
+     * sliver of ink under it. `aspect-ratio` resolves against the
+     * element's own width, so the two always agree.
+     *
+     * Content taller than the ratio still wins — the box grows and the
+     * surplus shows as ink below the picture rather than clipping.
+     */
+    aspect-ratio: 1672 / 941;
+    min-height: 0;
+    padding: 0;
+  }
+
+  .ls-heroslide:not([data-active='true']) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .ls-heroslide__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: top center;
+  }
+
+  /* The desktop left-to-right wash is off here; the veil below replaces
+     it. Not `display: none` — the element is reused. */
   .ls-heroslide::after {
+    background: none;
+  }
+
+  .ls-heroslide__inner {
+    position: relative;
+    /* Cancels desktop's 32%. Both sides get the same clamp so the copy is
+       inset evenly — `padding-left: 0` here briefly put the text flush
+       against the screen edge. */
+    padding-inline: clamp(20px, 4.5vw, 96px);
+    /* Reserves the dots-and-arrows strip, scaled like everything else —
+       104px of a 211px frame would be half the hero. */
+    padding-bottom: clamp(56px, 13vw, 104px);
+  }
+
+  /*
+   * `100vw` with a centring transform escapes the container padding so
+   * the veil is full-bleed while the text stays on the grid.
+   * `.ls-heroslider`'s `overflow: hidden` clips it, so nothing scrolls.
+   *
+   * ⚠️ **The feather sits above the copy, not on it.** An earlier
+   * version faded in from exactly the content top, which put the first
+   * line of every heading on bare photograph at 1.0-1.3:1. The feather
+   * scales with the type for the same reason the type scales with the
+   * frame.
+   */
+  .ls-heroslide__inner::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    top: calc(-1 * clamp(40px, 10vw, 72px));
+    bottom: 0;
+    z-index: -1;
+    /*
+     * Measured against the real pixels: each frame drawn to a canvas at
+     * its rendered size with the same fit the CSS uses, the brightest
+     * pixel under every glyph box found, and white composited over it at
+     * this gradient's alpha for that row.
+     *
+     * ⚠️ Re-measure if the fit, the copy position or the type scale
+     * changes, or the photography is replaced — and **model the same
+     * `object-fit` the CSS uses**. A probe written for `cover`
+     * (`Math.max`) samples entirely the wrong pixels against `contain`
+     * (`Math.min`), and its numbers mean nothing.
+     */
     background: linear-gradient(
-      to right,
-      rgb(0 0 0 / 66%) 0%,
-      rgb(0 0 0 / 60%) 40%,
-      rgb(0 0 0 / 0%) 78%
+      to bottom,
+      rgb(0 0 0 / 0%) 0,
+      rgb(0 0 0 / 56%) clamp(40px, 10vw, 72px),
+      rgb(0 0 0 / 64%) 100%
     );
   }
 
-  .ls-heroslide__heading {
-    font-size: 40px;
-    margin-top: 22px;
+  /* ---- Type, scaled to the frame ----
+     Fluid, not stepped: the hero's height is `100vw / 1.777`, so the copy
+     has to track `vw` too or it stops fitting between breakpoints. The
+     upper bounds are the tablet sizes; the lower bounds are what fits the
+     211px frame at 375px. */
+
+  .ls-heroslide__eyebrow {
+    margin-top: 0;
   }
 
-  .ls-heroslide__text {
-    font-size: 20px;
+  .ls-heroslide .ls-eyebrow {
+    font-size: clamp(10px, 2.4vw, 14px);
+    letter-spacing: clamp(1px, 0.4vw, 2px);
+  }
+
+  /*
+   * ⚠️ The doubled selectors are deliberate — do not "simplify" them.
+   *
+   * The heading carries both `.ls-h1` and `.ls-heroslide__heading`, and the
+   * paragraph both `.ls-lead` and `.ls-heroslide__text`. Those are the same
+   * specificity, so the **later rule in the file wins** — and `.ls-h1` is
+   * restated at 767.98px and 479.98px, `.ls-lead` at 767.98px, all of which
+   * sit below this block. A single-class rule here is therefore silently
+   * overridden on every phone.
+   *
+   * That was previously worked around by restating the hero sizes in each of
+   * those blocks, which drifted out of step **twice in one day** — each time
+   * quietly undoing a heading change below 480px. Raising the specificity
+   * fixes it once: `.ls-heroslide .ls-heroslide__heading` is (0,2,0) and
+   * beats `.ls-h1` at (0,1,0) wherever it appears.
+   */
+  .ls-heroslide .ls-heroslide__heading {
+    font-size: clamp(19px, 5vw, 38px);
+    margin-top: clamp(6px, 2vw, 16px);
+    line-height: 1.12;
+  }
+
+  .ls-heroslide .ls-heroslide__text {
+    margin-top: clamp(6px, 2vw, 16px);
+    font-size: clamp(13px, 3.2vw, 19px);
+    /* Desktop's 26em is wider than this column. */
+    max-width: none;
+  }
+
+  .ls-heroslide__cta {
+    margin-top: clamp(10px, 3vw, 28px);
+    padding: clamp(8px, 2.1vw, 13px) clamp(14px, 3.8vw, 24px);
+    font-size: clamp(12px, 3.1vw, 15px);
+  }
+
+  /* ---- Controls, scaled with the frame ----
+     42px arrows and a 40px inset are a desktop proportion; in a 211px
+     hero they are a fifth of its height. */
+
+  .ls-heroslider__controls {
+    bottom: clamp(12px, 3.4vw, 28px);
+    gap: clamp(12px, 3vw, 24px);
+  }
+
+  .ls-heroslider__arrow {
+    width: clamp(30px, 8vw, 42px);
+    height: clamp(30px, 8vw, 42px);
+  }
+
+  .ls-heroslider__arrow svg {
+    width: clamp(12px, 3.2vw, 16px);
+    height: clamp(12px, 3.2vw, 16px);
+  }
+
+  .ls-heroslider__dot {
+    width: clamp(7px, 1.9vw, 9px);
+    height: clamp(7px, 1.9vw, 9px);
+  }
+
+  .ls-heroslider__dot[data-active='true'] {
+    width: clamp(18px, 5vw, 26px);
   }
 
   /* Three across: five 20vw slots on a tablet leave each wordmark too narrow
@@ -615,91 +805,23 @@
   }
 
   /*
-   * The hero turns vertical. There is no empty left third at 375px — the crop
-   * is all subject — so the overlay stops being an overlay: the artwork drops
-   * to the bottom of the frame, the scrim goes solid white across the top, and
-   * the copy sits on white above it. Text over a photograph at this width is
-   * either unreadable or needs a veil so heavy the photograph is pointless.
-   */
-  /* Still a full screen, but as a floor rather than a fixed height: the
-     stacked layout below needs to grow if the copy runs long on a narrow
-     phone, and a hard `height` would clip it. */
-  .ls-heroslider {
-    height: auto;
-    min-height: calc(100vh - var(--header-h));
-    min-height: calc(100dvh - var(--header-h));
-  }
-
-  .ls-heroslide {
-    position: relative;
-    align-items: flex-start;
-    /* Stacked rather than absolutely positioned, so the tallest slide sets the
-       height and none of the others are clipped. Only the active one is in
-       flow; the rest are pulled out from under it.
-       The active slide is what actually drives the full-screen height here,
-       since the slider itself is `height: auto` at this width. */
-    min-height: calc(100vh - var(--header-h));
-    min-height: calc(100dvh - var(--header-h));
-    padding-block: 36px 108px;
-  }
-
-  .ls-heroslide:not([data-active='true']) {
-    position: absolute;
-    inset: 0;
-  }
-
-  .ls-heroslide__bg {
-    object-position: right bottom;
-  }
-
-  /*
-   * Fully opaque through the copy, not merely near-opaque. At 96-98% the
-   * labels inside the artwork's UI card stayed legible enough to read as
-   * stray text sitting behind the paragraph. A couple of percent of
-   * photograph is not worth seeing through a body paragraph; the artwork
-   * gets the bottom of the frame instead, where it is unobstructed.
+   * ⚠️ **The hero has no rules in this block, and should not get any.**
    *
-   * Dark since 2026-10-14. At 100% black the white copy is on pure black —
-   * 21:1, the most contrast there is.
+   * Its whole mobile and tablet design — structure, type, controls — lives in
+   * the 991.98px block above, and the type is now **fluid** (`clamp` on `vw`)
+   * because the frame height is `100vw / 1.777`. A fixed `font-size` here
+   * would override the clamp at one end of the range and break the fit the
+   * budget in that block is calculated against.
+   *
+   * This hero has been six designs in a day, and every revision left a stale
+   * override in this block for the next one to hunt down: `min-height:
+   * calc(100vw / 1.777 + 96px)`, `padding-bottom: 88px`, and flat heading
+   * sizes of 34px, 30px, 26px and 32px in turn. They are all gone. Twice a
+   * comment here outlived the rules it described and actively misdescribed
+   * the code.
+   *
+   * If the hero needs a phone-only value, prefer widening the clamp above.
    */
-  .ls-heroslide::after {
-    background: linear-gradient(
-      to bottom,
-      rgb(0 0 0 / 100%) 0%,
-      /* Holds past the "Learn More" pill — at 54% the fade began level with
-         the button and fragments of the artwork's UI card surfaced beside it,
-         which reads as a rendering glitch rather than as a photograph. */
-      rgb(0 0 0 / 100%) 64%,
-      rgb(0 0 0 / 55%) 82%,
-      rgb(0 0 0 / 0%) 100%
-    );
-  }
-
-  /* Cancels the desktop percentage. Restated as the same clamp the fluid
-     container uses rather than `var(--gutter)`, so both sides of the copy
-     match — the gutter is 20px here and the clamp bottoms out at 24px, which
-     left the text one pixel-nudge off-centre against its own band. */
-  .ls-heroslide__inner {
-    padding-right: clamp(24px, 4.5vw, 96px);
-  }
-
-  .ls-heroslide__heading {
-    font-size: 34px;
-    margin-top: 18px;
-  }
-
-  .ls-heroslide__text {
-    margin-top: 14px;
-    font-size: 18px;
-  }
-
-  .ls-heroslide__cta {
-    margin-top: 24px;
-  }
-
-  .ls-heroslider__controls {
-    bottom: 28px;
-  }
 
   /* Two wordmarks across instead of five — at 20vw each they would be 75px
      wide on a phone. Only the slot width changes; the belt is unaffected. */
@@ -844,19 +966,16 @@
   }
 
   /*
-   * Restated, not inherited. The hero heading carries both `.ls-h1` and
-   * `.ls-heroslide__heading`, which are the same specificity, so the later
-   * declaration wins — and `.ls-h1` above is later than the hero's own rule in
-   * the 768px block. Without this the heading silently renders at the generic
-   * 36px instead of the 32px that band is tuned for.
+   * The hero's heading and paragraph used to be restated here, to win back
+   * the `.ls-h1` / `.ls-lead` declarations above them. **Removed 2026-10-17**
+   * — the rules in the 991.98px block are now doubled
+   * (`.ls-heroslide .ls-heroslide__heading`), so they outrank `.ls-h1`
+   * wherever it is restated and no longer need shadowing here.
+   *
+   * That is also the fix for the drift this comment used to warn about: the
+   * flat size here fell out of step with the 768px block twice in one day,
+   * each time silently undoing a heading change below 480px.
    */
-  .ls-heroslide__heading {
-    font-size: 30px;
-  }
-
-  .ls-heroslide__text {
-    font-size: 17px;
-  }
 
   .ls-ind__title {
     font-size: 27px;
@@ -1175,12 +1294,6 @@
     padding: 28px 24px;
   }
 
-  /* 72px of vertical padding and 56px of horizontal is a desktop proportion;
-     at 375px it leaves the heading about 263px to live in. */
-  .ls-osm__close {
-    padding: 48px 24px;
-  }
-
   /* Stacked, full-width, so neither pill is a 200px target in a 327px row. */
   .ls-osm__closectas {
     flex-direction: column;
@@ -1211,5 +1324,24 @@
   /* 56px of side padding leaves a 375px viewport about 215px of heading. */
   .ls-ptr__grow {
     padding: 48px 24px;
+  }
+}
+
+/* The closing band's two-up. Below this the heading column and the argument
+   column each get too narrow to hold a line, so they stack — heading first,
+   which is the reading order anyway. */
+@media (max-width: 899px) {
+  .ls-osm__close {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+}
+
+/* ---- IntelliEXAMS editions (2026-10-17) ----
+   `.ls-grid--2` already collapses below 640px; this just stops a 40px inset
+   eating the card at phone width. */
+@media (max-width: 639px) {
+  .ls-iex__edition {
+    padding: 28px 24px;
   }
 }

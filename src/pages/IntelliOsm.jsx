@@ -422,33 +422,61 @@ export default function IntelliOsm() {
       </section>
 
       {/* ── Closing call to action ──
-          ⚠️ The only closing CTA band left on the site. See the file note. */}
-      <section className="ls-section ls-section--white" id={close.id}>
+          ⚠️ The only closing CTA band left on the site. See the file note.
+
+          Redesigned 2026-10-17: it was a centred card on a cyan wash with the
+          copy capped at 76ch. It is now a full-container two-up on the ink
+          band — heading left, the argument and the actions right, with the
+          sign-off on its own rule beneath.
+
+          Ink rather than another tint: this is the last thing on a long page
+          of white and smoke bands, and the page's two brand colours are
+          already spoken for as the AI/human distinction. Borrowing either one
+          here would weaken that. */}
+      {/* `--flush-bottom` because the footer is the same `--ink`, to the
+          byte. Without it the band's 112px bottom padding and the footer's
+          72px top padding stack into 184px of dead space with no visible
+          boundary anywhere in it — the exact case that modifier exists for. */}
+      <section
+        className="ls-section ls-section--ink ls-section--flush-bottom ls-osm__closeband"
+        id={close.id}
+      >
         <div className="ls-container">
-          <Reveal className="ls-osm__close" effect="fadeInUp">
-            <span className="ls-eyebrow">{close.subheading}</span>
-            <h2 className="ls-h2 ls-osm__closeheading">{close.heading}</h2>
-            {close.body.map((p) => (
-              <p className="ls-lead ls-osm__closebody" key={p.slice(0, 40)}>
-                {p}
-              </p>
-            ))}
-            <p className="ls-osm__closestatement">{close.statement}</p>
+          <div className="ls-osm__close">
+            <Reveal className="ls-osm__closelead" effect="fadeInLeft">
+              <span className="ls-eyebrow">{close.subheading}</span>
+              <h2 className="ls-h2 ls-osm__closeheading">{close.heading}</h2>
+            </Reveal>
 
-            <div className="ls-ke__ctas ls-osm__closectas">
-              {close.ctas.map((cta) => (
-                <Pill
-                  key={cta.label}
-                  variant={cta.kind === 'primary' ? 'solid' : 'tint'}
-                  to={cta.target}
-                  arrow={cta.kind === 'primary'}
-                >
-                  {cta.label}
-                </Pill>
+            <Reveal className="ls-osm__closeaside" effect="fadeInRight">
+              {close.body.map((p) => (
+                <p className="ls-lead ls-osm__closebody" key={p.slice(0, 40)}>
+                  {p}
+                </p>
               ))}
-            </div>
+              <p className="ls-osm__closestatement">{close.statement}</p>
 
-            <p className="ls-osm__signoff">{close.signoff}</p>
+              <div className="ls-ke__ctas ls-osm__closectas">
+                {close.ctas.map((cta) => (
+                  <Pill
+                    key={cta.label}
+                    /* On ink, `solid` is ink-on-white and `tint` is a pale
+                       cyan wash with dark-purple type — 2.0:1 against this
+                       background. `light` and the ink-band `ghost` override
+                       in `ls.css` are the pair that reads here. */
+                    variant={cta.kind === 'primary' ? 'light' : 'ghost'}
+                    to={cta.target}
+                    arrow={cta.kind === 'primary'}
+                  >
+                    {cta.label}
+                  </Pill>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+
+          <Reveal className="ls-osm__signoff" effect="fadeInUp">
+            {close.signoff}
           </Reveal>
         </div>
       </section>

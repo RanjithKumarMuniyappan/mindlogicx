@@ -207,7 +207,10 @@ export const knowledgeEngineeringPage = {
       id: "our-knowledge-engineering-framework",
       documentSection: "5. Our Knowledge Engineering Framework",
       sectionTitle: "Our Knowledge Engineering Framework",
-      heading: "From Domain Knowledge to Business Intelligence",
+      /* Shortened 2026-10-17 at the client's request, from "From Domain
+         Knowledge to Business Intelligence". This is one of the few places
+         the page departs from the source deck's wording. */
+      heading: "From Domain Knowledge to Intelligence",
       body: [
         "Mindlogicx follows a structured engineering approach that integrates domain knowledge, intelligent technologies, digital platforms and governance to deliver measurable business outcomes.",
       ],

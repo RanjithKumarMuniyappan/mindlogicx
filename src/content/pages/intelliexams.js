@@ -467,6 +467,81 @@ export const intelliexamsPage = {
         "No source, date or footnote for any of the three figures. 'm' is never expanded to 'million'. See concern 5.",
     },
 
+    /*
+     * ------------------------------------------------------------------ 4b
+     * THE TWO EDITIONS — added 2026-10-17 at the client's request.
+     *
+     * ⚠️ PROVENANCE IS DIFFERENT FROM THE REST OF THIS FILE. Everything else
+     * here was extracted from https://www.mindlogicx.com/intelliexam/. This
+     * section was transcribed from a **design screenshot supplied in chat**,
+     * not from any page or deck. The wording is what was legible in that
+     * image; there is no source document to check it against.
+     *
+     * It is, however, the same product split as **`/new_intelliexams`** on
+     * the live site — the "IntelliEXAMS Prime / NG" page flagged at the top
+     * of this file as duplicate content against `/intelliexam`. Putting the
+     * two editions on this page makes that overlap larger, not smaller.
+     * **Which of the two routes is canonical is still the client's call**,
+     * and it matters more now.
+     *
+     * The screenshot showed four buttons — "Explore IntelliEXAMS Prime",
+     * "Learn more", "Explore IntelliEXAMS NG", "Request Demo". **All four
+     * were excluded on instruction** ("do not show Buttons in new sections"),
+     * which is just as well: none of them has a destination on this site.
+     *
+     * The screenshot's dark panels and amber accent were also not followed,
+     * on instruction — the section uses this site's light card pattern and
+     * its two-colour palette.
+     */
+    {
+      id: "two-editions",
+      heading: "End-to-End Assessment Excellence",
+      subheading: "TWO POWERFUL PLATFORMS. ONE MISSION.",
+      lead: "Secure. Scalable. Built for Impact.",
+      sourceNote:
+        "Transcribed from a design screenshot supplied 2026-10-17, not from the live site or a content deck.",
+      editions: [
+        {
+          name: "IntelliEXAMS",
+          /* Rendered in the accent colour beside the product name, the way
+             the screenshot sets it. */
+          edition: "Prime",
+          tone: "cyan",
+          glyph: "Governed",
+          strapline:
+            "Secure & Controlled High-Stakes Examination Operations",
+          points: [
+            "Secure question paper authoring and delivery",
+            "Controlled online examination workflows",
+            "Digitized on-screen marking and evaluation governance",
+            "End-to-end control for high-stakes assessment operations",
+          ],
+        },
+        {
+          name: "IntelliEXAMS",
+          edition: "NG",
+          tone: "purple",
+          glyph: "AgentStructured",
+          strapline:
+            "Scalable Digital Assessment Infrastructure for the Future",
+          points: [
+            "Digital assessment infrastructure for institutions",
+            "Outcome-based education enablement",
+            "Academic outcomes and institutional analytics",
+            "Regulatory and compliance-aligned configuration",
+          ],
+        },
+      ],
+      /* ⚠️ Not rendered — see the note above. Kept so the screenshot's full
+         contents are on record. */
+      ctasNotRendered: [
+        "Explore IntelliEXAMS Prime",
+        "Learn more",
+        "Explore IntelliEXAMS NG",
+        "Request Demo",
+      ],
+    },
+
     // ------------------------------------------------------------------ 5
     {
       id: "qp-authoring-and-delivery",
